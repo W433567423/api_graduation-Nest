@@ -7,10 +7,18 @@ import { MySQLConfig, winstonConfig } from '@/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from '@/global/middleware/logger/logger.middleware';
 
+// import { HttpExceptionFilter } from '@/global/filter/http-exception.filter';
+
 @Module({
   imports: [winstonConfig, TypeOrmModule.forRoot(MySQLConfig), UsersModule],
   controllers: [AppController, UsersController],
-  providers: [UsersService],
+  providers: [
+    // {
+    //   provide: APP_FILTER, // 在这里注册
+    //   useClass: HttpExceptionFilter,
+    // },
+    UsersService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
