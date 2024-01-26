@@ -5,11 +5,11 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { swaggerOptions, swaggerPrefix } from '@/config/swagger';
 
 async function bootstrap() {
+  // const logger = new Logger();
   const app = await NestFactory.create(AppModule);
   // swagger
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup(swaggerPrefix, app, document);
-
   await app.listen(SERVER_PORT);
 }
 
