@@ -1,3 +1,3 @@
-import { eqValida, md5Password } from './handlePassword';
+import { eqPassword, eqValida, makeToken, md5Password } from './handlePassword';
 
-export { md5Password, eqValida };
+export { md5Password, eqPassword, makeToken, eqValida };

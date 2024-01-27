@@ -1,7 +1,7 @@
-import { MySQLConfig } from './secret';
-import { swaggerOptions, swaggerPrefix } from './swagger';
-import { statusFive, statusFour } from './status';
-import { winstonConfig } from './winston';
+import { MySQLConfig } from './secret.config';
+import { swaggerOptions, swaggerPrefix } from './swagger.config';
+import { statusFive, statusFour } from './status.config';
+import { winstonConfig } from './winston.config';
 import { sessionConfig } from './session.config';
 
 export const SERVER_PORT = 8001;

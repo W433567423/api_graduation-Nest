@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from '@/modules/users/users.entity';
-import { eqValida, md5Password } from '@/utils';
+import { eqPassword, eqValida, makeToken, md5Password } from '@/utils';
 
 @Injectable()
 export class UsersService {
@@ -38,15 +38,16 @@ export class UsersService {
     eqValida(originValida, valida);
 
     // 查询该用户名是否注册
-    const user = await this.isExistByName(username);
+    const dbUser = await this.isExistByName(username);
+
+    // 比较密码
+    eqPassword(dbUser.password, md5Password(password));
 
     // 登录
-    console.log(user.password, md5Password(password));
-
-    return 'payload';
+    return makeToken(dbUser);
   }
 
-  // 如果用户名查询用户
+  // 用户名查询用户
   async isExistByName(username: string) {
     const user = await this.userRepository.findOne({ where: { username } });
     if (!user) {

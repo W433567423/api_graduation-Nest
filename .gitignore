@@ -37,4 +37,4 @@ lerna-debug.log*
 
 #custom
 test/test.blade.php
-src/config/secret.ts
+src/config/secret.config.ts

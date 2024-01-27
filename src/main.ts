@@ -3,7 +3,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 
 import { SERVER_PORT, sessionConfig } from './config';
-import { swaggerOptions, swaggerPrefix } from '@/config/swagger';
+import { swaggerOptions, swaggerPrefix } from '@/config/swagger.config';
 
 import { AppModule } from './modules/app/app.module';
 
