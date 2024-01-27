@@ -9,8 +9,14 @@ export class CreateAppDto {
 
   @ApiProperty({
     description: '返回的信息',
-    example: `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`,
+    example: '请求成功',
   })
   @IsNotEmpty({ message: '返回信息不能为空' })
   readonly msg: string;
+
+  @ApiProperty({
+    description: '返回的数据',
+    example: `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`,
+  })
+  readonly data: any;
 }

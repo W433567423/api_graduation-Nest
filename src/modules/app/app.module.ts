@@ -6,17 +6,24 @@ import { UsersModule } from '@/modules/users/users.module';
 import { MySQLConfig, winstonConfig } from '@/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from '@/global/middleware/logger/logger.middleware';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { UnifyExceptionFilter } from '@/global/filter';
+import { UnifyResponseInterceptor } from '@/global/interceptor';
 
 @Module({
   imports: [winstonConfig, TypeOrmModule.forRoot(MySQLConfig), UsersModule],
   controllers: [AppController, UsersController],
   providers: [
+    // 全局过滤器
     {
       provide: APP_FILTER, // 在这里注册
       useClass: UnifyExceptionFilter,
+    },
+    // 应用拦截器
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UnifyResponseInterceptor,
     },
     UsersService,
   ],
