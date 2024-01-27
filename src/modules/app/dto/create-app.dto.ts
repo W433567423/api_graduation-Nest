@@ -18,5 +18,5 @@ export class CreateAppDto {
     description: '返回的数据',
     example: `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`,
   })
-  readonly data: any;
+  readonly data?: any;
 }
