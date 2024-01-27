@@ -2,6 +2,7 @@ import { MySQLConfig } from './secret';
 import { swaggerOptions, swaggerPrefix } from './swagger';
 import { statusFive, statusFour } from './status';
 import { winstonConfig } from './winston';
+import { sessionConfig } from './session.config';
 
 export const SERVER_PORT = 8001;
 
@@ -12,4 +13,5 @@ export {
   statusFour, // 响应状态4XX
   statusFive, // 响应状态5XX
   winstonConfig, // 日志系统
+  sessionConfig,
 };

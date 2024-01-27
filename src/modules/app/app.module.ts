@@ -12,10 +12,18 @@ import { UnifyResponseInterceptor } from '@/global/interceptor';
 import { UsersController } from '@/modules/users/users.controller';
 import { UsersService } from '@/modules/users/users.service';
 import { UsersModule } from '@/modules/users/users.module';
+import { CaptchaController } from '@/modules/captcha/captcha.controller';
+import { CaptchaService } from '@/modules/captcha/captcha.service';
+import { CaptchaModule } from '@/modules/captcha/captcha.module';
 
 @Module({
-  imports: [winstonConfig, TypeOrmModule.forRoot(MySQLConfig), UsersModule],
-  controllers: [AppController, UsersController],
+  imports: [
+    winstonConfig,
+    TypeOrmModule.forRoot(MySQLConfig),
+    UsersModule,
+    CaptchaModule,
+  ],
+  controllers: [AppController, UsersController, CaptchaController],
   providers: [
     // 全局过滤器
     {
@@ -28,6 +36,7 @@ import { UsersModule } from '@/modules/users/users.module';
       useClass: UnifyResponseInterceptor,
     },
     UsersService,
+    CaptchaService,
   ],
 })
 export class AppModule implements NestModule {
