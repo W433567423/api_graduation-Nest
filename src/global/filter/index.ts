@@ -1,3 +1,3 @@
-// import { HttpExceptionFilter } from './http-exception.filter';
-//
-// export { HttpExceptionFilter };
+import UnifyExceptionFilter from './uinify-exception.filter';
+
+export { UnifyExceptionFilter };

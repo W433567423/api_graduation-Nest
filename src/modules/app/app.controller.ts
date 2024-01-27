@@ -17,9 +17,6 @@ export class AppController {
   @ApiResponse(statusFour)
   @ApiResponse(statusFive)
   hallo() {
-    return {
-      code: 200,
-      message: `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`,
-    };
+    return `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`;
   }
 }

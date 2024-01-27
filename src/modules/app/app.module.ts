@@ -6,17 +6,18 @@ import { UsersModule } from '@/modules/users/users.module';
 import { MySQLConfig, winstonConfig } from '@/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from '@/global/middleware/logger/logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
 
-// import { HttpExceptionFilter } from '@/global/filter/http-exception.filter';
+import { UnifyExceptionFilter } from '@/global/filter';
 
 @Module({
   imports: [winstonConfig, TypeOrmModule.forRoot(MySQLConfig), UsersModule],
   controllers: [AppController, UsersController],
   providers: [
-    // {
-    //   provide: APP_FILTER, // 在这里注册
-    //   useClass: HttpExceptionFilter,
-    // },
+    {
+      provide: APP_FILTER, // 在这里注册
+      useClass: UnifyExceptionFilter,
+    },
     UsersService,
   ],
 })
