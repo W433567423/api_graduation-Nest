@@ -1,15 +1,17 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+
 import { AppController } from './app.controller';
+
+import { MySQLConfig, winstonConfig } from '@/config';
+import { LoggerMiddleware } from '@/global/middleware';
+import { UnifyExceptionFilter } from '@/global/filter';
+import { UnifyResponseInterceptor } from '@/global/interceptor';
+
 import { UsersController } from '@/modules/users/users.controller';
 import { UsersService } from '@/modules/users/users.service';
 import { UsersModule } from '@/modules/users/users.module';
-import { MySQLConfig, winstonConfig } from '@/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerMiddleware } from '@/global/middleware/logger/logger.middleware';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-
-import { UnifyExceptionFilter } from '@/global/filter';
-import { UnifyResponseInterceptor } from '@/global/interceptor';
 
 @Module({
   imports: [winstonConfig, TypeOrmModule.forRoot(MySQLConfig), UsersModule],

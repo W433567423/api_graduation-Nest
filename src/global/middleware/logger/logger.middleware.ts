@@ -5,7 +5,7 @@ import { getInfoReq } from '@/global/helper';
 import { Request } from 'express';
 
 @Injectable()
-export class LoggerMiddleware implements NestMiddleware {
+export default class LoggerMiddleware implements NestMiddleware {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger, // ①
   ) {}
