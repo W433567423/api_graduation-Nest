@@ -23,7 +23,7 @@ export default class TransformInterceptor implements NestInterceptor {
           req: getInfoReq(context.switchToHttp().getRequest()),
         });
         return {
-          code: 0,
+          code: 200,
           message: '请求成功',
           data,
         };

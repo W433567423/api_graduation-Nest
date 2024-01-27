@@ -10,11 +10,11 @@ import { UnifyExceptionFilter } from '@/global/filter';
 import { UnifyResponseInterceptor } from '@/global/interceptor';
 
 import { UsersController } from '@/modules/users/users.controller';
-import { UsersService } from '@/modules/users/users.service';
 import { UsersModule } from '@/modules/users/users.module';
 import { CaptchaController } from '@/modules/captcha/captcha.controller';
 import { CaptchaService } from '@/modules/captcha/captcha.service';
 import { CaptchaModule } from '@/modules/captcha/captcha.module';
+import { UsersService } from '@/modules/users/users.service';
 
 @Module({
   imports: [

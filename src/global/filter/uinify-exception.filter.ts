@@ -22,7 +22,6 @@ export default class UnifyExceptionFilter implements ExceptionFilter {
     const res = ctx.getResponse<Response>(); // 获取响应对象
     const req = ctx.getRequest<Request>(); // 获取请求对象
     const status = exception.getStatus();
-
     const response = exception.getResponse();
     let msg =
       exception.message || (status >= 500 ? 'Service Error' : 'Client Error');
