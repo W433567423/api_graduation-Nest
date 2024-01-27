@@ -30,13 +30,25 @@ export class UsersController {
       valida,
       validaServer || '',
     );
+    console.log(1111111);
     return res.send({ code: 201, message: '注册成功' });
   }
 
   @ApiOperation({ summary: '用户登录' })
   @Post('login')
-  login() {
-    // console.log(loginData);
-    return '用户登录';
+  async login(
+    @Body() signupData: RegistryUserDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const { username, password, valida } = signupData;
+    const { captcha: validaServer } = session;
+
+    const user = await this.usersService.login(
+      username,
+      password,
+      valida,
+      validaServer || '',
+    );
+    return user;
   }
 }

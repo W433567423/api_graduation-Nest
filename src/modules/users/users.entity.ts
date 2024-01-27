@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class UsersEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
   @Column({ type: 'varchar' })
@@ -10,4 +10,7 @@ export class UsersEntity extends BaseEntity {
 
   @Column({ type: 'varchar' })
   password: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  email?: string;
 }

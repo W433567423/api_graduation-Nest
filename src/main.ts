@@ -10,7 +10,7 @@ import { AppModule } from './modules/app/app.module';
 async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn'],
+    // logger: ['error', 'warn'],
   });
   // swagger
   const document = SwaggerModule.createDocument(app, swaggerOptions);

@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from '@/modules/users/users.entity';
+import { eqValida, md5Password } from '@/utils';
 
 @Injectable()
 export class UsersService {
@@ -10,28 +11,47 @@ export class UsersService {
     private readonly userRepository: Repository<UsersEntity>,
   ) {}
 
+  // 注册服务
   async registry(
     username: string,
-    password: string,
+    originPassword: string,
+    originValida: string,
     valida: string,
-    validaServer: string,
   ) {
-    // 校验验证码
-    if (
-      valida.toLocaleLowerCase() !== 'tutu' &&
-      valida.toLocaleLowerCase() !== validaServer.toLocaleLowerCase()
-    ) {
-      throw new HttpException('验证码不正确', HttpStatus.FORBIDDEN);
-    }
+    eqValida(originValida, valida);
 
-    // 查询是否已经注册
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (user) {
-      throw new HttpException('该用户名已注册', HttpStatus.FORBIDDEN);
-    }
+    // 查询该用户名是否注册
+    await this.isExistByName(username);
 
+    const password = md5Password(originPassword);
     // 新建用户
     return this.userRepository.save({ username, password });
   }
-  // async newUser(username: string, password: string) {}
+
+  // 登录服务
+  async login(
+    username: string,
+    password: string,
+    originValida: string,
+    valida: string,
+  ) {
+    eqValida(originValida, valida);
+
+    // 查询该用户名是否注册
+    const user = await this.isExistByName(username);
+
+    // 登录
+    console.log(user.password, md5Password(password));
+
+    return 'payload';
+  }
+
+  // 如果用户名查询用户
+  async isExistByName(username: string) {
+    const user = await this.userRepository.findOne({ where: { username } });
+    if (!user) {
+      throw new HttpException('该用户名尚未注册', HttpStatus.FORBIDDEN);
+    }
+    return user;
+  }
 }
