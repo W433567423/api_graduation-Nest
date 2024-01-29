@@ -11,6 +11,7 @@ async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule, {
     // logger: ['error', 'warn'],
+    cors: true,
   });
   // swagger
   const document = SwaggerModule.createDocument(app, swaggerOptions);

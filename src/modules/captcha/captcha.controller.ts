@@ -1,5 +1,4 @@
-import { Controller, Get, Query, Res, Session } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Query, Session } from '@nestjs/common';
 import { CaptchaService } from './captcha.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as svgCaptcha from 'svg-captcha';
@@ -14,7 +13,6 @@ export class CaptchaController {
   @ApiOperation({ summary: '获取验证码' })
   @Get()
   async getCaptcha(
-    @Res() res: Response,
     @Session() session: Record<string, any>,
     @Query() query: getCaptchaDto,
   ) {
@@ -25,7 +23,6 @@ export class CaptchaController {
     });
     session.captcha = captcha.text;
     console.log(captcha.text);
-    res.type('svg');
-    res.send(captcha.data);
+    return captcha.data;
   }
 }
