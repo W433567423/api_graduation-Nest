@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 
@@ -8,6 +8,7 @@ import { MySQLConfig, winstonConfig } from '@/config';
 import { LoggerMiddleware } from '@/global/middleware';
 import { UnifyExceptionFilter } from '@/global/filter';
 import { UnifyResponseInterceptor } from '@/global/interceptor';
+import { AuthGuard } from '@/global/guard/auth.guard';
 
 import { UsersController } from '@/modules/users/users.controller';
 import { UsersModule } from '@/modules/users/users.module';
@@ -34,6 +35,10 @@ import { UsersService } from '@/modules/users/users.service';
     {
       provide: APP_INTERCEPTOR,
       useClass: UnifyResponseInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
     UsersService,
     CaptchaService,

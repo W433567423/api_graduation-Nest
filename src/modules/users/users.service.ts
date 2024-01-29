@@ -21,7 +21,7 @@ export class UsersService {
     eqValida(originValida, valida);
 
     // 查询该用户名是否注册
-    await this.isExistByName(username);
+    await this.isExistByName(username, 'registry');
 
     const password = md5Password(originPassword);
     // 新建用户
@@ -38,7 +38,7 @@ export class UsersService {
     eqValida(originValida, valida);
 
     // 查询该用户名是否注册
-    const dbUser = await this.isExistByName(username);
+    const dbUser = (await this.isExistByName(username, 'login')) as UsersEntity;
 
     // 比较密码
     eqPassword(dbUser.password, md5Password(password));
@@ -48,10 +48,13 @@ export class UsersService {
   }
 
   // 用户名查询用户
-  async isExistByName(username: string) {
+  async isExistByName(username: string, status: 'login' | 'registry') {
     const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) {
+    if (status === 'login' && !user) {
       throw new HttpException('该用户名尚未注册', HttpStatus.FORBIDDEN);
+    }
+    if (status === 'registry' && user) {
+      throw new HttpException('该用户名已被注册', HttpStatus.FORBIDDEN);
     }
     return user;
   }
