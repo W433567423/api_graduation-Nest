@@ -5,7 +5,7 @@ import { winstonConfig } from './winston.config';
 import { sessionConfig } from './session.config';
 import { jwtConfig, jwtSecret } from './jwt.config';
 
-export const SERVER_PORT = 8001;
+export const SERVER_PORT = 8004;
 
 export {
   MySQLConfig, // mysql 配置
