@@ -4,11 +4,12 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { verify } from 'jsonwebtoken';
 import { IS_PUBLIC } from '../decorator';
 import { Reflector } from '@nestjs/core';
-import { publicSecret } from '@/config/jwt.config';
+import { JwtService } from '@nestjs/jwt';
+import { jwtSecret } from '@/config';
 
 // 登录拦截
 @Injectable()
@@ -18,7 +19,10 @@ export class AuthGuard implements CanActivate {
   //   '/user/registry'
   // ]
 
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private jwtService: JwtService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
@@ -31,29 +35,32 @@ export class AuthGuard implements CanActivate {
     } else {
       console.log('进入鉴权');
       const request = context.switchToHttp().getRequest();
-      const token: string | undefined = context
+      const authorization: string | undefined = context
         .switchToRpc()
         .getData()
-        .headers.token?.replaceAll(' ', '');
-      // if (this.urlList.includes(request.url)) {
-      //   return true
-      // }
-      if (token) {
+        .headers?.authorization?.replace('Bearer ', '');
+      if (authorization) {
         try {
           console.log(
             '鉴权成功',
-            verify(token, publicSecret, { algorithms: ['RS256'] }),
+            await this.jwtService.verifyAsync(authorization, {
+              secret: jwtSecret,
+            }),
+            // verify(authorization, publicSecret, { algorithms: ['RS256'] }),
           );
-          request.user = verify(token, publicSecret, { algorithms: ['RS256'] });
+          // request.user = verify(authorization, publicSecret, { algorithms: ['RS256'] });
+          request['user'] = await this.jwtService.verifyAsync(authorization, {
+            secret: jwtSecret,
+          });
           return true;
         } catch {
-          console.log('鉴权失败', token);
-          throw new HttpException('token验证失败', HttpStatus.UNAUTHORIZED);
+          console.log('鉴权失败', authorization);
+          throw new UnauthorizedException();
         }
       } else {
-        console.log('无token');
+        console.log('无token/token失效');
         throw new HttpException(
-          '没有授权访问,请先登录',
+          '没有授权访问或授权失败,请重新登录',
           HttpStatus.UNAUTHORIZED,
         );
       }

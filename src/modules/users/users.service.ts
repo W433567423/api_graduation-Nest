@@ -2,13 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from '@/modules/users/users.entity';
-import { eqPassword, eqValida, makeToken, md5Password } from '@/utils';
+import { eqPassword, eqValida, md5Password } from '@/utils';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly userRepository: Repository<UsersEntity>,
+    private jwtService: JwtService,
   ) {}
 
   // 注册服务
@@ -44,7 +46,11 @@ export class UsersService {
     eqPassword(dbUser.password, md5Password(password));
 
     // 登录
-    return makeToken(dbUser);
+    return await this.jwtService.signAsync({
+      id: dbUser.id,
+      username: dbUser.username,
+    });
+    // return makeToken(dbUser);
   }
 
   // 用户名查询用户

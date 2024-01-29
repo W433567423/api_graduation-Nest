@@ -1,11 +1,11 @@
-import { Body, Controller, Post, Res, Session } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Post, Req, Res, Session } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RegistryUserDto } from '@/modules/users/dto/create-user.dto';
 import { CreateAppDto } from '@/modules/app/dto/create-app.dto';
 import { NoAuth } from '@/global/decorator';
-import type { registryData } from '@/modules/users/';
+import type { registryData } from '@/modules/users/index';
 
 @ApiTags('用户管理')
 @Controller('users')
@@ -60,7 +60,7 @@ export class UsersController {
 
   @ApiOperation({ summary: '鉴权' })
   @Post('auth')
-  auth() {
-    return 'user';
+  auth(@Req() req: Request) {
+    return (req as any).user;
   }
 }

@@ -1,3 +1,5 @@
+import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
+
 export const publicSecret = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA22SdOxylIiXN39SQG5sx
 pERjMKA6VInK2nwpL+05OsMdwwEtC+f8vudaGXTaAYP4e2hsALto6CgyHDeF//jT
@@ -38,3 +40,10 @@ wzyZuaeJTqqqLsF1x51mE/KVWDmRcx4oVi7vU0+CltD28Jywrobkg402qVay5onc
 USGGhBJdvMxjbmR3he2lGto=
 -----END PRIVATE KEY-----
 `;
+
+export const jwtSecret = 'tutu is the author';
+export const jwtConfig: JwtModuleOptions = {
+  global: true,
+  secret: jwtSecret,
+  signOptions: { expiresIn: '7d' },
+};
