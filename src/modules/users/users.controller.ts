@@ -49,6 +49,7 @@ export class UsersController {
   ) {
     const { username, password, valida } = signupData;
     const { captcha: validaServer } = session;
+    console.log(session);
 
     return await this.usersService.login(
       username,
