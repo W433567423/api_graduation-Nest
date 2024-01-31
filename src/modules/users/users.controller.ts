@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, Res, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, Session } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,13 +27,13 @@ export class UsersController {
     const { username, password, valida } = signupData;
     const { captcha: validaServer } = session;
 
-    await this.usersService.registry(
+    const token = await this.usersService.registry(
       username,
       password,
       valida,
       validaServer || '',
     );
-    return res.send({ code: 201, message: '注册成功' });
+    return res.send({ code: 201, message: '注册成功', data: token });
   }
 
   @ApiOperation({ summary: '用户登录' })
@@ -49,7 +49,6 @@ export class UsersController {
   ) {
     const { username, password, valida } = signupData;
     const { captcha: validaServer } = session;
-    console.log(session);
 
     return await this.usersService.login(
       username,
@@ -60,7 +59,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: '鉴权' })
-  @Post('auth')
+  @Get('auth')
   auth(@Req() req: Request) {
     return (req as any).user;
   }

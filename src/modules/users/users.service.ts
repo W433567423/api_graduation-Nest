@@ -27,7 +27,13 @@ export class UsersService {
 
     const password = md5Password(originPassword);
     // 新建用户
-    return this.userRepository.save({ username, password });
+    const dbUser = await this.userRepository.save({ username, password });
+
+    // 登录
+    return await this.jwtService.signAsync({
+      id: dbUser.id,
+      username: dbUser.username,
+    });
   }
 
   // 登录服务
