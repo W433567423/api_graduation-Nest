@@ -11,6 +11,9 @@ export class UsersEntity extends BaseEntity {
   @Column({ type: 'varchar' })
   password: string;
 
+  @Column({ type: 'varchar' })
+  phoneNum: string;
+
   @Column({ type: 'varchar', nullable: true })
   email?: string;
 }

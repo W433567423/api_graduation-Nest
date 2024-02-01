@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsMobilePhone, IsNotEmpty } from 'class-validator';
 
 export class userRegistryReqDto {
   @ApiProperty({ description: '用户名', example: 'test' })
@@ -18,12 +18,13 @@ export class userRegistryReqDto {
     example: 'tutu',
   })
   @IsNotEmpty({ message: '验证码不能为空' })
-  readonly valida: string;
+  readonly phoneValida: string;
 
   @ApiProperty({
     description: '手机号',
-    example: '17700000000',
+    example: 17762647331,
   })
+  @IsMobilePhone('zh-CN')
   @IsNotEmpty({ message: '手机号不能为空' })
   readonly phoneNum: string;
 }

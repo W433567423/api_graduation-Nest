@@ -20,8 +20,8 @@ export class getCaptchaReqDto {
 export class getPhoneCaptchaReqDto {
   @ApiProperty({
     description: '手机号码',
-    example: 17700000000,
-    default: 17700000000,
+    example: 17762647331,
+    default: 17762647331,
   })
   readonly phoneNum: string;
 }

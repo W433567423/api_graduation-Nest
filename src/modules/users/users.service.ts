@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from '@/modules/users/users.entity';
+import { UsersEntity } from '@/modules/users/entities/users.entity';
 import { eqPassword, eqValida, md5Password } from '@/utils';
 import { JwtService } from '@nestjs/jwt';
 
@@ -21,15 +21,18 @@ export class UsersService {
     valida: string,
     phoneNum: string,
   ) {
-    eqValida(originValida, valida);
-    console.log(phoneNum);
+    eqValida(originValida, String(valida));
 
     // 查询该用户名是否注册
     await this.isExistByName(username, 'registry');
 
     const password = md5Password(originPassword);
     // 新建用户
-    const dbUser = await this.userRepository.save({ username, password });
+    const dbUser = await this.userRepository.save({
+      username,
+      password,
+      phoneNum,
+    });
 
     // 登录
     return await this.jwtService.signAsync({

@@ -26,14 +26,15 @@ export class UsersController {
     @Res() res: Response,
     @Session() session: Record<string, any>,
   ) {
-    const { username, password, valida, phoneNum } = signupData;
-    const { captcha: validaServer } = session;
+    console.log(1111111);
+    const { username, password, phoneValida, phoneNum } = signupData;
+    const { phoneCaptcha: phoneCaptcha } = session;
 
     const token = await this.usersService.registry(
       username,
       password,
-      valida,
-      validaServer || '',
+      phoneValida,
+      phoneCaptcha || '',
       phoneNum,
     );
     return res.send({ code: 201, message: '注册成功', data: token });

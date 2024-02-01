@@ -58,12 +58,13 @@ export class CaptchaController {
   ) {
     const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
     const { phoneNum } = query;
+    console.log(phoneNum);
     if (!phoneNum || phoneNum.length !== 11 || phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
     }
     const code = creatValidaCode();
-    console.log('手机号码', phoneNum);
-    session.captcha = code;
+    console.log('手机号码', phoneNum, code);
+    session.phoneCaptcha = code;
     return code;
   }
 }
