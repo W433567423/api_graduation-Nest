@@ -19,8 +19,10 @@ export class UsersService {
     originPassword: string,
     originValida: string,
     valida: string,
+    phoneNum: string,
   ) {
     eqValida(originValida, valida);
+    console.log(phoneNum);
 
     // 查询该用户名是否注册
     await this.isExistByName(username, 'registry');

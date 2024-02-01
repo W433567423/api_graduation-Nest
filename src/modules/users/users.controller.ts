@@ -2,10 +2,12 @@ import { Body, Controller, Get, Post, Req, Res, Session } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RegistryUserDto } from '@/modules/users/dto/create-user.dto';
-import { CreateAppDto } from '@/modules/app/dto/create-app.dto';
+import {
+  userLoginReqDto,
+  userRegistryReqDto,
+} from '@/modules/users/dto/user.req.dto';
 import { NoAuth } from '@/global/decorator';
-import type { registryData } from '@/modules/users/index';
+import { userRegistryAndLoginResDto } from '@/modules/users/dto/user.res.dto';
 
 @ApiTags('用户管理')
 @Controller('users')
@@ -15,16 +17,16 @@ export class UsersController {
   @ApiOperation({ summary: '注册用户' })
   @ApiResponse({
     status: '2XX',
-    type: CreateAppDto,
+    type: userRegistryAndLoginResDto,
   })
   @NoAuth()
   @Post('registry')
   async registry(
-    @Body() signupData: RegistryUserDto,
+    @Body() signupData: userRegistryReqDto,
     @Res() res: Response,
     @Session() session: Record<string, any>,
   ) {
-    const { username, password, valida } = signupData;
+    const { username, password, valida, phoneNum } = signupData;
     const { captcha: validaServer } = session;
 
     const token = await this.usersService.registry(
@@ -32,6 +34,7 @@ export class UsersController {
       password,
       valida,
       validaServer || '',
+      phoneNum,
     );
     return res.send({ code: 201, message: '注册成功', data: token });
   }
@@ -40,11 +43,11 @@ export class UsersController {
   @NoAuth()
   @ApiResponse({
     status: '2XX',
-    type: CreateAppDto<registryData>,
+    type: userRegistryAndLoginResDto,
   })
   @Post('login')
   async login(
-    @Body() signupData: RegistryUserDto,
+    @Body() signupData: userLoginReqDto,
     @Session() session: Record<string, any>,
   ) {
     const { username, password, valida } = signupData;

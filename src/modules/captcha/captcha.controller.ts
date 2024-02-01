@@ -1,9 +1,14 @@
 import { Controller, Get, Query, Session } from '@nestjs/common';
 import { CaptchaService } from './captcha.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as svgCaptcha from 'svg-captcha';
 import { NoAuth } from '@/global/decorator';
-import { getCaptchaDto } from '@/modules/captcha/dto/captcha.dto';
+import { getCaptchaDto } from '@/modules/captcha/dto/captcha.req.dto';
+import { creatValidaCode } from '@/utils';
+import {
+  getCaptchaResDto,
+  getPhoneCaptchaResDto,
+} from '@/modules/captcha/dto/captcha.res.dto';
 
 @ApiTags('验证码')
 @Controller('captcha')
@@ -11,6 +16,11 @@ import { getCaptchaDto } from '@/modules/captcha/dto/captcha.dto';
 export class CaptchaController {
   constructor(private readonly captchaService: CaptchaService) {}
   @ApiOperation({ summary: '获取验证码' })
+  @ApiResponse({
+    status: '2XX',
+    description: '系统成功响应',
+    type: getCaptchaResDto,
+  })
   @Get()
   async getCaptcha(
     @Session() session: Record<string, any>,
@@ -22,7 +32,19 @@ export class CaptchaController {
       ...query,
     });
     session.captcha = captcha.text;
-    console.log(captcha.text);
     return captcha.data;
+  }
+
+  @ApiOperation({ summary: '获取手机验证码' })
+  @ApiResponse({
+    status: '2XX',
+    description: '系统成功响应',
+    type: getPhoneCaptchaResDto,
+  })
+  @Get('phone')
+  async getPhoneCaptcha(@Session() session: Record<string, any>) {
+    const code = creatValidaCode();
+    session.captcha = code;
+    return code;
   }
 }

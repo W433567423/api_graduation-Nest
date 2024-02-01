@@ -40,6 +40,7 @@
     "rxjs": "^7.8.1",
     "svg-captcha": "^1.4.0",
     "swagger-ui-express": "^5.0.0",
+    "tencentcloud-sdk-nodejs": "^4.0.791",
     "typeorm": "^0.3.19",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",

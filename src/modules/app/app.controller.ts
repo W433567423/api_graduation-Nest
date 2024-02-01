@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SERVER_PORT, statusFive, statusFour, swaggerPrefix } from '@/config';
-import { CreateAppDto } from '@/modules/app/dto/create-app.dto';
+import { defaultAppResDto } from '@/modules/app/dto/app.res.dto';
 
 @ApiTags('入口')
 @Controller()
@@ -12,7 +12,7 @@ export class AppController {
   @ApiResponse({
     status: '2XX',
     description: '系统成功响应',
-    type: CreateAppDto,
+    type: defaultAppResDto,
   })
   @ApiResponse(statusFour)
   @ApiResponse(statusFive)
