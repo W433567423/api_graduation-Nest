@@ -26,7 +26,7 @@ export class UsersController {
     @Res() res: Response,
     @Session() session: Record<string, any>,
   ) {
-    console.log(1111111);
+    11;
     const { username, password, phoneValida, phoneNum } = signupData;
     const { phoneCaptcha: phoneCaptcha } = session;
 

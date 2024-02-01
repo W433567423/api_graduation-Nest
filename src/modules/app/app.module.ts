@@ -13,7 +13,6 @@ import { AuthGuard } from '@/global/guard/auth.guard';
 import { UsersController } from '@/modules/users/users.controller';
 import { UsersModule } from '@/modules/users/users.module';
 import { CaptchaController } from '@/modules/captcha/captcha.controller';
-import { CaptchaService } from '@/modules/captcha/captcha.service';
 import { CaptchaModule } from '@/modules/captcha/captcha.module';
 import { UsersService } from '@/modules/users/users.service';
 
@@ -41,7 +40,6 @@ import { UsersService } from '@/modules/users/users.service';
       useClass: AuthGuard,
     },
     UsersService,
-    CaptchaService,
   ],
 })
 export class AppModule implements NestModule {

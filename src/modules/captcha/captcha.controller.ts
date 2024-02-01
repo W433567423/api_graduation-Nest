@@ -6,7 +6,6 @@ import {
   Query,
   Session,
 } from '@nestjs/common';
-import { CaptchaService } from './captcha.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as svgCaptcha from 'svg-captcha';
 import { NoAuth } from '@/global/decorator';
@@ -24,7 +23,7 @@ import {
 @Controller('captcha')
 @NoAuth()
 export class CaptchaController {
-  constructor(private readonly captchaService: CaptchaService) {}
+  constructor() {}
   @ApiOperation({ summary: '获取验证码' })
   @ApiResponse({
     status: '2XX',
