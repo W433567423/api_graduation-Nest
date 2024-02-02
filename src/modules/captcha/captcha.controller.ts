@@ -12,11 +12,13 @@ import { NoAuth } from '@/global/decorator';
 import {
   getCaptchaReqDto,
   getPhoneCaptchaReqDto,
+  getEmailCaptchaReqDto,
 } from '@/modules/captcha/dto/captcha.req.dto';
-import { creatValidaCode } from '@/utils';
+import { creatValidaCode, EmailInstance } from '@/utils';
 import {
   getCaptchaResDto,
   getPhoneCaptchaResDto,
+  getEmailCaptchaResDto,
 } from '@/modules/captcha/dto/captcha.res.dto';
 
 @ApiTags('验证码')
@@ -58,12 +60,38 @@ export class CaptchaController {
     const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
     const { phoneNum } = query;
     console.log(phoneNum);
-    if (!phoneNum || phoneNum.length !== 11 || phoneRex.test(phoneNum)) {
+    if (!phoneNum || phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
     }
     const code = creatValidaCode();
     console.log('手机号码', phoneNum, code);
     session.phoneCaptcha = code;
+    return code;
+  }
+
+  @ApiOperation({ summary: '获取邮箱验证码' })
+  @ApiResponse({
+    status: '2XX',
+    description: '系统成功响应',
+    type: getEmailCaptchaResDto,
+  })
+  @Get('email')
+  async getEmailCaptcha(
+    @Query() query: getEmailCaptchaReqDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    const { emailNum } = query;
+    console.log(emailNum);
+    if (!emailNum || phoneRex.test(emailNum)) {
+      throw new HttpException('邮箱不正确', HttpStatus.FORBIDDEN);
+    }
+    const code = creatValidaCode();
+    session.emailCaptcha = code;
+    EmailInstance.send({
+      email: emailNum,
+      text: `【tutu】您正在注册/登录tutuの网站,验证码为${code}`,
+    });
     return code;
   }
 }

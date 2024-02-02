@@ -19,3 +19,11 @@ export class getPhoneCaptchaResDto extends appResDto {
   @IsNotEmpty({ message: '返回信息不能为空' })
   readonly data: number;
 }
+export class getEmailCaptchaResDto extends appResDto {
+  @ApiProperty({
+    description: '邮箱验证码',
+    example: `123456`,
+  })
+  @IsNotEmpty({ message: '返回信息不能为空' })
+  readonly data: number;
+}

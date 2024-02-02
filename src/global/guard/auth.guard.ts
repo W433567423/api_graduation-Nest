@@ -30,10 +30,8 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      console.log('跳过鉴权');
       return true;
     } else {
-      console.log('进入鉴权');
       const request = context.switchToHttp().getRequest();
       const authorization: string | undefined = context
         .switchToRpc()

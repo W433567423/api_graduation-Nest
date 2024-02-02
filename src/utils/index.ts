@@ -1,5 +1,5 @@
 import { eqPassword, eqValida, md5Password } from './handlePassword';
-
+import EmailInstance from './email.utils';
 // 生成随机验证码
 const creatValidaCode = (len = 6) => {
   let code = 0;
@@ -10,4 +10,4 @@ const creatValidaCode = (len = 6) => {
 
   return Math.floor(code);
 };
-export { md5Password, eqPassword, eqValida, creatValidaCode };
+export { md5Password, eqPassword, eqValida, creatValidaCode, EmailInstance };
