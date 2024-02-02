@@ -40,19 +40,15 @@ export class AuthGuard implements CanActivate {
       if (authorization) {
         try {
           console.log(
-            '鉴权成功',
             await this.jwtService.verifyAsync(authorization, {
               secret: jwtSecret,
             }),
-            // verify(authorization, publicSecret, { algorithms: ['RS256'] }),
           );
-          // request.user = verify(authorization, publicSecret, { algorithms: ['RS256'] });
           request['user'] = await this.jwtService.verifyAsync(authorization, {
             secret: jwtSecret,
           });
           return true;
         } catch {
-          console.log('鉴权失败', authorization);
           throw new UnauthorizedException();
         }
       } else {

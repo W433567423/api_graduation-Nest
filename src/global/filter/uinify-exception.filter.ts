@@ -10,7 +10,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { getInfoReq } from '@/global/helper';
 
-@Catch()
+@Catch(HttpException)
 export default class UnifyExceptionFilter implements ExceptionFilter {
   // 注入日志服务相关依赖
   constructor(

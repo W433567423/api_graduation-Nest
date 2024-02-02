@@ -78,7 +78,7 @@ export class CaptchaController {
   @Get('email')
   async getEmailCaptcha(
     @Query() query: getEmailCaptchaReqDto,
-    @Session() session: Record<string, any>,
+    @Session() session: { emailCaptchaServer: number | undefined },
   ) {
     const emailRex = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
     const { emailNum } = query;
@@ -86,7 +86,7 @@ export class CaptchaController {
       throw new HttpException('邮箱不正确', HttpStatus.FORBIDDEN);
     }
     const code = creatValidaCode();
-    session.emailCaptcha = code;
+    session.emailCaptchaServer = code;
     EmailInstance.send({
       email: emailNum,
       text: `【tutu】您正在注册/登录tutuの网站,验证码为${code}`,

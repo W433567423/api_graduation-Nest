@@ -6,25 +6,19 @@ const md5Password = (password: string) => {
   return createHash('md5').update(password).digest('hex');
 };
 
-// 校验验证码
-const eqValidaString = (originValida: string, valida: string) => {
+// 校验图形验证码
+const eqValidaString = (codevalida: string, validaServer: string) => {
   if (
-    originValida.toLocaleLowerCase() !== 'tutu' &&
-    originValida.toLocaleLowerCase() !== valida.toLocaleLowerCase()
+    codevalida.toLocaleLowerCase() !== 'tutu' &&
+    codevalida.toLocaleLowerCase() !== validaServer.toLocaleLowerCase()
   ) {
     throw new HttpException('验证码不正确', HttpStatus.FORBIDDEN);
   }
 };
 
 // 校验验证码
-const eqValidaNumber = (
-  originValida: string | number,
-  valida: string | number,
-) => {
-  if (
-    Number(originValida) !== 123456 &&
-    Number(originValida) !== Number(valida)
-  ) {
+const eqValidaNumber = (codevalida: number, validaServer: number) => {
+  if (codevalida !== 123456 && codevalida !== validaServer) {
     throw new HttpException('验证码不正确', HttpStatus.FORBIDDEN);
   }
 };
@@ -35,8 +29,6 @@ const eqPassword = (originPassword: string, password: string) => {
     throw new HttpException('密码不正确', HttpStatus.FORBIDDEN);
   }
 };
-
-// // 生成token
 // const makeToken = (dbUser: UsersEntity) => {
 //   const user = {
 //     id: dbUser.id,

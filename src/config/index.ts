@@ -4,6 +4,7 @@ import { statusFive, statusFour } from './status.config';
 import { winstonConfig } from './winston.config';
 import { sessionConfig } from './session.config';
 import { jwtConfig, jwtSecret } from './jwt.config';
+import { corsConfig } from './cos.config';
 
 export const SERVER_PORT = 8004;
 
@@ -17,4 +18,5 @@ export {
   sessionConfig,
   jwtConfig,
   jwtSecret,
+  corsConfig, // cors跨域配置
 };

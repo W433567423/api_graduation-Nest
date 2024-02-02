@@ -25,21 +25,22 @@ import { UsersService } from '@/modules/users/users.service';
   ],
   controllers: [AppController, UsersController, CaptchaController],
   providers: [
-    // 全局过滤器
-    {
-      provide: APP_FILTER, // 在这里注册
-      useClass: UnifyExceptionFilter,
-    },
-    // 应用拦截器
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: UnifyResponseInterceptor,
-    },
+    UsersService,
+    // 鉴权守卫
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    UsersService,
+    // 全局异常过滤器
+    {
+      provide: APP_FILTER, // 在这里注册
+      useClass: UnifyExceptionFilter,
+    },
+    // 应用响应拦截器
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UnifyResponseInterceptor,
+    },
   ],
 })
 export class AppModule implements NestModule {

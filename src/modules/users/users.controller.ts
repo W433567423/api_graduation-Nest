@@ -25,16 +25,16 @@ export class UsersController {
   async registry(
     @Body() signupData: userRegistryReqDto,
     @Res() res: Response,
-    @Session() session: Record<string, any>,
+    @Session() session: { captchaServer: string | undefined },
   ) {
     const { username, password, emailValida, emailNum } = signupData;
-    const { emailCaptcha: emailCaptcha } = session;
+    const { captchaServer } = session;
 
     const token = await this.usersService.registry(
       username,
       password,
       emailValida,
-      emailCaptcha || '',
+      captchaServer || '',
       emailNum,
     );
     return res.send({ code: 201, message: '注册成功', data: token });
@@ -49,39 +49,37 @@ export class UsersController {
   @Post('login')
   async login(
     @Body() signupData: userLoginReqDto,
-    @Session() session: Record<string, any>,
+    @Session() session: { captchaServer: string | undefined },
   ) {
     const { username, password, valida } = signupData;
-    const { captcha: validaServer } = session;
+
+    const { captchaServer } = session;
 
     return await this.usersService.login(
       username,
       password,
       valida,
-      validaServer || '',
+      captchaServer || '',
     );
   }
 
   @ApiOperation({ summary: '用户忘记密码' })
   @NoAuth()
-  @ApiResponse({
-    status: '2XX',
-  })
   @Post('forgetPassword')
   async forgetPassword(
     @Body() signupData: userforgetPasswordReqDto,
-    @Session() session: Record<string, any>,
+    @Session() session: { emailCaptchaServer: number | undefined },
   ) {
     const { emailValida, emailNum, newPassword } = signupData;
-    const { emailCaptcha: validaServer } = session;
-    console.log(emailNum, emailValida, validaServer);
-    this.usersService.forget(emailNum, newPassword, emailValida, validaServer);
-    // return await this.usersService.login(
-    //   username,
-    //   password,
-    //   valida,
-    //   validaServer || '',
-    // );
+    const { emailCaptchaServer } = session;
+
+    this.usersService.forget(
+      emailNum,
+      newPassword,
+      emailValida,
+      emailCaptchaServer || 0,
+    );
+    return 'ok';
   }
 
   @ApiOperation({ summary: '鉴权' })

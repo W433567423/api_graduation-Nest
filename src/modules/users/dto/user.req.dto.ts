@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsMobilePhone, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 export class userDefaultReqDto {
   @ApiProperty({ description: '用户名', example: 'test' })
   @IsNotEmpty({ message: '用户名不能为空' })

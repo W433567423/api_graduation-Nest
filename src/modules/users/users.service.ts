@@ -61,10 +61,10 @@ export class UsersService {
   async login(
     username: string,
     password: string,
-    originValida: string,
-    valida: string,
+    codevalida: string,
+    validaServer: string,
   ) {
-    eqValidaString(originValida, valida);
+    eqValidaString(codevalida, validaServer);
 
     // 查询该用户名是否注册
     const dbUser = (await this.isExistByName(username, 'login')) as UsersEntity;
@@ -85,9 +85,9 @@ export class UsersService {
     email: string,
     newPassword: string,
     emailValida: string,
-    validaServer: string,
+    validaServer: number,
   ) {
-    eqValidaNumber(emailValida, validaServer);
+    eqValidaNumber(Number(emailValida), validaServer);
 
     // 查询该用户名是否注册
     const dbUser = await this.userRepository.findOne({
@@ -97,7 +97,9 @@ export class UsersService {
     if (!dbUser) {
       throw new HttpException('该邮箱尚未被绑定', HttpStatus.FORBIDDEN);
     } else {
-      this.userRepository.update(dbUser.id, { password: newPassword });
+      this.userRepository.update(dbUser.id, {
+        password: md5Password(newPassword),
+      });
     }
   }
 }
