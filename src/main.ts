@@ -31,6 +31,7 @@ async function bootstrap() {
     credentials: true,
     //  定义了响应头中可以被客户端读取的字段列表。这里只列出了一个字段名 API-Token-Expiry。
     exposedHeaders: ['API-Token-Expiry'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
 
   // swagger

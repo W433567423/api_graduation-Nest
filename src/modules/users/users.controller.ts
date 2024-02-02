@@ -5,6 +5,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   userLoginReqDto,
   userRegistryReqDto,
+  userforgetPasswordReqDto,
 } from '@/modules/users/dto/user.req.dto';
 import { NoAuth } from '@/global/decorator';
 import { userRegistryAndLoginResDto } from '@/modules/users/dto/user.res.dto';
@@ -60,6 +61,29 @@ export class UsersController {
       valida,
       validaServer || '',
     );
+  }
+
+  @ApiOperation({ summary: '用户忘记密码' })
+  @NoAuth()
+  @ApiResponse({
+    status: '2XX',
+    type: userRegistryAndLoginResDto,
+  })
+  @Post('forgetPassword')
+  async forgetPassword(
+    @Body() signupData: userforgetPasswordReqDto,
+    @Session() session: Record<string, any>,
+  ) {
+    const { phoneValida, phoneNum, valida } = signupData;
+    const { captcha: validaServer } = session;
+    console.log(phoneNum, valida, phoneValida, validaServer);
+
+    // return await this.usersService.login(
+    //   username,
+    //   password,
+    //   valida,
+    //   validaServer || '',
+    // );
   }
 
   @ApiOperation({ summary: '鉴权' })
