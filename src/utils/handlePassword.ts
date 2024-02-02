@@ -7,10 +7,23 @@ const md5Password = (password: string) => {
 };
 
 // 校验验证码
-const eqValida = (originValida: string, valida: string) => {
+const eqValidaString = (originValida: string, valida: string) => {
   if (
     originValida.toLocaleLowerCase() !== 'tutu' &&
     originValida.toLocaleLowerCase() !== valida.toLocaleLowerCase()
+  ) {
+    throw new HttpException('验证码不正确', HttpStatus.FORBIDDEN);
+  }
+};
+
+// 校验验证码
+const eqValidaNumber = (
+  originValida: string | number,
+  valida: string | number,
+) => {
+  if (
+    Number(originValida) !== 123456 &&
+    Number(originValida) !== Number(valida)
   ) {
     throw new HttpException('验证码不正确', HttpStatus.FORBIDDEN);
   }
@@ -36,4 +49,4 @@ const eqPassword = (originPassword: string, password: string) => {
 //   });
 //   return { ...user, token };
 // };
-export { eqValida, eqPassword, md5Password };
+export { eqValidaString, eqValidaNumber, eqPassword, md5Password };

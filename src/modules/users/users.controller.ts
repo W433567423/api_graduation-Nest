@@ -66,17 +66,16 @@ export class UsersController {
   @NoAuth()
   @ApiResponse({
     status: '2XX',
-    type: userRegistryAndLoginResDto,
   })
   @Post('forgetPassword')
   async forgetPassword(
     @Body() signupData: userforgetPasswordReqDto,
     @Session() session: Record<string, any>,
   ) {
-    const { phoneValida, phoneNum, valida } = signupData;
-    const { captcha: validaServer } = session;
-    console.log(phoneNum, valida, phoneValida, validaServer);
-
+    const { emailValida, emailNum, newPassword } = signupData;
+    const { emailCaptcha: validaServer } = session;
+    console.log(emailNum, emailValida, validaServer);
+    this.usersService.forget(emailNum, newPassword, emailValida, validaServer);
     // return await this.usersService.login(
     //   username,
     //   password,
