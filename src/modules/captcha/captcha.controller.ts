@@ -60,7 +60,7 @@ export class CaptchaController {
     const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
     const { phoneNum } = query;
     console.log(phoneNum);
-    if (!phoneNum || phoneRex.test(phoneNum)) {
+    if (!phoneNum || !phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
     }
     const code = creatValidaCode();
@@ -80,10 +80,9 @@ export class CaptchaController {
     @Query() query: getEmailCaptchaReqDto,
     @Session() session: Record<string, any>,
   ) {
-    const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    const emailRex = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
     const { emailNum } = query;
-    console.log(emailNum);
-    if (!emailNum || phoneRex.test(emailNum)) {
+    if (!emailNum || !emailRex.test(emailNum)) {
       throw new HttpException('邮箱不正确', HttpStatus.FORBIDDEN);
     }
     const code = creatValidaCode();
