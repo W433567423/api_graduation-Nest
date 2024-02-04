@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { appResDto } from '@/modules/app/dto/app.res.dto';
+import { appResDto } from '@/modules/app-dto/app.res.dto';
 
 export class getCaptchaResDto extends appResDto {
   @ApiProperty({

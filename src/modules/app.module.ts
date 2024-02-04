@@ -15,6 +15,9 @@ import { UsersModule } from '@/modules/users/users.module';
 import { CaptchaController } from '@/modules/captcha/captcha.controller';
 import { CaptchaModule } from '@/modules/captcha/captcha.module';
 import { UsersService } from '@/modules/users/users.service';
+import { ProjectsController } from './projects/projects.controller';
+import { ProjectsModule } from './projects/projects.module';
+import { ProjectsService } from './projects/projects.service';
 
 @Module({
   imports: [
@@ -22,10 +25,17 @@ import { UsersService } from '@/modules/users/users.service';
     TypeOrmModule.forRoot(MySQLConfig),
     UsersModule,
     CaptchaModule,
+    ProjectsModule,
   ],
-  controllers: [AppController, UsersController, CaptchaController],
+  controllers: [
+    AppController,
+    UsersController,
+    CaptchaController,
+    ProjectsController,
+  ],
   providers: [
     UsersService,
+    ProjectsService,
     // 鉴权守卫
     {
       provide: APP_GUARD,
