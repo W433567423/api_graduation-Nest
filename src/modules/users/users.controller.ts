@@ -73,7 +73,7 @@ export class UsersController {
     const { emailValida, emailNum, newPassword } = signupData;
     const { emailCaptchaServer } = session;
 
-    this.usersService.forget(
+    await this.usersService.forget(
       emailNum,
       newPassword,
       emailValida,
