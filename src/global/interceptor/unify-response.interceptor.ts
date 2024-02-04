@@ -9,6 +9,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { map, Observable } from 'rxjs';
 import { Logger } from 'winston';
 import { getInfoReq } from 'src/global/helper/';
+import type { IResData } from '@/modules';
 
 @Injectable()
 export default class TransformInterceptor implements NestInterceptor {
@@ -17,15 +18,15 @@ export default class TransformInterceptor implements NestInterceptor {
   ) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: IResData<any>) => {
         this.logger.info('response', {
           responseData: data,
           req: getInfoReq(context.switchToHttp().getRequest()),
         });
         return {
-          code: 200,
-          message: '请求成功',
-          data,
+          code: data.code || 200,
+          message: data.msg || '请求成功',
+          data: data.msg || data.data,
         };
       }),
     );

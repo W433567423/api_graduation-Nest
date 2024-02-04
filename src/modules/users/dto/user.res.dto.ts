@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { appResDto } from '@/modules/app-dto/app.res.dto';
+import { successResDto } from '@/modules/app-dto/app.res.dto';
 
-export class userRegistryAndLoginResDto extends appResDto {
+export class userRegistryAndLoginResDto extends successResDto<string> {
   @ApiProperty({
     description: 'token',
     example:
@@ -11,5 +11,3 @@ export class userRegistryAndLoginResDto extends appResDto {
   @IsNotEmpty({ message: 'token不能为空' })
   readonly data: string;
 }
-
-export class userLoginResDto extends appResDto {}

@@ -1,3 +1,9 @@
+interface IResData<T> {
+  code?: number;
+  msg?: string;
+  data?: T;
+}
+
 interface IUser {
   id: number;
   username: string;
@@ -8,4 +14,4 @@ interface IUser {
 interface IReqUser extends Request {
   user?: IUser;
 }
-export type { IUser, IReqUser };
+export type { IUser, IReqUser, IResData };

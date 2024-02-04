@@ -6,6 +6,8 @@ import {
   reNameProjectReqDto,
   getListReqDto,
 } from './dto/project.req.dto';
+import type { IResData } from '../index';
+import type { IGetListRes } from './index';
 
 @ApiTags('项目管理')
 @ApiBearerAuth('JWT-auth')
@@ -15,25 +17,25 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '创建项目' })
   @Post('create')
-  async create(@Body() data: createProjectReqDto) {
+  async create(@Body() data: createProjectReqDto): Promise<IResData<string>> {
     await this.projectsService.create(data.projectName);
 
-    return '项目创建成功';
+    return { code: 201, msg: '项目创建成功' };
   }
 
   @ApiOperation({ summary: '获取项目列表' })
   @Post('list')
-  async getList(@Body() data: getListReqDto) {
+  async getList(@Body() data: getListReqDto): Promise<IResData<IGetListRes>> {
     const dbRes = await this.projectsService.getList(data.page, data.size);
 
-    return { list: dbRes[0], total: dbRes[1] };
+    return { data: { list: dbRes[0], total: dbRes[1] } };
   }
 
   @ApiOperation({ summary: '重命名项目' })
   @Patch('rename')
-  async auth(@Body() data: reNameProjectReqDto) {
+  async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {
     await this.projectsService.reName(data.projectName, data.newName);
 
-    return '项目重命名成功';
+    return { msg: '项目重命名成功' };
   }
 }

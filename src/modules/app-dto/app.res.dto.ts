@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SERVER_PORT, swaggerPrefix } from '@/config';
 import { IsNotEmpty } from 'class-validator';
 
-export class appResDto {
+export class successResDto<T> {
   @ApiProperty({ description: '状态码', example: '200' })
   @IsNotEmpty({ message: '状态码不能为空' })
   readonly code: number;
@@ -13,12 +12,11 @@ export class appResDto {
   })
   @IsNotEmpty({ message: '返回信息不能为空' })
   readonly msg: string;
-}
 
-export class defaultAppResDto extends appResDto {
   @ApiProperty({
     description: '返回的数据',
-    example: `<h1>hallo, this is tutu の graduation</h1><hr/><li>the swagger address is <a href="http://localhost:${SERVER_PORT}/${swaggerPrefix}">localhost:${SERVER_PORT}/${swaggerPrefix}</a>;</li>`,
+    example: 'ok',
+    required: false,
   })
-  readonly data?: string;
+  readonly data?: T;
 }
