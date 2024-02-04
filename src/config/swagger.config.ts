@@ -16,7 +16,6 @@ const swaggerOptions = new DocumentBuilder()
     },
     'JWT-auth',
   )
-  .addApiKey()
   .build();
 
 // swagger链接前缀

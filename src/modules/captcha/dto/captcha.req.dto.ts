@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsMobilePhone } from 'class-validator';
 
 export class getCaptchaReqDto {
   @ApiProperty({
@@ -23,6 +24,7 @@ export class getPhoneCaptchaReqDto {
     example: '17762647331',
     default: '17762647331',
   })
+  @IsMobilePhone()
   readonly phoneNum: string;
 }
 
@@ -32,5 +34,6 @@ export class getEmailCaptchaReqDto {
     example: 't433567423@qq.com',
     default: 't433567423@qq.com',
   })
+  @IsEmail()
   readonly emailNum: string;
 }
