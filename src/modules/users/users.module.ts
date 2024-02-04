@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from '@/modules/users/entities/users.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from '@/config';
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([UsersEntity]),
@@ -13,6 +12,6 @@ import { jwtConfig } from '@/config';
   ],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, UsersModule],
 })
 export class UsersModule {}

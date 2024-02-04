@@ -1,7 +1,12 @@
 import { Body, Controller, Get, Post, Req, Res, Session } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from './users.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import {
   userLoginReqDto,
   userRegistryReqDto,
@@ -25,16 +30,16 @@ export class UsersController {
   async registry(
     @Body() signupData: userRegistryReqDto,
     @Res() res: Response,
-    @Session() session: { captchaServer: string | undefined },
+    @Session() session: { emailCaptchaServer: number | undefined },
   ) {
     const { username, password, emailValida, emailNum } = signupData;
-    const { captchaServer } = session;
+    const { emailCaptchaServer } = session;
 
     const token = await this.usersService.registry(
       username,
       password,
       emailValida,
-      captchaServer || '',
+      emailCaptchaServer || 0,
       emailNum,
     );
     return res.send({ code: 201, message: '注册成功', data: token });
@@ -83,6 +88,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: '鉴权' })
+  @ApiBearerAuth('JWT-auth')
   @Get('auth')
   auth(@Req() req: Request) {
     return (req as any).user;

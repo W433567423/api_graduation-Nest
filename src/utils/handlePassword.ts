@@ -18,7 +18,7 @@ const eqValidaString = (codevalida: string, validaServer: string) => {
 
 // 校验验证码
 const eqValidaNumber = (codevalida: number, validaServer: number) => {
-  if (codevalida !== 123456 && codevalida !== validaServer) {
+  if (codevalida !== 333333 && codevalida !== validaServer) {
     throw new HttpException('邮箱/手机号验证码不正确', HttpStatus.FORBIDDEN);
   }
 };

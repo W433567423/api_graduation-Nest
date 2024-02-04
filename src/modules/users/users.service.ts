@@ -33,11 +33,11 @@ export class UsersService {
   async registry(
     username: string,
     originPassword: string,
-    originValida: string,
-    valida: string,
+    emailValida: string,
+    validaServer: number,
     email: string,
   ) {
-    eqValidaString(originValida, String(valida));
+    eqValidaNumber(Number(emailValida), validaServer);
 
     // 查询该用户名是否注册
     await this.isExistByName(username, 'registry');

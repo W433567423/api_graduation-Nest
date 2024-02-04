@@ -10,7 +10,7 @@ import { IS_PUBLIC } from '../decorator';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { jwtSecret } from '@/config';
-
+import type { IUser, IReqUser } from '@/modules';
 // 登录拦截
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,21 +32,19 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     } else {
-      const request = context.switchToHttp().getRequest();
+      const request = context.switchToHttp().getRequest<IReqUser>();
       const authorization: string | undefined = context
         .switchToRpc()
         .getData()
         .headers?.authorization?.replace('Bearer ', '');
       if (authorization) {
         try {
-          console.log(
-            await this.jwtService.verifyAsync(authorization, {
+          request['user'] = await this.jwtService.verifyAsync<IUser>(
+            authorization,
+            {
               secret: jwtSecret,
-            }),
+            },
           );
-          request['user'] = await this.jwtService.verifyAsync(authorization, {
-            secret: jwtSecret,
-          });
           return true;
         } catch {
           throw new UnauthorizedException();
