@@ -1,10 +1,17 @@
-import { Controller, Patch, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Patch,
+  Post,
+  Body,
+  Get,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { ProjectsService } from './projects.service';
 import {
   createProjectReqDto,
   reNameProjectReqDto,
-  getListReqDto,
 } from './dto/project.req.dto';
 import type { IResData } from '../index';
 import type { IGetListRes } from './index';
@@ -24,9 +31,12 @@ export class ProjectsController {
   }
 
   @ApiOperation({ summary: '获取项目列表' })
-  @Post('list')
-  async getList(@Body() data: getListReqDto): Promise<IResData<IGetListRes>> {
-    const dbRes = await this.projectsService.getList(data.page, data.size);
+  @Get('list')
+  async getList(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('size', ParseIntPipe) size: number,
+  ): Promise<IResData<IGetListRes>> {
+    const dbRes = await this.projectsService.getList(page, size);
 
     return { data: { list: dbRes[0], total: dbRes[1] } };
   }
