@@ -12,6 +12,7 @@ import { ProjectsService } from './projects.service';
 import {
   createProjectReqDto,
   reNameProjectReqDto,
+  getListReqDto,
 } from './dto/project.req.dto';
 import type { IResData } from '../index';
 import type { IGetListRes } from './index';
@@ -33,6 +34,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '获取项目列表' })
   @Get('list')
   async getList(
+    @Query() _query: getListReqDto,
     @Query('page', ParseIntPipe) page: number,
     @Query('size', ParseIntPipe) size: number,
   ): Promise<IResData<IGetListRes>> {

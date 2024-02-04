@@ -1,4 +1,3 @@
-import { ParseIntPipe } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 export class userDefaultReqDto {
@@ -16,25 +15,23 @@ export class createProjectReqDto {
   readonly projectName: string;
 }
 
-// export class getListReqDto {
-//   @ApiProperty({
-//     description: '页码',
-//     example: 0,
-//     required: false,
-//     minimum: 1,
-//   })
-//   @IsNumberString()
-//   readonly page?: number;
+export class getListReqDto {
+  @ApiProperty({
+    description: '页码',
+    example: 0,
+    minimum: 0,
+  })
+  @IsNumberString()
+  readonly page: number;
 
-//   @ApiProperty({
-//     description: '每页数量',
-//     example: 1,
-//     required: false,
-//     minimum: 1,
-//   })
-//   @IsNumberString()
-//   readonly size?: number;
-// }
+  @ApiProperty({
+    description: '每页数量',
+    example: 10,
+    minimum: 1,
+  })
+  @IsNumberString()
+  readonly size: number;
+}
 
 export class reNameProjectReqDto {
   @ApiProperty({
