@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsNotEmpty, IsNumberString, MaxLength } from 'class-validator';
 export class userDefaultReqDto {
   @ApiProperty({ description: '用户名', example: 'test' })
   @IsNotEmpty({ message: '用户名不能为空' })
@@ -10,9 +10,10 @@ export class createProjectReqDto {
   @ApiProperty({
     description: '项目名称',
     example: 'test',
-    maximum: 12,
+    maxLength: 12,
   })
   @IsNotEmpty({ message: '项目名称不能为空' })
+  @MaxLength(12)
   readonly projectName: string;
 }
 
@@ -48,5 +49,15 @@ export class reNameProjectReqDto {
     example: 'new test',
   })
   @IsNotEmpty({ message: '项目名称不能为空' })
+  @MaxLength(12)
   readonly newName: string;
+}
+
+export class deleteProjectReqDto {
+  @ApiProperty({
+    description: '项目的id',
+    example: '0',
+  })
+  @IsNotEmpty({ message: '项目的id不能为空' })
+  readonly projectId: number;
 }

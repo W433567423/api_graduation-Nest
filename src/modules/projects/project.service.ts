@@ -62,6 +62,17 @@ export class ProjectsService {
       throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
     }
   }
+
+  // 删除项目
+  async deleteById(id: number) {
+    const user = await this.getUser();
+    const res = await this.projectRepository.delete({
+      id,
+      user,
+    });
+    console.log(res);
+  }
+
   // 判断项目名是否被使用
   async isExistProject(projectName: string, user: UsersEntity) {
     const dbProject = await this.projectRepository.findOneBy({

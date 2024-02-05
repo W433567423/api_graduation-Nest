@@ -6,6 +6,7 @@ import {
   Get,
   Query,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -18,6 +19,7 @@ import {
   createProjectReqDto,
   reNameProjectReqDto,
   getListReqDto,
+  deleteProjectReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto } from './dtos/project.res.dto';
 import type { IResData } from '../index';
@@ -60,5 +62,13 @@ export class ProjectsController {
     await this.projectsService.reName(data.projectId, data.newName);
 
     return { msg: '项目重命名成功' };
+  }
+
+  @ApiOperation({ summary: '删除项目' })
+  @Delete('delete')
+  async delet(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
+    await this.projectsService.deleteById(data.projectId);
+
+    return { msg: '项目删除成功' };
   }
 }
