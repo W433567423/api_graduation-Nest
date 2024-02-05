@@ -36,12 +36,11 @@ export class getListReqDto {
 
 export class reNameProjectReqDto {
   @ApiProperty({
-    description: '旧项目名称',
-    example: 'test',
-    maximum: 12,
+    description: '项目的id',
+    example: '0',
   })
-  @IsNotEmpty({ message: '项目名称不能为空' })
-  readonly projectName: string;
+  @IsNotEmpty({ message: '项目的id不能为空' })
+  readonly projectId: number;
 
   @ApiProperty({
     description: '新项目名称',

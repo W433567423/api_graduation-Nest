@@ -57,7 +57,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '重命名项目' })
   @Patch('rename')
   async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.reName(data.projectName, data.newName);
+    await this.projectsService.reName(data.projectId, data.newName);
 
     return { msg: '项目重命名成功' };
   }

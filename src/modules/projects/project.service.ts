@@ -48,11 +48,11 @@ export class ProjectsService {
   }
 
   // 重命名项目
-  async reName(projectName: string, newName: string) {
+  async reName(projectId: number, newName: string) {
     const user = await this.getUser();
 
     const dbProject = await this.projectRepository.findOneBy({
-      projectName,
+      id: projectId,
       user,
     });
     if (dbProject) {

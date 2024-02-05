@@ -14,7 +14,5 @@ export const corsConfig: CorsOptions = {
   origin: ['http://localhost:5173'],
   // 指定了是否允许跨域请求携带认证信息，如 Cookies、Authorization 等
   credentials: true,
-  //  定义了响应头中可以被客户端读取的字段列表。这里只列出了一个字段名 API-Token-Expiry。
-  exposedHeaders: ['API-Token-Expiry'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 };
