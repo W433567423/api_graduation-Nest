@@ -1,4 +1,4 @@
-import { ProjectsEntity } from './entities/projects.entity';
+import { ProjectsEntity } from './entities/project.entity';
 interface IGetListRes {
   list: ProjectsEntity[];
   total: number;

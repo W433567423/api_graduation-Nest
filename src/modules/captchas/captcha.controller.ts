@@ -13,13 +13,13 @@ import {
   getCaptchaReqDto,
   getPhoneCaptchaReqDto,
   getEmailCaptchaReqDto,
-} from '@/modules/captcha/dto/captcha.req.dto';
+} from '@/modules/captchas/dtos/captcha.req.dto';
 import { creatValidaCode, EmailInstance } from '@/utils';
 import {
   getCaptchaResDto,
   getPhoneCaptchaResDto,
   getEmailCaptchaResDto,
-} from '@/modules/captcha/dto/captcha.res.dto';
+} from '@/modules/captchas/dtos/captcha.res.dto';
 import type { IResData } from '../index';
 
 @ApiTags('验证码')
@@ -44,6 +44,7 @@ export class CaptchaController {
       ...query,
     });
     session.captcha = captcha.text;
+
     return { msg: '获取图形验证码成功', data: captcha.data };
   }
 

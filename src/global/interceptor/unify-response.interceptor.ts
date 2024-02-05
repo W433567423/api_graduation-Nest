@@ -26,7 +26,7 @@ export default class TransformInterceptor implements NestInterceptor {
         return {
           code: data.code || 200,
           message: data.msg || '请求成功',
-          data: data.msg || data.data,
+          data: data.data,
         };
       }),
     );

@@ -10,6 +10,7 @@ export class createProjectReqDto {
   @ApiProperty({
     description: '项目名称',
     example: 'test',
+    maximum: 12,
   })
   @IsNotEmpty({ message: '项目名称不能为空' })
   readonly projectName: string;
@@ -37,12 +38,14 @@ export class reNameProjectReqDto {
   @ApiProperty({
     description: '旧项目名称',
     example: 'test',
+    maximum: 12,
   })
   @IsNotEmpty({ message: '项目名称不能为空' })
   readonly projectName: string;
 
   @ApiProperty({
     description: '新项目名称',
+    maximum: 12,
     example: 'new test',
   })
   @IsNotEmpty({ message: '项目名称不能为空' })

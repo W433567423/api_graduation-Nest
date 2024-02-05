@@ -1,4 +1,4 @@
-import { ProjectsEntity } from '@/modules/projects/entities/projects.entity';
+import { ProjectsEntity } from '@/modules/projects/entities/project.entity';
 import {
   BaseEntity,
   Column,

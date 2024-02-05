@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req, Session } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './user.service';
 import {
   ApiOperation,
   ApiResponse,
@@ -10,9 +10,9 @@ import {
   userLoginReqDto,
   userRegistryReqDto,
   userforgetPasswordReqDto,
-} from '@/modules/users/dto/user.req.dto';
+} from '@/modules/users/dtos/user.req.dto';
 import { NoAuth } from '@/global/decorator';
-import { userRegistryAndLoginResDto } from '@/modules/users/dto/user.res.dto';
+import { userRegistryAndLoginResDto } from '@/modules/users/dtos/user.res.dto';
 import type { IReqUser, IResData, IUser } from '../index';
 
 @ApiTags('用户管理')

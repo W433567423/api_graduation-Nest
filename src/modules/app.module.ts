@@ -10,14 +10,14 @@ import { UnifyExceptionFilter } from '@/global/filter';
 import { UnifyResponseInterceptor } from '@/global/interceptor';
 import { AuthGuard } from '@/global/guard/auth.guard';
 
-import { UsersController } from '@/modules/users/users.controller';
-import { UsersModule } from '@/modules/users/users.module';
-import { CaptchaController } from '@/modules/captcha/captcha.controller';
-import { CaptchaModule } from '@/modules/captcha/captcha.module';
-import { UsersService } from '@/modules/users/users.service';
-import { ProjectsController } from './projects/projects.controller';
-import { ProjectsModule } from './projects/projects.module';
-import { ProjectsService } from './projects/projects.service';
+import { UsersController } from '@/modules/users/user.controller';
+import { UsersModule } from '@/modules/users/user.module';
+import { CaptchaController } from '@/modules/captchas/captcha.controller';
+import { CaptchaModule } from '@/modules/captchas/captcha.module';
+import { UsersService } from '@/modules/users/user.service';
+import { ProjectsController } from './projects/project.controller';
+import { ProjectsModule } from './projects/project.module';
+import { ProjectsService } from './projects/project.service';
 
 @Module({
   imports: [

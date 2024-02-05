@@ -7,13 +7,19 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { ProjectsService } from './projects.service';
+import {
+  ApiOperation,
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { ProjectsService } from './project.service';
 import {
   createProjectReqDto,
   reNameProjectReqDto,
   getListReqDto,
-} from './dto/project.req.dto';
+} from './dtos/project.req.dto';
+import { getListResDto } from './dtos/project.res.dto';
 import type { IResData } from '../index';
 import type { IGetListRes } from './index';
 
@@ -33,6 +39,11 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '获取项目列表' })
   @Get('list')
+  @ApiResponse({
+    status: '2XX',
+    description: '系统成功响应',
+    type: getListResDto,
+  })
   async getList(
     @Query() _query: getListReqDto,
     @Query('page', ParseIntPipe) page: number,

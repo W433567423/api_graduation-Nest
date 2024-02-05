@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SERVER_PORT, statusFive, statusFour, swaggerPrefix } from '@/config';
-import { successResDto } from '@/modules/app-dto/app.res.dto';
+import { successResDto } from '@/modules/api-dtos/app.res.dto';
 import { NoAuth } from '@/global/decorator';
 import type { IResData } from './index';
 

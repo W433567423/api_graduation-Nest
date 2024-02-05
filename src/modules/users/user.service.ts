@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from '@/modules/users/entities/users.entity';
+import { UsersEntity } from '@/modules/users/entities/user.entity';
 import {
   eqPassword,
   eqValidaNumber,

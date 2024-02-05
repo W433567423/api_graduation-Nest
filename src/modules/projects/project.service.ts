@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProjectsEntity } from './entities/projects.entity';
+import { ProjectsEntity } from './entities/project.entity';
 import { REQUEST } from '@nestjs/core';
 import { IReqUser } from '..';
-import { UsersEntity } from '../users/entities/users.entity';
+import { UsersEntity } from '../users/entities/user.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectsService {
