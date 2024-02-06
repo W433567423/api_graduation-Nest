@@ -95,4 +95,17 @@ export class ProjectsService {
     }
     return user;
   }
+
+  // 设置运行状态
+  async setProjectStatus(user: UsersEntity, projectId: number, status: number) {
+    const dbProject = await this.projectRepository.findOneBy({
+      id: projectId,
+      user,
+    });
+    if (dbProject) {
+      this.projectRepository.update(projectId, { lastStatus: status });
+    } else {
+      throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
+    }
+  }
 }

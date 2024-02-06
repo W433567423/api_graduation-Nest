@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('projcts')
@@ -19,10 +20,17 @@ export class ProjectsEntity extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   lastStatus: number; // 0:未知,-1:错误,1:成功
 
-  @CreateDateColumn()
+  @Column({ type: 'longtext', nullable: true })
+  code: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
   createTime: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn({
+    type: 'timestamp',
+  })
   updateTime: Date;
 
   @ManyToOne(() => UsersEntity, (user) => user.projects)
