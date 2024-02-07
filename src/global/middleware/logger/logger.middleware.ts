@@ -13,12 +13,7 @@ export default class LoggerMiddleware implements NestMiddleware {
     this.logger.warn('route', {
       req: getInfoReq(req),
     });
-    console.log(
-      'route',
-      JSON.stringify({
-        req: getInfoReq(req),
-      }),
-    );
+
     next();
   }
 }

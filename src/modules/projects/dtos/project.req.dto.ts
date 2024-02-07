@@ -55,9 +55,25 @@ export class reNameProjectReqDto {
 
 export class deleteProjectReqDto {
   @ApiProperty({
+    description: '项目的id数组',
+    example: [0],
+  })
+  @IsNotEmpty({ message: '项目的id数组不能为空' })
+  readonly projectIds: number[];
+}
+
+export class disableProjectReqDto {
+  @ApiProperty({
     description: '项目的id',
     example: '0',
   })
   @IsNotEmpty({ message: '项目的id不能为空' })
   readonly projectId: number;
+
+  @ApiProperty({
+    description: '项目的禁用状态',
+    example: false,
+  })
+  @IsNotEmpty({ message: '项目的禁用状态不能为空' })
+  readonly disable: boolean;
 }

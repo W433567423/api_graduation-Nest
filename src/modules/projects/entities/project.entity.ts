@@ -23,6 +23,9 @@ export class ProjectsEntity extends BaseEntity {
   @Column({ type: 'longtext', nullable: true })
   code: string;
 
+  @Column({ type: 'boolean', default: false })
+  disable: boolean;
+
   @CreateDateColumn({
     type: 'timestamp',
   })

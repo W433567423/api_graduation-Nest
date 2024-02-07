@@ -35,7 +35,6 @@ export class ProjectsService {
   // 获取项目列表
   async getList(page: number | undefined, size: number | undefined) {
     const user = await this.getUser();
-    console.log(page, size, page === undefined && size === undefined);
     if (page === undefined && size === undefined) {
       return this.projectRepository.findAndCountBy({ user });
     } else {
@@ -64,13 +63,15 @@ export class ProjectsService {
   }
 
   // 删除项目
-  async deleteById(id: number) {
+  async deleteByIds(ids: number[]) {
     const user = await this.getUser();
-    const res = await this.projectRepository.delete({
-      id,
-      user,
-    });
-    console.log(res);
+    const qb = this.projectRepository.createQueryBuilder('project');
+    const projects = await qb
+      .where('project.userId = :userId', { userId: user.id })
+      .andWhere('project.id IN (:ids)', { ids })
+      .getMany();
+
+    return await this.projectRepository.remove(projects);
   }
 
   // 判断项目名是否被使用
@@ -84,16 +85,18 @@ export class ProjectsService {
     }
   }
 
-  // 获取用户
-  async getUser() {
-    const user = await this.userRepository.findOneBy({
-      id: this.requset.user?.id,
+  // 设置运行状态
+  async setProjectDisable(projectId: number, status: boolean) {
+    const user = await this.getUser();
+    const dbProject = await this.projectRepository.findOneBy({
+      id: projectId,
+      user,
     });
-    if (!user) {
-      // 理论上不可能
-      throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
+    if (dbProject) {
+      this.projectRepository.update(projectId, { disable: status });
+    } else {
+      throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
     }
-    return user;
   }
 
   // 设置运行状态
@@ -107,5 +110,17 @@ export class ProjectsService {
     } else {
       throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
     }
+  }
+
+  // 获取用户
+  async getUser() {
+    const user = await this.userRepository.findOneBy({
+      id: this.requset.user?.id,
+    });
+    if (!user) {
+      // 理论上不可能
+      throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
+    }
+    return user;
   }
 }

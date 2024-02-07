@@ -20,6 +20,7 @@ import {
   reNameProjectReqDto,
   getListReqDto,
   deleteProjectReqDto,
+  disableProjectReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto } from './dtos/project.res.dto';
 import type { IResData } from '../index';
@@ -64,10 +65,18 @@ export class ProjectsController {
     return { msg: '项目重命名成功' };
   }
 
+  @ApiOperation({ summary: '禁用项目' })
+  @Patch('disable')
+  async disable(@Body() data: disableProjectReqDto): Promise<IResData<null>> {
+    await this.projectsService.setProjectDisable(data.projectId, data.disable);
+
+    return { msg: '项目改变禁用状态成功' };
+  }
+
   @ApiOperation({ summary: '删除项目' })
   @Delete('delete')
   async delet(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.deleteById(data.projectId);
+    await this.projectsService.deleteByIds(data.projectIds);
 
     return { msg: '项目删除成功' };
   }
