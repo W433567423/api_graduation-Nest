@@ -58,6 +58,17 @@ export class ProjectsController {
     return { data: { list: dbRes, total: projectTotal } };
   }
 
+  @ApiOperation({ summary: '获取项目代码' })
+  @Get('code')
+  async getCode(
+    @Query('projectId', ParseIntPipe) projectId: number,
+  ): Promise<IResData<string>> {
+    return {
+      msg: '获取代码成功',
+      data: await this.projectsService.getProjectCode(projectId),
+    };
+  }
+
   @ApiOperation({ summary: '重命名项目' })
   @Patch('rename')
   async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {

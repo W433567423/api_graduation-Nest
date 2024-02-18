@@ -32,6 +32,7 @@ export class ProjectsService {
     projct.user = user;
     this.projectRepository.save(projct);
   }
+
   // 获取项目列表
   async getList(page: number | undefined, size: number | undefined) {
     const user = await this.getUser();
@@ -65,7 +66,18 @@ export class ProjectsService {
     }
   }
 
-  // 重命名项目
+  // 获取项目代码
+  async getProjectCode(projectId: number) {
+    const user = await this.getUser();
+
+    const code = await this.projectRepository.find({
+      select: ['code'],
+      where: { id: projectId, user },
+    });
+
+    return code?.[0]?.code || 'none code';
+  }
+
   async reName(projectId: number, newName: string) {
     const user = await this.getUser();
 
@@ -94,7 +106,7 @@ export class ProjectsService {
       .execute();
   }
 
-  // 设置运行状态
+  // 设置禁用状态
   async setProjectDisable(ids: number[], disable: boolean) {
     const user = await this.getUser();
 
