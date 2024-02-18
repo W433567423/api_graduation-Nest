@@ -62,6 +62,15 @@ export class deleteProjectReqDto {
   readonly projectIds: number[];
 }
 
+export class changeProjectCodeReqDto {
+  @ApiProperty({
+    description: '项目的代码(仅简单模式)',
+    example: 'console.log(1)',
+  })
+  @IsNotEmpty({ message: '代码内容不能为空' })
+  readonly code: string;
+}
+
 export class disableProjectReqDto {
   @ApiProperty({
     description: '项目的ids',

@@ -21,10 +21,12 @@ import {
   getListReqDto,
   deleteProjectReqDto,
   disableProjectReqDto,
+  changeProjectCodeReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto } from './dtos/project.res.dto';
 import type { IResData } from '../index';
 import type { IGetListRes } from './index';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @ApiTags('项目管理')
 @ApiBearerAuth('JWT-auth')
@@ -66,6 +68,18 @@ export class ProjectsController {
     return {
       msg: '获取代码成功',
       data: await this.projectsService.getProjectCode(projectId),
+    };
+  }
+
+  @ApiOperation({ summary: '修改项目代码' })
+  @Patch('code')
+  async changeCode(
+    @Query('projectId', ParseIntPipe) projectId: number,
+    @Body() data: changeProjectCodeReqDto,
+  ): Promise<IResData<UpdateResult>> {
+    return {
+      msg: '修改代码成功',
+      data: await this.projectsService.changeProjectCode(projectId, data.code),
     };
   }
 

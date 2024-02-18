@@ -78,6 +78,21 @@ export class ProjectsService {
     return code?.[0]?.code || 'none code';
   }
 
+  // 修改项目代码
+  async changeProjectCode(projectId: number, code: string) {
+    const user = await this.getUser();
+    const dbProject = await this.projectRepository.findOneBy({
+      id: projectId,
+      user,
+    });
+    if (dbProject) {
+      return await this.projectRepository.update(dbProject.id, { code });
+    } else {
+      throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
+    }
+  }
+
+  // 重命名项目
   async reName(projectId: number, newName: string) {
     const user = await this.getUser();
 
