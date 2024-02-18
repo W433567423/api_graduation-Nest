@@ -68,7 +68,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '禁用项目' })
   @Patch('disable')
   async disable(@Body() data: disableProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.setProjectDisable(data.projectId, data.disable);
+    await this.projectsService.setProjectDisable(data.projectIds, data.disable);
 
     return { msg: '项目改变禁用状态成功' };
   }

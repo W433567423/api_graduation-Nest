@@ -62,18 +62,6 @@ export class ProjectsService {
     }
   }
 
-  // 删除项目
-  async deleteByIds(ids: number[]) {
-    const user = await this.getUser();
-    const qb = this.projectRepository.createQueryBuilder('project');
-    const projects = await qb
-      .where('project.userId = :userId', { userId: user.id })
-      .andWhere('project.id IN (:ids)', { ids })
-      .getMany();
-
-    return await this.projectRepository.remove(projects);
-  }
-
   // 判断项目名是否被使用
   async isExistProject(projectName: string, user: UsersEntity) {
     const dbProject = await this.projectRepository.findOneBy({
@@ -85,18 +73,30 @@ export class ProjectsService {
     }
   }
 
-  // 设置运行状态
-  async setProjectDisable(projectId: number, status: boolean) {
+  // 删除项目
+  async deleteByIds(ids: number[]) {
     const user = await this.getUser();
-    const dbProject = await this.projectRepository.findOneBy({
-      id: projectId,
-      user,
-    });
-    if (dbProject) {
-      this.projectRepository.update(projectId, { disable: status });
-    } else {
-      throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
-    }
+    const qb = this.projectRepository.createQueryBuilder('project');
+    return await qb
+      .createQueryBuilder()
+      .delete()
+      .from(ProjectsEntity)
+      .where('userId = :userId', { userId: user.id })
+      .andWhere('id IN (:ids)', { ids })
+      .execute();
+  }
+
+  // 设置运行状态
+  async setProjectDisable(ids: number[], disable: boolean) {
+    const user = await this.getUser();
+
+    return await this.projectRepository
+      .createQueryBuilder()
+      .update(ProjectsEntity)
+      .set({ disable: disable })
+      .where('userId = :userId', { userId: user.id })
+      .andWhere('id IN (:ids)', { ids })
+      .execute();
   }
 
   // 设置运行状态

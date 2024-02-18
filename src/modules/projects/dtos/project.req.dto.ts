@@ -64,15 +64,15 @@ export class deleteProjectReqDto {
 
 export class disableProjectReqDto {
   @ApiProperty({
-    description: '项目的id',
-    example: '0',
+    description: '项目的ids',
+    example: [0],
   })
-  @IsNotEmpty({ message: '项目的id不能为空' })
-  readonly projectId: number;
+  @IsNotEmpty({ message: '项目的ids不能为空' })
+  readonly projectIds: number[];
 
   @ApiProperty({
     description: '项目的禁用状态',
-    example: false,
+    example: true,
   })
   @IsNotEmpty({ message: '项目的禁用状态不能为空' })
   readonly disable: boolean;
