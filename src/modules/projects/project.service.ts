@@ -81,6 +81,8 @@ export class ProjectsService {
   // 修改项目代码
   async changeProjectCode(projectId: number, code: string) {
     const user = await this.getUser();
+    console.log(projectId, code);
+
     const dbProject = await this.projectRepository.findOneBy({
       id: projectId,
       user,
