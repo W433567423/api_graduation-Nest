@@ -53,8 +53,9 @@ export class ProjectsController {
     @Query('size', ParseIntPipe) size: number,
   ): Promise<IResData<IGetListRes>> {
     const dbRes = await this.projectsService.getList(page, size);
+    const projectTotal = await this.projectsService.getProjectTotal();
 
-    return { data: { list: dbRes[0], total: dbRes[1] } };
+    return { data: { list: dbRes, total: projectTotal } };
   }
 
   @ApiOperation({ summary: '重命名项目' })

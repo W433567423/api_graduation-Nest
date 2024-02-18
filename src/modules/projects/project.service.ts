@@ -36,11 +36,30 @@ export class ProjectsService {
   async getList(page: number | undefined, size: number | undefined) {
     const user = await this.getUser();
     if (page === undefined && size === undefined) {
-      return this.projectRepository.findAndCountBy({ user });
+      return this.projectRepository.find({
+        select: [
+          'id',
+          'projectName',
+          'createTime',
+          'updateTime',
+          'disable',
+          'lastStatus',
+        ],
+        where: { user },
+      });
+      // return this.projectRepository.findAndCountBy({ user });
     } else {
-      return this.projectRepository.findAndCount({
+      return this.projectRepository.find({
         skip: page,
         take: size,
+        select: [
+          'id',
+          'projectName',
+          'createTime',
+          'updateTime',
+          'disable',
+          'lastStatus',
+        ],
         where: { user },
       });
     }
@@ -59,17 +78,6 @@ export class ProjectsService {
       this.projectRepository.update(dbProject.id, { projectName: newName });
     } else {
       throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
-    }
-  }
-
-  // 判断项目名是否被使用
-  async isExistProject(projectName: string, user: UsersEntity) {
-    const dbProject = await this.projectRepository.findOneBy({
-      projectName,
-      user,
-    });
-    if (dbProject) {
-      throw new HttpException('该项目名已被使用', HttpStatus.FORBIDDEN);
     }
   }
 
@@ -109,6 +117,22 @@ export class ProjectsService {
       this.projectRepository.update(projectId, { lastStatus: status });
     } else {
       throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
+    }
+  }
+  // 设置运行状态
+  async getProjectTotal() {
+    const user = await this.getUser();
+    return await this.projectRepository.countBy({ user });
+  }
+
+  // 判断项目名是否被使用
+  async isExistProject(projectName: string, user: UsersEntity) {
+    const dbProject = await this.projectRepository.findOneBy({
+      projectName,
+      user,
+    });
+    if (dbProject) {
+      throw new HttpException('该项目名已被使用', HttpStatus.FORBIDDEN);
     }
   }
 
