@@ -11,6 +11,7 @@ import { ProjectsEntity } from './entities/project.entity';
 import { REQUEST } from '@nestjs/core';
 import { IReqUser } from '..';
 import { UsersEntity } from '../users/entities/user.entity';
+import { runCode } from '@/utils/runCode.utils';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectsService {
@@ -69,12 +70,10 @@ export class ProjectsService {
   // 获取项目代码
   async getProjectCode(projectId: number) {
     const user = await this.getUser();
-
     const code = await this.projectRepository.find({
       select: ['code'],
       where: { id: projectId, user },
     });
-
     return code?.[0]?.code || 'none code';
   }
 
@@ -92,6 +91,13 @@ export class ProjectsService {
     } else {
       throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
     }
+  }
+  // 运行项目代码
+  async runProjectCode(code: string, type: string) {
+    await this.getUser();
+    console.log(await runCode(code, type));
+
+    return await runCode(code, type);
   }
 
   // 重命名项目

@@ -47,6 +47,7 @@
     "tencentcloud-sdk-nodejs": "^4.0.791",
     "typeorm": "^0.3.19",
     "uuid": "^9.0.1",
+    "vm2": "^3.9.19",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"
   },

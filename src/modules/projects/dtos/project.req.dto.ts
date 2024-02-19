@@ -71,6 +71,15 @@ export class changeProjectCodeReqDto {
   readonly code: string;
 }
 
+export class runProjectCodeReqDto extends changeProjectCodeReqDto {
+  @ApiProperty({
+    description: '代码语言',
+    example: 'javascript',
+  })
+  @IsNotEmpty({ message: '代码语言不能为空' })
+  readonly codeType: string;
+}
+
 export class disableProjectReqDto {
   @ApiProperty({
     description: '项目的ids',

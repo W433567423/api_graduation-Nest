@@ -22,6 +22,7 @@ import {
   deleteProjectReqDto,
   disableProjectReqDto,
   changeProjectCodeReqDto,
+  runProjectCodeReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto } from './dtos/project.res.dto';
 import type { IResData } from '../index';
@@ -80,6 +81,15 @@ export class ProjectsController {
     return {
       msg: '修改代码成功',
       data: await this.projectsService.changeProjectCode(projectId, data.code),
+    };
+  }
+
+  @ApiOperation({ summary: '运行项目代码' })
+  @Post('code')
+  async runCode(@Body() data: runProjectCodeReqDto): Promise<IResData<any>> {
+    return {
+      msg: '代码运行成功',
+      data: await this.projectsService.runProjectCode(data.code, data.codeType),
     };
   }
 
