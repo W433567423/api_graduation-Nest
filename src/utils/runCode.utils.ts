@@ -1,10 +1,11 @@
 import { NodeVM, VMScript } from 'vm2';
 
 const runJavaScript = async (code: string) => {
-  const vm = new NodeVM();
+  const vm = new NodeVM({});
   const script = new VMScript(code);
   const a = vm.run(script);
   console.log(11111, a);
+  console.log(console);
 
   // return { success: true, data: vm.run(script) };
 };
