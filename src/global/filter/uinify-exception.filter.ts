@@ -8,7 +8,7 @@ import {
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { getInfoReq } from '@/global/helper';
+import { getInfoReq } from '@/global/helper/getInfoReq';
 
 @Catch(HttpException)
 export default class UnifyExceptionFilter implements ExceptionFilter {

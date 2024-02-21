@@ -6,9 +6,9 @@ import { AppController } from './app.controller';
 
 import { winstonConfig } from '@/config/winston.config';
 import { MySQLConfig } from '@/config/secret.config';
-import { LoggerMiddleware } from '@/global/middleware';
-import { UnifyExceptionFilter } from '@/global/filter';
-import { UnifyResponseInterceptor } from '@/global/interceptor';
+import LoggerMiddleware from '@/global/middleware/logger.middleware';
+import UnifyExceptionFilter from '@/global/filter/uinify-exception.filter';
+import UnifyResponseInterceptor from '@/global/interceptor/unify-response.interceptor';
 import { AuthGuard } from '@/global/guard/auth.guard';
 
 import { UsersController } from '@/modules/users/user.controller';

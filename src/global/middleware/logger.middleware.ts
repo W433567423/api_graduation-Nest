@@ -1,7 +1,7 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { getInfoReq } from '@/global/helper';
+import { getInfoReq } from '@/global/helper/getInfoReq';
 import { Request } from 'express';
 
 @Injectable()

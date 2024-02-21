@@ -8,7 +8,7 @@ import {
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { map, Observable } from 'rxjs';
 import { Logger } from 'winston';
-import { getInfoReq } from 'src/global/helper/';
+import { getInfoReq } from 'src/global/helper/getInfoReq';
 import type { IResData } from '@/modules';
 
 @Injectable()
