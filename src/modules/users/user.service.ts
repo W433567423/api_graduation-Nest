@@ -7,7 +7,7 @@ import {
   eqValidaNumber,
   eqValidaString,
   md5Password,
-} from '@/utils';
+} from '@/utils/handlePassword';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

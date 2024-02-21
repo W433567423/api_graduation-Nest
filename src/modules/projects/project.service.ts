@@ -12,6 +12,7 @@ import { REQUEST } from '@nestjs/core';
 import { IReqUser } from '..';
 import { UsersEntity } from '../users/entities/user.entity';
 import { runCode } from '@/utils/runCode.utils';
+import type { retrunRunCodeData } from '@/utils/index.d';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectsService {
@@ -93,7 +94,7 @@ export class ProjectsService {
     }
   }
   // 运行项目代码
-  async runProjectCode(code: string, type: string) {
+  async runProjectCode(code: string, type: string): Promise<retrunRunCodeData> {
     await this.getUser();
     console.log(await runCode(code, type));
 

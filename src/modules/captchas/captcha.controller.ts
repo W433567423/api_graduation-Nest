@@ -14,7 +14,8 @@ import {
   getPhoneCaptchaReqDto,
   getEmailCaptchaReqDto,
 } from '@/modules/captchas/dtos/captcha.req.dto';
-import { creatValidaCode, EmailInstance } from '@/utils';
+import { creatValidaCode } from '@/utils/handlePassword';
+import EmailInstance from '@/utils/email.utils';
 import {
   getCaptchaResDto,
   getPhoneCaptchaResDto,

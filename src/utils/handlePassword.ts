@@ -6,6 +6,17 @@ const md5Password = (password: string) => {
   return createHash('md5').update(password).digest('hex');
 };
 
+// 生成随机验证码
+const creatValidaCode = (len = 6) => {
+  let code = 0;
+  const codeLen = 10 ** len;
+  while (code < codeLen / 10) {
+    code = Math.random() * codeLen;
+  }
+
+  return Math.floor(code);
+};
+
 // 校验图形验证码
 const eqValidaString = (codevalida: string, validaServer: string) => {
   if (
@@ -41,4 +52,10 @@ const eqPassword = (originPassword: string, password: string) => {
 //   });
 //   return { ...user, token };
 // };
-export { eqValidaString, eqValidaNumber, eqPassword, md5Password };
+export {
+  eqValidaString,
+  creatValidaCode,
+  eqValidaNumber,
+  eqPassword,
+  md5Password,
+};
