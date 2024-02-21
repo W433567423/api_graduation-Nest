@@ -96,8 +96,7 @@ export class ProjectsService {
   // 运行项目代码
   async runProjectCode(code: string, type: string): Promise<retrunRunCodeData> {
     await this.getUser();
-    console.log(await runCode(code, type));
-
+    await runCode(code, type);
     return await runCode(code, type);
   }
 

@@ -93,7 +93,7 @@ export class ProjectsController {
     );
     return {
       msg: result?.success ? '代码运行成功' : '代码运行失败',
-      data: result?.data,
+      data: result?.data.length ? result?.data : result?.error,
     };
   }
 

@@ -1,13 +1,15 @@
 import { NodeVM, VMScript } from 'vm2';
 interface retrunRunCodeData {
   success: boolean;
-  data: Array<string> | Error;
+  data: Array<string>;
+  error: Error;
 }
 
 const runJavaScript = async (code: string) => {
   const data: retrunRunCodeData = {
     success: true,
     data: [],
+    error: new Error(),
   };
   const curCode = code.replaceAll('console.log', 'tutu_result.push');
 
@@ -21,7 +23,9 @@ const runJavaScript = async (code: string) => {
     data.data = vm.getGlobal('tutu_result');
   } catch (e) {
     data.success = false;
-    data.data = e;
+    data.error.name = e.name;
+    data.error.message = e.message;
+    data.error.stack = e.stack;
   }
 
   return data;
