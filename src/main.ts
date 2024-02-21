@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 
-import { SERVER_PORT, sessionConfig, corsConfig } from './config';
+import { corsConfig } from './config/cos.config';
+import { SERVER_PORT, sessionConfig } from './config/session.config';
 import { swaggerOptions, swaggerPrefix } from '@/config/swagger.config';
 
 import { AppModule } from './modules/app.module';

@@ -9,7 +9,7 @@ import {
 import { IS_PUBLIC } from '../decorator';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { jwtSecret } from '@/config';
+import { jwtSecret } from '@/config/jwt.config';
 import type { IUser, IReqUser } from '@/modules';
 // 登录拦截
 @Injectable()

@@ -4,7 +4,8 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 
-import { MySQLConfig, winstonConfig } from '@/config';
+import { winstonConfig } from '@/config/winston.config';
+import { MySQLConfig } from '@/config/secret.config';
 import { LoggerMiddleware } from '@/global/middleware';
 import { UnifyExceptionFilter } from '@/global/filter';
 import { UnifyResponseInterceptor } from '@/global/interceptor';
