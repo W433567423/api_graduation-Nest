@@ -1,3 +1,3 @@
-import type { retrunRunCodeData } from './runCode.utils';
+import type { returnRunCodeData } from './runCode.utils';
 
-export type { retrunRunCodeData };
+export type { returnRunCodeData };

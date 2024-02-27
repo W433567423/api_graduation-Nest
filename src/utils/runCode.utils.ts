@@ -1,12 +1,12 @@
 import { NodeVM, VMScript } from 'vm2';
-interface retrunRunCodeData {
+interface returnRunCodeData {
   success: boolean;
   data: Array<string>;
   error: Error;
 }
 
 const runJavaScript = async (code: string) => {
-  const data: retrunRunCodeData = {
+  const data: returnRunCodeData = {
     success: true,
     data: [],
     error: new Error(),
@@ -39,4 +39,4 @@ const runCode = async (code: string, type: string) => {
       return await runJavaScript(code);
   }
 };
-export { runCode, type retrunRunCodeData };
+export { runCode, type returnRunCodeData };

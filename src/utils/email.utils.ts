@@ -1,9 +1,9 @@
 import { emailConfig } from '@/config/secret.config';
+import * as NodeMail from 'nodemailer';
 import { SendMailOptions } from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import * as nodemail from 'nodemailer';
-import { Readable } from 'stream';
 import Mail from 'nodemailer/lib//mailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { Readable } from 'stream';
 
 const emailCreateConfig: SMTPTransport.Options = {
   service: emailConfig.service,
@@ -20,7 +20,7 @@ const emailCreateConfig: SMTPTransport.Options = {
 class Email {
   private transporter;
   constructor() {
-    this.transporter = nodemail.createTransport(emailCreateConfig);
+    this.transporter = NodeMail.createTransport(emailCreateConfig);
   }
   // 发送验证码的方法
   send({

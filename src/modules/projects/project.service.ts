@@ -1,3 +1,5 @@
+import type { returnRunCodeData } from '@/utils/index.d';
+import { runCode } from '@/utils/runCode.utils';
 import {
   HttpException,
   HttpStatus,
@@ -5,19 +7,17 @@ import {
   Injectable,
   Scope,
 } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProjectsEntity } from './entities/project.entity';
-import { REQUEST } from '@nestjs/core';
 import { IReqUser } from '..';
 import { UsersEntity } from '../users/entities/user.entity';
-import { runCode } from '@/utils/runCode.utils';
-import type { retrunRunCodeData } from '@/utils/index.d';
+import { ProjectsEntity } from './entities/project.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectsService {
   constructor(
-    @Inject(REQUEST) private readonly requset: IReqUser,
+    @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(UsersEntity)
     private readonly userRepository: Repository<UsersEntity>,
     @InjectRepository(ProjectsEntity)
@@ -29,10 +29,10 @@ export class ProjectsService {
 
     await this.isExistProject(projectName, user);
 
-    const projct = new ProjectsEntity();
-    projct.projectName = projectName;
-    projct.user = user;
-    this.projectRepository.save(projct);
+    const project = new ProjectsEntity();
+    project.projectName = projectName;
+    project.user = user;
+    this.projectRepository.save(project);
   }
 
   // 获取项目列表
@@ -94,7 +94,7 @@ export class ProjectsService {
     }
   }
   // 运行项目代码
-  async runProjectCode(code: string, type: string): Promise<retrunRunCodeData> {
+  async runProjectCode(code: string, type: string): Promise<returnRunCodeData> {
     await this.getUser();
     await runCode(code, type);
     return await runCode(code, type);
@@ -174,7 +174,7 @@ export class ProjectsService {
   // 获取用户
   async getUser() {
     const user = await this.userRepository.findOneBy({
-      id: this.requset.user?.id,
+      id: this.request.user?.id,
     });
     if (!user) {
       // 理论上不可能

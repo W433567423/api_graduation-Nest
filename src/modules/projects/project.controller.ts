@@ -1,33 +1,34 @@
 import {
+  Body,
   Controller,
+  Delete,
+  Get,
+  ParseIntPipe,
   Patch,
   Post,
-  Body,
-  Get,
   Query,
-  ParseIntPipe,
-  Delete,
 } from '@nestjs/common';
 import {
-  ApiOperation,
-  ApiTags,
   ApiBearerAuth,
+  ApiOperation,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { ProjectsService } from './project.service';
+import * as dayjs from 'dayjs';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import type { IResData } from '../index';
 import {
+  changeProjectCodeReqDto,
   createProjectReqDto,
-  reNameProjectReqDto,
-  getListReqDto,
   deleteProjectReqDto,
   disableProjectReqDto,
-  changeProjectCodeReqDto,
+  getListReqDto,
+  reNameProjectReqDto,
   runProjectCodeReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto } from './dtos/project.res.dto';
-import type { IResData } from '../index';
 import type { IGetListRes } from './index';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { ProjectsService } from './project.service';
 
 @ApiTags('项目管理')
 @ApiBearerAuth('JWT-auth')
@@ -92,8 +93,12 @@ export class ProjectsController {
       data.codeType,
     );
     return {
-      msg: result?.success ? '代码运行成功' : '代码运行失败',
-      data: result?.data.length ? result?.data : result?.error,
+      msg: result.success ? '代码运行成功' : '代码运行失败',
+      data: {
+        codeStatus: result.success,
+        codeResult: result?.data.length ? result?.data : result?.error,
+        codeRunDate: dayjs().format('YYYY/MM/DD HH:mm:ss'),
+      },
     };
   }
 
