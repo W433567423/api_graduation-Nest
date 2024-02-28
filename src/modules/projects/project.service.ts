@@ -94,10 +94,23 @@ export class ProjectsService {
     }
   }
   // 运行项目代码
-  async runProjectCode(code: string, type: string): Promise<returnRunCodeData> {
+  async runProjectCode(
+    projectId: number,
+    code: string,
+    type: string,
+  ): Promise<returnRunCodeData> {
     await this.getUser();
-    await runCode(code, type);
-    return await runCode(code, type);
+    const runResult = await runCode(code, type);
+    console.log(
+      '🚀 ~ ProjectsService ~ runProjectCode ~ runResult:',
+      runResult,
+    );
+    if (runResult.success) {
+      // 运行成功，保存代码
+      await this.projectRepository.update(projectId, { code });
+    }
+
+    return runResult;
   }
 
   // 重命名项目

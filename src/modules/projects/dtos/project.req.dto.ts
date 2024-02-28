@@ -69,12 +69,22 @@ export class changeProjectCodeReqDto {
   })
   @IsNotEmpty({ message: '代码内容不能为空' })
   readonly code: string;
+
+  @ApiProperty({
+    description: '代码语言',
+    example: 'javascript',
+    default: 'javascript',
+    required: false,
+  })
+  readonly codeType?: string;
 }
 
 export class runProjectCodeReqDto extends changeProjectCodeReqDto {
   @ApiProperty({
     description: '代码语言',
     example: 'javascript',
+    default: 'javascript',
+    required: true,
   })
   @IsNotEmpty({ message: '代码语言不能为空' })
   readonly codeType: string;

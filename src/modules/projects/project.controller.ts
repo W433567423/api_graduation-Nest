@@ -87,8 +87,12 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '运行项目代码' })
   @Post('code')
-  async runCode(@Body() data: runProjectCodeReqDto): Promise<IResData<any>> {
+  async runCode(
+    @Query('projectId', ParseIntPipe) projectId: number,
+    @Body() data: runProjectCodeReqDto,
+  ): Promise<IResData<any>> {
     const result = await this.projectsService.runProjectCode(
+      projectId,
       data.code,
       data.codeType,
     );
