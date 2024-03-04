@@ -1,19 +1,19 @@
-import { Body, Controller, Get, Post, Req, Session } from '@nestjs/common';
-import { UsersService } from './user.service';
+import { NoAuth } from '@/global/decorator';
 import {
+  userForgetPasswordReqDto,
+  userLoginReqDto,
+  userRegistryReqDto,
+} from '@/modules/users/dtos/user.req.dto';
+import { userRegistryAndLoginResDto } from '@/modules/users/dtos/user.res.dto';
+import { Body, Controller, Get, Post, Req, Session } from '@nestjs/common';
+import {
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
-  ApiBearerAuth,
 } from '@nestjs/swagger';
-import {
-  userLoginReqDto,
-  userRegistryReqDto,
-  userforgetPasswordReqDto,
-} from '@/modules/users/dtos/user.req.dto';
-import { NoAuth } from '@/global/decorator';
-import { userRegistryAndLoginResDto } from '@/modules/users/dtos/user.res.dto';
 import type { IReqUser, IResData, IUser } from '../index';
+import { UsersService } from './user.service';
 
 @ApiTags('用户管理')
 @Controller('users')
@@ -31,13 +31,13 @@ export class UsersController {
     @Body() signupData: userRegistryReqDto,
     @Session() session: { emailCaptchaServer: number | undefined },
   ): Promise<IResData<string>> {
-    const { username, password, emailValida, emailNum } = signupData;
+    const { username, password, emailValid, emailNum } = signupData;
     const { emailCaptchaServer } = session;
 
     const token = await this.usersService.registry(
       username,
       password,
-      emailValida,
+      emailValid,
       emailCaptchaServer || 0,
       emailNum,
     );
@@ -55,7 +55,7 @@ export class UsersController {
     @Body() signupData: userLoginReqDto,
     @Session() session: { captchaServer: string | undefined },
   ): Promise<IResData<string>> {
-    const { username, password, valida } = signupData;
+    const { username, password, valid } = signupData;
 
     const { captchaServer } = session;
 
@@ -63,7 +63,7 @@ export class UsersController {
       data: await this.usersService.login(
         username,
         password,
-        valida,
+        valid,
         captchaServer || '',
       ),
     };
@@ -73,16 +73,16 @@ export class UsersController {
   @NoAuth()
   @Post('forgetPassword')
   async forgetPassword(
-    @Body() signupData: userforgetPasswordReqDto,
+    @Body() signupData: userForgetPasswordReqDto,
     @Session() session: { emailCaptchaServer: number | undefined },
   ): Promise<IResData<null>> {
-    const { emailValida, emailNum, newPassword } = signupData;
+    const { emailValid, emailNum, newPassword } = signupData;
     const { emailCaptchaServer } = session;
 
     await this.usersService.forget(
       emailNum,
       newPassword,
-      emailValida,
+      emailValid,
       emailCaptchaServer || 0,
     );
     return { msg: '密码重置成功' };

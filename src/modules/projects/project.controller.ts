@@ -26,7 +26,7 @@ import {
   reNameProjectReqDto,
   runProjectCodeReqDto,
 } from './dtos/project.req.dto';
-import { getListResDto } from './dtos/project.res.dto';
+import { getListResDto, getProjectCodeResDto } from './dtos/project.res.dto';
 import type { IGetListRes } from './index';
 import { ProjectsService } from './project.service';
 
@@ -66,7 +66,7 @@ export class ProjectsController {
   @Get('code')
   async getCode(
     @Query('projectId', ParseIntPipe) projectId: number,
-  ): Promise<IResData<string>> {
+  ): Promise<IResData<getProjectCodeResDto>> {
     return {
       msg: '获取代码成功',
       data: await this.projectsService.getProjectCode(projectId),

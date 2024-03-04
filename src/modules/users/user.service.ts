@@ -1,14 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from '@/modules/users/entities/user.entity';
 import {
   eqPassword,
-  eqValidaNumber,
-  eqValidaString,
+  eqValidNumber,
+  eqValidString,
   md5Password,
 } from '@/utils/handlePassword';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -33,11 +33,11 @@ export class UsersService {
   async registry(
     username: string,
     originPassword: string,
-    emailValida: string,
-    validaServer: number,
+    emailValid: string,
+    validServer: number,
     email: string,
   ) {
-    eqValidaNumber(Number(emailValida), validaServer);
+    eqValidNumber(Number(emailValid), validServer);
 
     // 查询该用户名是否注册
     await this.isExistByName(username, 'registry');
@@ -61,10 +61,10 @@ export class UsersService {
   async login(
     username: string,
     password: string,
-    codevalida: string,
-    validaServer: string,
+    codeValid: string,
+    validServer: string,
   ) {
-    eqValidaString(codevalida, validaServer);
+    eqValidString(codeValid, validServer);
 
     // 查询该用户名是否注册
     const dbUser = (await this.isExistByName(username, 'login')) as UsersEntity;
@@ -84,10 +84,10 @@ export class UsersService {
   async forget(
     email: string,
     newPassword: string,
-    emailValida: string,
-    validaServer: number,
+    emailValid: string,
+    validServer: number,
   ) {
-    eqValidaNumber(Number(emailValida), validaServer);
+    eqValidNumber(Number(emailValid), validServer);
 
     // 查询该用户名是否注册
     const dbUser = await this.userRepository.findOne({

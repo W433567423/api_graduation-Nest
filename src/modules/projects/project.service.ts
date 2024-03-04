@@ -71,11 +71,14 @@ export class ProjectsService {
   // 获取项目代码
   async getProjectCode(projectId: number) {
     const user = await this.getUser();
-    const code = await this.projectRepository.find({
-      select: ['code'],
+    const dbResult = await this.projectRepository.find({
+      select: ['code', 'projectName'],
       where: { id: projectId, user },
     });
-    return code?.[0]?.code || 'none code';
+    return {
+      projectName: dbResult?.[0].projectName,
+      code: dbResult?.[0]?.code || 'none code',
+    };
   }
 
   // 修改项目代码

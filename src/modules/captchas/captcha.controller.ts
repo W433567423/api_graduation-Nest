@@ -1,3 +1,16 @@
+import { NoAuth } from '@/global/decorator';
+import {
+  getCaptchaReqDto,
+  getEmailCaptchaReqDto,
+  getPhoneCaptchaReqDto,
+} from '@/modules/captchas/dtos/captcha.req.dto';
+import {
+  getCaptchaResDto,
+  getEmailCaptchaResDto,
+  getPhoneCaptchaResDto,
+} from '@/modules/captchas/dtos/captcha.res.dto';
+import EmailInstance from '@/utils/email.utils';
+import { createValidCode } from '@/utils/handlePassword';
 import {
   Controller,
   Get,
@@ -8,19 +21,6 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as svgCaptcha from 'svg-captcha';
-import { NoAuth } from '@/global/decorator';
-import {
-  getCaptchaReqDto,
-  getPhoneCaptchaReqDto,
-  getEmailCaptchaReqDto,
-} from '@/modules/captchas/dtos/captcha.req.dto';
-import { creatValidaCode } from '@/utils/handlePassword';
-import EmailInstance from '@/utils/email.utils';
-import {
-  getCaptchaResDto,
-  getPhoneCaptchaResDto,
-  getEmailCaptchaResDto,
-} from '@/modules/captchas/dtos/captcha.res.dto';
 import type { IResData } from '../index';
 
 @ApiTags('验证码')
@@ -66,7 +66,7 @@ export class CaptchaController {
     if (!phoneNum || !phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
     }
-    const code = creatValidaCode();
+    const code = createValidCode();
     console.log('手机号码', phoneNum, code);
     session.phoneCaptcha = code;
     return { msg: '获取手机验证码成功' };
@@ -88,7 +88,7 @@ export class CaptchaController {
     if (!emailNum || !emailRex.test(emailNum)) {
       throw new HttpException('邮箱不正确', HttpStatus.FORBIDDEN);
     }
-    const code = creatValidaCode();
+    const code = createValidCode();
     session.emailCaptchaServer = code;
     EmailInstance.send({
       email: emailNum,

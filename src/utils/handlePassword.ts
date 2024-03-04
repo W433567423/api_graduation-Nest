@@ -7,7 +7,7 @@ const md5Password = (password: string) => {
 };
 
 // 生成随机验证码
-const creatValidaCode = (len = 6) => {
+const createValidCode = (len = 6) => {
   let code = 0;
   const codeLen = 10 ** len;
   while (code < codeLen / 10) {
@@ -18,18 +18,18 @@ const creatValidaCode = (len = 6) => {
 };
 
 // 校验图形验证码
-const eqValidaString = (codevalida: string, validaServer: string) => {
+const eqValidString = (codeValid: string, validServer: string) => {
   if (
-    codevalida.toLocaleLowerCase() !== 'tutu' &&
-    codevalida.toLocaleLowerCase() !== validaServer.toLocaleLowerCase()
+    codeValid.toLocaleLowerCase() !== 'tutu' &&
+    codeValid.toLocaleLowerCase() !== validServer.toLocaleLowerCase()
   ) {
     throw new HttpException('图形验证码不正确', HttpStatus.FORBIDDEN);
   }
 };
 
 // 校验验证码
-const eqValidaNumber = (codevalida: number, validaServer: number) => {
-  if (codevalida !== 333333 && codevalida !== validaServer) {
+const eqValidNumber = (codeValid: number, validServer: number) => {
+  if (codeValid !== 333333 && codeValid !== validServer) {
     throw new HttpException('邮箱/手机号验证码不正确', HttpStatus.FORBIDDEN);
   }
 };
@@ -53,9 +53,9 @@ const eqPassword = (originPassword: string, password: string) => {
 //   return { ...user, token };
 // };
 export {
-  eqValidaString,
-  creatValidaCode,
-  eqValidaNumber,
+  createValidCode,
   eqPassword,
+  eqValidNumber,
+  eqValidString,
   md5Password,
 };

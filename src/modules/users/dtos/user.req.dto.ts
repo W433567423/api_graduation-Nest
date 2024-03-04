@@ -19,7 +19,7 @@ export class userRegistryReqDto extends userDefaultReqDto {
     example: '333333',
   })
   @IsNotEmpty({ message: '邮箱验证码不能为空' })
-  readonly emailValida: string;
+  readonly emailValid: string;
 
   @ApiProperty({
     description: '邮箱',
@@ -43,16 +43,16 @@ export class userLoginReqDto extends userDefaultReqDto {
     example: 'tutu',
   })
   @IsNotEmpty({ message: '验证码不能为空' })
-  readonly valida: string;
+  readonly valid: string;
 }
 
-export class userforgetPasswordReqDto {
+export class userForgetPasswordReqDto {
   @ApiProperty({
     description: '邮箱验证码',
     example: '333333',
   })
   @IsNotEmpty({ message: '邮箱验证码不能为空' })
-  readonly emailValida: string;
+  readonly emailValid: string;
 
   @ApiProperty({
     description: '邮箱',
