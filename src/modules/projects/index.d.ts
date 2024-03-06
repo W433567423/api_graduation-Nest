@@ -1,7 +1,11 @@
 import { ProjectsEntity } from './entities/project.entity';
-interface IGetListRes {
+export interface IGetListRes {
   list: ProjectsEntity[];
   total: number;
 }
-
-export type { IGetListRes };
+export interface IPostCreateProject {
+  projectName: string;
+  projectType: string;
+  projectLanguage?: string;
+  projectCode?: string;
+}

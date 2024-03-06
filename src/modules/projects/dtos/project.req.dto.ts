@@ -15,6 +15,28 @@ export class createProjectReqDto {
   @IsNotEmpty({ message: '项目名称不能为空' })
   @MaxLength(12)
   readonly projectName: string;
+
+  @ApiProperty({
+    description: '项目类型',
+    example: 'simple',
+    enum: ['simple', 'complex'],
+  })
+  @IsNotEmpty({ message: '项目类型不能为空' })
+  readonly projectType: string;
+
+  @ApiProperty({
+    description: '项目语言',
+    example: 'JavaScript',
+    required: false,
+  })
+  readonly projectLanguage?: string;
+
+  @ApiProperty({
+    description: '项目源码',
+    example: 'console.log(1)',
+    required: false,
+  })
+  readonly projectCode?: string;
 }
 
 export class getListReqDto {
@@ -76,7 +98,7 @@ export class changeProjectCodeReqDto {
     default: 'javascript',
     required: false,
   })
-  readonly codeType?: string;
+  readonly codeLanguage?: string;
 }
 
 export class runProjectCodeReqDto extends changeProjectCodeReqDto {
@@ -87,7 +109,7 @@ export class runProjectCodeReqDto extends changeProjectCodeReqDto {
     required: true,
   })
   @IsNotEmpty({ message: '代码语言不能为空' })
-  readonly codeType: string;
+  readonly codeLanguage: string;
 }
 
 export class disableProjectReqDto {

@@ -38,10 +38,13 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '创建项目' })
   @Post('create')
-  async create(@Body() data: createProjectReqDto): Promise<IResData<string>> {
-    await this.projectsService.create(data.projectName);
+  async create(
+    @Body() data: createProjectReqDto,
+  ): Promise<IResData<{ projectId: number }>> {
+    const { id } = await this.projectsService.create(data);
+    console.log('🚀 ~ ProjectsController ~ id:', id);
 
-    return { code: 201, msg: '项目创建成功' };
+    return { code: 201, msg: '项目创建成功', data: { projectId: id } };
   }
 
   @ApiOperation({ summary: '获取项目列表' })
@@ -94,7 +97,7 @@ export class ProjectsController {
     const result = await this.projectsService.runProjectCode(
       projectId,
       data.code,
-      data.codeType,
+      data.codeLanguage,
     );
     return {
       msg: result.success ? '代码运行成功' : '代码运行失败',
@@ -124,7 +127,7 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '删除项目' })
   @Delete('delete')
-  async delet(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
+  async delete(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
     await this.projectsService.deleteByIds(data.projectIds);
 
     return { msg: '项目删除成功' };

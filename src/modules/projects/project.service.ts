@@ -10,6 +10,7 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
 import { UsersEntity } from '../users/entities/user.entity';
 import { ProjectsEntity } from './entities/project.entity';
@@ -24,15 +25,18 @@ export class ProjectsService {
     private readonly projectRepository: Repository<ProjectsEntity>,
   ) {}
   // 创建项目
-  async create(projectName: string) {
+  async create(createParam: IPostCreateProject) {
     const user = await this.getUser();
 
-    await this.isExistProject(projectName, user);
+    await this.isExistProject(createParam.projectName, user);
 
     const project = new ProjectsEntity();
-    project.projectName = projectName;
+    project.projectName = createParam.projectName;
+    project.projectType = createParam.projectType;
+    project.codeLanguage = createParam.projectLanguage || '';
+    project.code = createParam.projectCode || '';
     project.user = user;
-    this.projectRepository.save(project);
+    return this.projectRepository.save(project);
   }
 
   // 获取项目列表
