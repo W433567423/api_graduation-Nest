@@ -1,16 +1,16 @@
+import { jwtSecret } from '@/config/jwt.config';
+import type { IReqUser, IUser } from '@/modules';
 import {
-  type CanActivate,
-  type ExecutionContext,
   HttpException,
   HttpStatus,
   Injectable,
   UnauthorizedException,
+  type CanActivate,
+  type ExecutionContext,
 } from '@nestjs/common';
-import { IS_PUBLIC } from '../decorator';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { jwtSecret } from '@/config/jwt.config';
-import type { IUser, IReqUser } from '@/modules';
+import { IS_PUBLIC } from '../decorator';
 // 登录拦截
 @Injectable()
 export class AuthGuard implements CanActivate {
