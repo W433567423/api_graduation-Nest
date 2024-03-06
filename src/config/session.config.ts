@@ -1,6 +1,6 @@
-import * as session from 'express-session';
 import { RequestHandler } from '@nestjs/common/interfaces';
-export const SERVER_PORT = 8004;
+import * as session from 'express-session';
+export const SERVER_PORT = 8013;
 export const sessionConfig: RequestHandler = session({
   secret: 'my-secret',
   resave: false,
