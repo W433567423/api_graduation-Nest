@@ -16,7 +16,7 @@ export class ProjectEntity extends AppEntity {
   @Column({ comment: '项目类型', type: 'varchar' })
   projectType: string;
 
-  @Column({ comment: '项目根目录', type: 'varchar' })
+  @Column({ comment: '项目根目录', type: 'varchar', nullable: true })
   rootDir: string;
 
   @Column({ comment: '代码(仅简单模式)', type: 'longtext', nullable: true })

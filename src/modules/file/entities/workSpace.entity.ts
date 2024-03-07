@@ -1,9 +1,9 @@
 import { AppEntity } from '@/modules/app.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('avatars')
-export class AvatarsEntity extends AppEntity {
+@Entity('workSpace')
+export class WorkSpaceEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
@@ -18,7 +18,15 @@ export class AvatarsEntity extends AppEntity {
 
   @Column({
     type: 'longtext',
+    comment: '远程文件地址',
+    nullable: true,
+  })
+  fileUrl: string;
+
+  @Column({
+    type: 'varchar',
     comment: '文件内容',
+    nullable: true,
   })
   content: string;
 
@@ -28,6 +36,20 @@ export class AvatarsEntity extends AppEntity {
   })
   parentFolder: string;
 
-  @OneToOne(() => UserEntity, (user) => user.avatar)
+  @Column({
+    type: 'varchar',
+    comment: '文件后缀',
+    nullable: true,
+  })
+  ext: string;
+
+  @Column({
+    type: 'varchar',
+    comment: 'md5',
+    nullable: true,
+  })
+  md: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.workFiles)
   user: UserEntity;
 }
