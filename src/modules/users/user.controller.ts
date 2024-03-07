@@ -13,12 +13,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { IReqUser, IResData, IUser } from '../index';
-import { UsersService } from './user.service';
+import { UserService } from './user.service';
 
 @ApiTags('用户管理')
 @Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly UserService: UserService) {}
 
   @ApiOperation({ summary: '注册用户' })
   @ApiResponse({
@@ -34,7 +34,7 @@ export class UsersController {
     const { username, password, emailValid, emailNum } = signupData;
     const { emailCaptchaServer } = session;
 
-    const token = await this.usersService.registry(
+    const token = await this.UserService.registry(
       username,
       password,
       emailValid,
@@ -60,7 +60,7 @@ export class UsersController {
     const { captchaServer } = session;
 
     return {
-      data: await this.usersService.login(
+      data: await this.UserService.login(
         username,
         password,
         valid,
@@ -79,7 +79,7 @@ export class UsersController {
     const { emailValid, emailNum, newPassword } = signupData;
     const { emailCaptchaServer } = session;
 
-    await this.usersService.forget(
+    await this.UserService.forget(
       emailNum,
       newPassword,
       emailValid,

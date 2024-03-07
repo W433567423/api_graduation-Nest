@@ -13,9 +13,9 @@ import LoggerMiddleware from '@/global/middleware/logger.middleware';
 
 import { CaptchaController } from '@/modules/captchas/captcha.controller';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
-import { UsersController } from '@/modules/users/user.controller';
-import { UsersModule } from '@/modules/users/user.module';
-import { UsersService } from '@/modules/users/user.service';
+import { UserController } from '@/modules/users/user.controller';
+import { UserModule } from '@/modules/users/user.module';
+import { UserService } from '@/modules/users/user.service';
 import { FileModule } from './file/file.module';
 import { ProjectsController } from './projects/project.controller';
 import { ProjectsModule } from './projects/project.module';
@@ -25,19 +25,19 @@ import { ProjectsService } from './projects/project.service';
   imports: [
     winstonConfig,
     TypeOrmModule.forRoot(MySQLConfig),
-    UsersModule,
+    UserModule,
     CaptchaModule,
     ProjectsModule,
     FileModule,
   ],
   controllers: [
     AppController,
-    UsersController,
+    UserController,
     CaptchaController,
     ProjectsController,
   ],
   providers: [
-    UsersService,
+    UserService,
     ProjectsService,
     // 鉴权守卫
     {

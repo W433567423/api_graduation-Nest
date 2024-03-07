@@ -3,15 +3,15 @@ import { UsersEntity } from '@/modules/users/entities/user.entity';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './user.controller';
-import { UsersService } from './user.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([UsersEntity]),
     JwtModule.register(jwtConfig),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
+  controllers: [UserController],
+  providers: [UserService],
   exports: [TypeOrmModule],
 })
-export class UsersModule {}
+export class UserModule {}

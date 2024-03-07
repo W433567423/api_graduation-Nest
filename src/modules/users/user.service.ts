@@ -5,14 +5,23 @@ import {
   eqValidString,
   md5Password,
 } from '@/utils/handlePassword';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Scope,
+} from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IReqUser } from '..';
 
-@Injectable()
-export class UsersService {
+@Injectable({ scope: Scope.REQUEST })
+export class UserService {
   constructor(
+    @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(UsersEntity)
     private readonly userRepository: Repository<UsersEntity>,
     private jwtService: JwtService,
@@ -101,5 +110,17 @@ export class UsersService {
         password: md5Password(newPassword),
       });
     }
+  }
+
+  // 获取用户
+  async getUser() {
+    const user = await this.userRepository.findOneBy({
+      id: this.request.user?.id,
+    });
+    if (!user) {
+      // 理论上不可能
+      throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
+    }
+    return user;
   }
 }
