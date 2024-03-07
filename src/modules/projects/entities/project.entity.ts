@@ -1,6 +1,6 @@
+import { AppEntity } from '@/modules/app.entity';
 import { UsersEntity } from '@/modules/users/entities/user.entity';
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity('projects')
-export class ProjectsEntity extends BaseEntity {
+export class ProjectsEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 

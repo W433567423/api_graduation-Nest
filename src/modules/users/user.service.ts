@@ -17,6 +17,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IReqUser } from '..';
+import { AvatarsEntity } from '../file/entities/avatar.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -122,5 +123,16 @@ export class UserService {
       throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
     }
     return user;
+  }
+
+  // 更新用户头像
+  async updateUserAvatar(avatar: AvatarsEntity) {
+    const userId = this.request.user!.id;
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['avatar'],
+    });
+    user!.avatar = avatar;
+    return this.userRepository.update(userId, user!);
   }
 }
