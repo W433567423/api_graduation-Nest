@@ -12,17 +12,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
-import { UsersEntity } from '../users/entities/user.entity';
-import { ProjectsEntity } from './entities/project.entity';
+import { UserEntity } from '../users/entities/user.entity';
+import { ProjectEntity } from './entities/project.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectService {
   constructor(
     @Inject(REQUEST) private readonly request: IReqUser,
-    @InjectRepository(UsersEntity)
-    private readonly userRepository: Repository<UsersEntity>,
-    @InjectRepository(ProjectsEntity)
-    private readonly projectRepository: Repository<ProjectsEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepository: Repository<ProjectEntity>,
   ) {}
   // 创建项目
   async create(createParam: IPostCreateProject) {
@@ -30,7 +30,7 @@ export class ProjectService {
 
     await this.isExistProject(createParam.projectName, user);
 
-    const project = new ProjectsEntity();
+    const project = new ProjectEntity();
     project.projectName = createParam.projectName;
     project.projectType = createParam.projectType;
     project.codeLanguage = createParam.projectLanguage || '';
@@ -140,7 +140,7 @@ export class ProjectService {
     return await qb
       .createQueryBuilder()
       .delete()
-      .from(ProjectsEntity)
+      .from(ProjectEntity)
       .where('userId = :userId', { userId: user.id })
       .andWhere('id IN (:ids)', { ids })
       .execute();
@@ -152,7 +152,7 @@ export class ProjectService {
 
     return await this.projectRepository
       .createQueryBuilder()
-      .update(ProjectsEntity)
+      .update(ProjectEntity)
       .set({ disable: disable })
       .where('userId = :userId', { userId: user.id })
       .andWhere('id IN (:ids)', { ids })
@@ -160,7 +160,7 @@ export class ProjectService {
   }
 
   // 设置运行状态
-  async setProjectStatus(user: UsersEntity, projectId: number, status: number) {
+  async setProjectStatus(user: UserEntity, projectId: number, status: number) {
     const dbProject = await this.projectRepository.findOneBy({
       id: projectId,
       user,
@@ -178,7 +178,7 @@ export class ProjectService {
   }
 
   // 判断项目名是否被使用
-  async isExistProject(projectName: string, user: UsersEntity) {
+  async isExistProject(projectName: string, user: UserEntity) {
     const dbProject = await this.projectRepository.findOneBy({
       projectName,
       user,

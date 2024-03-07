@@ -1,4 +1,4 @@
-import { UsersEntity } from '@/modules/users/entities/user.entity';
+import { UserEntity } from '@/modules/users/entities/user.entity';
 import {
   eqPassword,
   eqValidNumber,
@@ -23,8 +23,8 @@ import { AvatarsEntity } from '../file/entities/avatar.entity';
 export class UserService {
   constructor(
     @Inject(REQUEST) private readonly request: IReqUser,
-    @InjectRepository(UsersEntity)
-    private readonly userRepository: Repository<UsersEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
   ) {}
   // 用户名查询用户
@@ -77,7 +77,7 @@ export class UserService {
     eqValidString(codeValid, validServer);
 
     // 查询该用户名是否注册
-    const dbUser = (await this.isExistByName(username, 'login')) as UsersEntity;
+    const dbUser = (await this.isExistByName(username, 'login')) as UserEntity;
 
     // 比较密码
     eqPassword(dbUser.password, md5Password(password));

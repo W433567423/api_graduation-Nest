@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
 import { IReqUser } from '..';
-import { UsersEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../users/entities/user.entity';
 import { AvatarsEntity } from './entities/avatar.entity';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -17,7 +17,7 @@ export class FileService {
     @InjectRepository(AvatarsEntity)
     private readonly avatarRepository: Repository<AvatarsEntity>,
   ) {}
-  async uploadAvatar(user: UsersEntity, file: Express.Multer.File) {
+  async uploadAvatar(user: UserEntity, file: Express.Multer.File) {
     // 上传到cos
     const filePath = path.resolve(
       `src/../.uploads/${String(user.id)}_${String(file.fieldname)}`,

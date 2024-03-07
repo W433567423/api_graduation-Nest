@@ -1,5 +1,5 @@
 import { AppEntity } from '@/modules/app.entity';
-import { UsersEntity } from '@/modules/users/entities/user.entity';
+import { UserEntity } from '@/modules/users/entities/user.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('avatars')
@@ -22,6 +22,6 @@ export class AvatarsEntity extends AppEntity {
   })
   size: string;
 
-  @OneToOne(() => UsersEntity, (user) => user.avatar)
-  user: UsersEntity;
+  @OneToOne(() => UserEntity, (user) => user.avatar)
+  user: UserEntity;
 }

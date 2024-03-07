@@ -1,5 +1,5 @@
 import { AppEntity } from '@/modules/app.entity';
-import { UsersEntity } from '@/modules/users/entities/user.entity';
+import { UserEntity } from '@/modules/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity('projects')
-export class ProjectsEntity extends AppEntity {
+export class ProjectEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
@@ -42,6 +42,6 @@ export class ProjectsEntity extends AppEntity {
   })
   updateTime: Date;
 
-  @ManyToOne(() => UsersEntity, (user) => user.projects)
-  user: UsersEntity;
+  @ManyToOne(() => UserEntity, (user) => user.projects)
+  user: UserEntity;
 }

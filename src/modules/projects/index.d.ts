@@ -1,6 +1,6 @@
-import { ProjectsEntity } from './entities/project.entity';
+import { ProjectEntity } from './entities/project.entity';
 export interface IGetListRes {
-  list: ProjectsEntity[];
+  list: ProjectEntity[];
   total: number;
 }
 export interface IPostCreateProject {

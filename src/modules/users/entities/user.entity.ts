@@ -1,6 +1,6 @@
 import { AppEntity } from '@/modules/app.entity';
 import { AvatarsEntity } from '@/modules/file/entities/avatar.entity';
-import { ProjectsEntity } from '@/modules/projects/entities/project.entity';
+import { ProjectEntity } from '@/modules/projects/entities/project.entity';
 import {
   Column,
   Entity,
@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity('users')
-export class UsersEntity extends AppEntity {
+export class UserEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
@@ -27,9 +27,9 @@ export class UsersEntity extends AppEntity {
   @Column({ type: 'varchar' })
   email: string;
 
-  @OneToMany(() => ProjectsEntity, (project) => project.user)
+  @OneToMany(() => ProjectEntity, (project) => project.user)
   @JoinColumn()
-  projects: ProjectsEntity[];
+  projects: ProjectEntity[];
 
   @OneToOne(() => AvatarsEntity, (avatar) => avatar.user)
   @JoinColumn()

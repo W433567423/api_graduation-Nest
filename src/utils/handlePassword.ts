@@ -40,7 +40,7 @@ const eqPassword = (originPassword: string, password: string) => {
     throw new HttpException('密码不正确', HttpStatus.FORBIDDEN);
   }
 };
-// const makeToken = (dbUser: UsersEntity) => {
+// const makeToken = (dbUser: UserEntity) => {
 //   const user = {
 //     id: dbUser.id,
 //     username: dbUser.username,
