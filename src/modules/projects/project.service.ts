@@ -14,6 +14,7 @@ import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
+import { UserService } from '../users/user.service';
 import { ProjectEntity } from './entities/project.entity';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -24,10 +25,11 @@ export class ProjectService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
+    private readonly userService: UserService,
   ) {}
   // 创建项目
   async create(createParam: IPostCreateProject) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
 
     await this.isExistProject(createParam.projectName, user);
 
@@ -50,7 +52,7 @@ export class ProjectService {
 
   // 获取项目列表
   async getList(page: number | undefined, size: number | undefined) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
     if (page === undefined && size === undefined) {
       return this.projectRepository.find({
         select: [
@@ -83,7 +85,7 @@ export class ProjectService {
 
   // 获取项目代码
   async getProjectCode(projectId: number) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
     const dbResult = await this.projectRepository.find({
       select: ['code', 'projectName'],
       where: { id: projectId, user },
@@ -96,7 +98,7 @@ export class ProjectService {
 
   // 修改项目代码
   async changeProjectCode(projectId: number, code: string) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
     console.log(projectId, code);
 
     const dbProject = await this.projectRepository.findOneBy({
@@ -115,7 +117,7 @@ export class ProjectService {
     code: string,
     type: string,
   ): Promise<returnRunCodeData> {
-    await this.getUser();
+    await this.userService.getUser();
     const runResult = await runCode(code, type);
     console.log('🚀 ~ ProjectService ~ runProjectCode ~ runResult:', runResult);
     if (runResult.success) {
@@ -128,7 +130,7 @@ export class ProjectService {
 
   // 重命名项目
   async reName(projectId: number, newName: string) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
 
     const dbProject = await this.projectRepository.findOneBy({
       id: projectId,
@@ -144,7 +146,7 @@ export class ProjectService {
 
   // 删除项目
   async deleteByIds(ids: number[]) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
     const qb = this.projectRepository.createQueryBuilder('project');
     return await qb
       .createQueryBuilder()
@@ -157,7 +159,7 @@ export class ProjectService {
 
   // 设置禁用状态
   async setProjectDisable(ids: number[], disable: boolean) {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
 
     return await this.projectRepository
       .createQueryBuilder()
@@ -182,7 +184,7 @@ export class ProjectService {
   }
   // 设置运行状态
   async getProjectTotal() {
-    const user = await this.getUser();
+    const user = await this.userService.getUser();
     return await this.projectRepository.countBy({ user });
   }
 
@@ -195,17 +197,5 @@ export class ProjectService {
     if (dbProject) {
       throw new HttpException('该项目名已被使用', HttpStatus.FORBIDDEN);
     }
-  }
-
-  // 获取用户
-  async getUser() {
-    const user = await this.userRepository.findOneBy({
-      id: this.request.user?.id,
-    });
-    if (!user) {
-      // 理论上不可能
-      throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
-    }
-    return user;
   }
 }

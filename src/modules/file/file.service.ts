@@ -1,3 +1,4 @@
+import { UserService } from '@/modules/users/user.service';
 import { uploadFile } from '@/utils/cos.utils';
 import { isExistDir } from '@/utils/fs.utile';
 import { Inject, Injectable, Scope } from '@nestjs/common';
@@ -19,6 +20,7 @@ export class FileService {
     private readonly avatarRepository: Repository<AvatarsEntity>,
     @InjectRepository(WorkFileEntity)
     private readonly workSpaceRepository: Repository<WorkFileEntity>,
+    private readonly userService: UserService,
   ) {}
   // 上传用户头像
   async uploadAvatar(user: UserEntity, file: Express.Multer.File) {
@@ -66,7 +68,7 @@ export class FileService {
     file.fileName = folderName;
     file.parentFolder = 0;
     file.isFolder = true;
-
+    file.user = await this.userService.getUser();
     this.workSpaceRepository.save(file);
   }
 }
