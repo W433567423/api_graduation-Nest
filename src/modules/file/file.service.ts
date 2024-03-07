@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
 import { AvatarsEntity } from './entities/avatar.entity';
+import { WorkFileEntity } from './entities/workSpace.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class FileService {
@@ -16,7 +17,10 @@ export class FileService {
     @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(AvatarsEntity)
     private readonly avatarRepository: Repository<AvatarsEntity>,
+    @InjectRepository(WorkFileEntity)
+    private readonly workSpaceRepository: Repository<WorkFileEntity>,
   ) {}
+  // 上传用户头像
   async uploadAvatar(user: UserEntity, file: Express.Multer.File) {
     // 上传到cos
     const filePath = path.resolve(
@@ -54,5 +58,15 @@ export class FileService {
 
       return await this.avatarRepository.save(avatar);
     }
+  }
+
+  // 创建工作根目录
+  async createRootFolder(folderName: string) {
+    const file = new WorkFileEntity();
+    file.fileName = folderName;
+    file.parentFolder = 0;
+    file.isFolder = true;
+
+    this.workSpaceRepository.save(file);
   }
 }

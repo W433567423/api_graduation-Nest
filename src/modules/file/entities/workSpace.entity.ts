@@ -3,7 +3,7 @@ import { UserEntity } from '@/modules/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('workSpace')
-export class WorkSpaceEntity extends AppEntity {
+export class WorkFileEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
@@ -31,17 +31,17 @@ export class WorkSpaceEntity extends AppEntity {
   content: string;
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     comment: '父目录',
   })
-  parentFolder: string;
+  parentFolder: number;
 
   @Column({
     type: 'varchar',
-    comment: '文件后缀',
+    comment: '文件类型',
     nullable: true,
   })
-  ext: string;
+  mimetype: string;
 
   @Column({
     type: 'varchar',
