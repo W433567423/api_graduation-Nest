@@ -16,7 +16,7 @@ import { UsersEntity } from '../users/entities/user.entity';
 import { ProjectsEntity } from './entities/project.entity';
 
 @Injectable({ scope: Scope.REQUEST })
-export class ProjectsService {
+export class ProjectService {
   constructor(
     @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(UsersEntity)
@@ -108,10 +108,7 @@ export class ProjectsService {
   ): Promise<returnRunCodeData> {
     await this.getUser();
     const runResult = await runCode(code, type);
-    console.log(
-      '🚀 ~ ProjectsService ~ runProjectCode ~ runResult:',
-      runResult,
-    );
+    console.log('🚀 ~ ProjectService ~ runProjectCode ~ runResult:', runResult);
     if (runResult.success) {
       // 运行成功，保存代码
       await this.projectRepository.update(projectId, { code });

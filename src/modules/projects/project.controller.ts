@@ -28,21 +28,21 @@ import {
 } from './dtos/project.req.dto';
 import { getListResDto, getProjectCodeResDto } from './dtos/project.res.dto';
 import type { IGetListRes } from './index';
-import { ProjectsService } from './project.service';
+import { ProjectService } from './project.service';
 
 @ApiTags('项目管理')
 @ApiBearerAuth('JWT-auth')
 @Controller('projects')
-export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+export class ProjectController {
+  constructor(private readonly projectService: ProjectService) {}
 
   @ApiOperation({ summary: '创建项目' })
   @Post('create')
   async create(
     @Body() data: createProjectReqDto,
   ): Promise<IResData<{ projectId: number }>> {
-    const { id } = await this.projectsService.create(data);
-    console.log('🚀 ~ ProjectsController ~ id:', id);
+    const { id } = await this.projectService.create(data);
+    console.log('🚀 ~ ProjectController ~ id:', id);
 
     return { code: 201, msg: '项目创建成功', data: { projectId: id } };
   }
@@ -59,8 +59,8 @@ export class ProjectsController {
     @Query('page', ParseIntPipe) page: number,
     @Query('size', ParseIntPipe) size: number,
   ): Promise<IResData<IGetListRes>> {
-    const dbRes = await this.projectsService.getList(page, size);
-    const projectTotal = await this.projectsService.getProjectTotal();
+    const dbRes = await this.projectService.getList(page, size);
+    const projectTotal = await this.projectService.getProjectTotal();
 
     return { data: { list: dbRes, total: projectTotal } };
   }
@@ -72,7 +72,7 @@ export class ProjectsController {
   ): Promise<IResData<getProjectCodeResDto>> {
     return {
       msg: '获取代码成功',
-      data: await this.projectsService.getProjectCode(projectId),
+      data: await this.projectService.getProjectCode(projectId),
     };
   }
 
@@ -84,7 +84,7 @@ export class ProjectsController {
   ): Promise<IResData<UpdateResult>> {
     return {
       msg: '修改代码成功',
-      data: await this.projectsService.changeProjectCode(projectId, data.code),
+      data: await this.projectService.changeProjectCode(projectId, data.code),
     };
   }
 
@@ -94,7 +94,7 @@ export class ProjectsController {
     @Query('projectId', ParseIntPipe) projectId: number,
     @Body() data: runProjectCodeReqDto,
   ): Promise<IResData<any>> {
-    const result = await this.projectsService.runProjectCode(
+    const result = await this.projectService.runProjectCode(
       projectId,
       data.code,
       data.codeLanguage,
@@ -112,7 +112,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '重命名项目' })
   @Patch('rename')
   async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.reName(data.projectId, data.newName);
+    await this.projectService.reName(data.projectId, data.newName);
 
     return { msg: '项目重命名成功' };
   }
@@ -120,7 +120,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '禁用项目' })
   @Patch('disable')
   async disable(@Body() data: disableProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.setProjectDisable(data.projectIds, data.disable);
+    await this.projectService.setProjectDisable(data.projectIds, data.disable);
 
     return { msg: '项目改变禁用状态成功' };
   }
@@ -128,7 +128,7 @@ export class ProjectsController {
   @ApiOperation({ summary: '删除项目' })
   @Delete('delete')
   async delete(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
-    await this.projectsService.deleteByIds(data.projectIds);
+    await this.projectService.deleteByIds(data.projectIds);
 
     return { msg: '项目删除成功' };
   }

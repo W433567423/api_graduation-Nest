@@ -17,9 +17,9 @@ import { UserController } from '@/modules/users/user.controller';
 import { UserModule } from '@/modules/users/user.module';
 import { UserService } from '@/modules/users/user.service';
 import { FileModule } from './file/file.module';
-import { ProjectsController } from './projects/project.controller';
-import { ProjectsModule } from './projects/project.module';
-import { ProjectsService } from './projects/project.service';
+import { ProjectController } from './projects/project.controller';
+import { ProjectModule } from './projects/project.module';
+import { ProjectService } from './projects/project.service';
 
 @Module({
   imports: [
@@ -27,18 +27,18 @@ import { ProjectsService } from './projects/project.service';
     TypeOrmModule.forRoot(MySQLConfig),
     UserModule,
     CaptchaModule,
-    ProjectsModule,
+    ProjectModule,
     FileModule,
   ],
   controllers: [
     AppController,
     UserController,
     CaptchaController,
-    ProjectsController,
+    ProjectController,
   ],
   providers: [
     UserService,
-    ProjectsService,
+    ProjectService,
     // 鉴权守卫
     {
       provide: APP_GUARD,

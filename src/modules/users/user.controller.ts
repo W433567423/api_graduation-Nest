@@ -18,7 +18,7 @@ import { UserService } from './user.service';
 @ApiTags('用户管理')
 @Controller('users')
 export class UserController {
-  constructor(private readonly UserService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: '注册用户' })
   @ApiResponse({
@@ -34,7 +34,7 @@ export class UserController {
     const { username, password, emailValid, emailNum } = signupData;
     const { emailCaptchaServer } = session;
 
-    const token = await this.UserService.registry(
+    const token = await this.userService.registry(
       username,
       password,
       emailValid,
@@ -60,7 +60,7 @@ export class UserController {
     const { captchaServer } = session;
 
     return {
-      data: await this.UserService.login(
+      data: await this.userService.login(
         username,
         password,
         valid,
@@ -79,7 +79,7 @@ export class UserController {
     const { emailValid, emailNum, newPassword } = signupData;
     const { emailCaptchaServer } = session;
 
-    await this.UserService.forget(
+    await this.userService.forget(
       emailNum,
       newPassword,
       emailValid,
