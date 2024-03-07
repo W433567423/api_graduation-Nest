@@ -25,7 +25,7 @@ export class FileController {
     const user = await this.userService.getUser();
     const avatar = await this.fileService.uploadAvatar(user, file);
     await this.userService.updateUserAvatar(avatar);
-    return 'ok';
+    return { message: '用户头像成功', data: avatar.fileUrl };
     // @UploadedFile() avatar: Express.Multer.File,
     // console.log('🚀 ~ FileController ~ avatar:', avatar);
     // return await this.fileService.uploadAvatar();
