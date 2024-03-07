@@ -1,9 +1,11 @@
+import { AvatarsEntity } from '@/modules/file/entities/avatar.entity';
 import { ProjectsEntity } from '@/modules/projects/entities/project.entity';
 import {
   BaseEntity,
   Column,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -26,4 +28,7 @@ export class UsersEntity extends BaseEntity {
 
   @OneToMany(() => ProjectsEntity, (project) => project.user)
   projects: ProjectsEntity[];
+
+  @OneToOne(() => AvatarsEntity, (avatar) => avatar.user)
+  avatar: AvatarsEntity;
 }

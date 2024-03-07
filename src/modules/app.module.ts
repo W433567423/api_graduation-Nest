@@ -1,21 +1,22 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 
-import { winstonConfig } from '@/config/winston.config';
 import { MySQLConfig } from '@/config/secret.config';
-import LoggerMiddleware from '@/global/middleware/logger.middleware';
+import { winstonConfig } from '@/config/winston.config';
 import UnifyExceptionFilter from '@/global/filter/uinify-exception.filter';
-import UnifyResponseInterceptor from '@/global/interceptor/unify-response.interceptor';
 import { AuthGuard } from '@/global/guard/auth.guard';
+import UnifyResponseInterceptor from '@/global/interceptor/unify-response.interceptor';
+import LoggerMiddleware from '@/global/middleware/logger.middleware';
 
-import { UsersController } from '@/modules/users/user.controller';
-import { UsersModule } from '@/modules/users/user.module';
 import { CaptchaController } from '@/modules/captchas/captcha.controller';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
+import { UsersController } from '@/modules/users/user.controller';
+import { UsersModule } from '@/modules/users/user.module';
 import { UsersService } from '@/modules/users/user.service';
+import { FileModule } from './file/file.module';
 import { ProjectsController } from './projects/project.controller';
 import { ProjectsModule } from './projects/project.module';
 import { ProjectsService } from './projects/project.service';
@@ -27,6 +28,7 @@ import { ProjectsService } from './projects/project.service';
     UsersModule,
     CaptchaModule,
     ProjectsModule,
+    FileModule,
   ],
   controllers: [
     AppController,
