@@ -7,22 +7,26 @@ export class AvatarsEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ type: 'varchar', comment: '远程文件地址' })
-  fileUrl: string;
+  @Column({ type: 'varchar', comment: '文件(夹)名称' })
+  fileName: string;
+
+  @Column({
+    type: 'boolean',
+    comment: '是否为文件夹',
+  })
+  isFolder: boolean;
+
+  @Column({
+    type: 'longtext',
+    comment: '文件内容',
+  })
+  content: string;
 
   @Column({
     type: 'varchar',
-    name: 'mimetype',
-    comment: '文件类型',
+    comment: '父目录',
   })
-  mimetype: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'size',
-    comment: '文件大小(bit)',
-  })
-  size: string;
+  parentFolder: string;
 
   @OneToOne(() => UserEntity, (user) => user.avatar)
   user: UserEntity;

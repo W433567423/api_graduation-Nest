@@ -1,16 +1,19 @@
-import { BaseEntity, Entity, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  CreateDateColumn,
+  Entity,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class AppEntity extends BaseEntity {
-  @UpdateDateColumn({
-    name: 'createAt',
+  @CreateDateColumn({
     type: 'timestamp',
   })
-  createAt!: Date;
+  createTime: Date;
 
   @UpdateDateColumn({
-    name: 'updateAt',
     type: 'timestamp',
   })
-  updateAte!: Date;
+  updateTime: Date;
 }

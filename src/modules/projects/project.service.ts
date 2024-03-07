@@ -10,6 +10,7 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
@@ -36,7 +37,15 @@ export class ProjectService {
     project.codeLanguage = createParam.projectLanguage || '';
     project.code = createParam.projectCode || '';
     project.user = user;
-    return this.projectRepository.save(project);
+    if (project.projectType === 'complex') {
+      console.log(
+        '🚀 ~ ProjectService ~ create ~ v4():',
+        'workspace_' + v4().split('-')[0],
+      );
+    }
+
+    // return this.projectRepository.save(project);
+    return { id: 0 };
   }
 
   // 获取项目列表

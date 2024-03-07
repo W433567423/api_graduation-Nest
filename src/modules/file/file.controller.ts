@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Post,
   UploadedFile,
@@ -7,6 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../users/user.service';
+import { uploadAvatarReqDto } from './dtos/avatar.req.dto';
 import { FileService } from './file.service';
 
 @Controller('files')
@@ -21,7 +23,11 @@ export class FileController {
   @Post('avatar')
   @ApiOperation({ summary: '上传头像' })
   @UseInterceptors(FileInterceptor('avatar'))
-  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+  async uploadAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() _data: uploadAvatarReqDto,
+  ) {
+    console.log('🚀 ~ FileController ~ _data:', _data);
     const user = await this.userService.getUser();
     const avatar = await this.fileService.uploadAvatar(user, file);
     await this.userService.updateUserAvatar(avatar);

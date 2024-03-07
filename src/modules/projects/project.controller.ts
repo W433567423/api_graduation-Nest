@@ -41,8 +41,7 @@ export class ProjectController {
   async create(
     @Body() data: createProjectReqDto,
   ): Promise<IResData<{ projectId: number }>> {
-    const { id } = await this.projectService.create(data);
-    console.log('🚀 ~ ProjectController ~ id:', id);
+    const { id } = (await this.projectService.create(data)) as any;
 
     return { code: 201, msg: '项目创建成功', data: { projectId: id } };
   }
