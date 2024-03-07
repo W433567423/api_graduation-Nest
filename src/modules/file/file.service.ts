@@ -21,6 +21,7 @@ export class FileService {
     @InjectRepository(WorkFileEntity)
     private readonly workSpaceRepository: Repository<WorkFileEntity>,
     private readonly userService: UserService,
+    // private readonly projectService: ProjectService,
   ) {}
   // 上传用户头像
   async uploadAvatar(user: UserEntity, file: Express.Multer.File) {
@@ -63,12 +64,21 @@ export class FileService {
   }
 
   // 创建工作根目录
-  async createRootFolder(folderName: string) {
+  async create(projectId: number, folderName: string) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
     file.parentFolder = 0;
-    file.isFolder = true;
     file.user = await this.userService.getUser();
+    // const dbProject = await this.projectService.getProjectById(projectId);
+    // if (!dbProject) {
+    //   // 理论上不可能
+    //   throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
+    // }
     this.workSpaceRepository.save(file);
+  }
+
+  // 获取项目工作区目录
+  async getProjectWorkSpace(projectId: number) {
+    // this.workSpaceRepository.findBy({ pr });
   }
 }

@@ -1,4 +1,5 @@
 import { AppEntity } from '@/modules/app.entity';
+import { WorkFileEntity } from '@/modules/file/entities/workSpace.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -17,7 +18,7 @@ export class ProjectEntity extends AppEntity {
   projectType: string;
 
   @Column({ comment: '项目根目录', type: 'varchar', nullable: true })
-  rootDir: string;
+  rootFolder: string;
 
   @Column({ comment: '代码(仅简单模式)', type: 'longtext', nullable: true })
   code: string;
@@ -30,4 +31,6 @@ export class ProjectEntity extends AppEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.projects)
   user: UserEntity;
+  @ManyToOne(() => WorkFileEntity, (workFiles) => workFiles.project)
+  workFiles: WorkFileEntity;
 }

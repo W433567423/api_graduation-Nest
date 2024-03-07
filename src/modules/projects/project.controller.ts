@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import * as dayjs from 'dayjs';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { FileService } from '../file/file.service';
 import type { IResData } from '../index';
 import {
   changeProjectCodeReqDto,
@@ -34,7 +35,10 @@ import { ProjectService } from './project.service';
 @ApiBearerAuth('JWT-auth')
 @Controller('projects')
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly fileService: FileService,
+  ) {}
 
   @ApiOperation({ summary: '创建项目' })
   @Post('create')
@@ -72,6 +76,15 @@ export class ProjectController {
     return {
       msg: '获取代码成功',
       data: await this.projectService.getProjectCode(projectId),
+    };
+  }
+
+  @ApiOperation({ summary: '获取项目工作区目录' })
+  @Get('workSpace')
+  async getWorkSpace(@Query('projectId', ParseIntPipe) projectId: number) {
+    return {
+      msg: '获取项目目录成功',
+      data: await this.fileService.getProjectWorkSpace(projectId),
     };
   }
 

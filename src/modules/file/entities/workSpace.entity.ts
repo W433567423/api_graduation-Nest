@@ -1,4 +1,5 @@
 import { AppEntity } from '@/modules/app.entity';
+import { ProjectEntity } from '@/modules/projects/entities/project.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -52,4 +53,7 @@ export class WorkFileEntity extends AppEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.workFiles)
   user: UserEntity;
+
+  @ManyToOne(() => ProjectEntity, (project) => project.workFiles)
+  project: ProjectEntity;
 }

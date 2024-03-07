@@ -44,7 +44,8 @@ export class ProjectService {
     if (project.projectType === 'complex') {
       // 创建工作目录
       const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
-      this.fileService.createRootFolder(rootFolderName);
+      this.fileService.create(project.id, rootFolderName);
+      project.rootFolder = rootFolderName;
     }
     return this.projectRepository.save(project);
   }
@@ -61,6 +62,7 @@ export class ProjectService {
           'updateTime',
           'disable',
           'lastStatus',
+          'projectType',
         ],
         where: { user },
       });
@@ -75,6 +77,7 @@ export class ProjectService {
           'createTime',
           'updateTime',
           'disable',
+          'projectType',
           'lastStatus',
         ],
         where: { user },
@@ -184,7 +187,12 @@ export class ProjectService {
   // 设置运行状态
   async getProjectTotal() {
     const user = await this.userService.getUser();
-    return await this.projectRepository.countBy({ user });
+    return this.projectRepository.countBy({ user });
+  }
+
+  // 通过id获取项目
+  async getProjectById(id: number) {
+    return this.projectRepository.findOneBy({ id });
   }
 
   // 判断项目名是否被使用
