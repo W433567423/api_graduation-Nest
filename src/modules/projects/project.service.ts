@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
+import { FileService } from '../file/file.service';
 import { UserEntity } from '../users/entities/user.entity';
 import { UserService } from '../users/user.service';
 import { ProjectEntity } from './entities/project.entity';
@@ -26,6 +27,7 @@ export class ProjectService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly userService: UserService,
+    private readonly fileService: FileService,
   ) {}
   // 创建项目
   async create(createParam: IPostCreateProject) {
@@ -40,14 +42,11 @@ export class ProjectService {
     project.code = createParam.projectCode || '';
     project.user = user;
     if (project.projectType === 'complex') {
-      console.log(
-        '🚀 ~ ProjectService ~ create ~ v4():',
-        'workspace_' + v4().split('-')[0],
-      );
+      // 创建工作目录
+      const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
+      this.fileService.createRootFolder(rootFolderName);
     }
-
-    // return this.projectRepository.save(project);
-    return { id: 0 };
+    return this.projectRepository.save(project);
   }
 
   // 获取项目列表
