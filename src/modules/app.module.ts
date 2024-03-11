@@ -16,6 +16,7 @@ import { CaptchaModule } from '@/modules/captchas/captcha.module';
 import { UserController } from '@/modules/users/user.controller';
 import { UserModule } from '@/modules/users/user.module';
 import { UserService } from '@/modules/users/user.service';
+import { FileController } from './file/file.controller';
 import { FileModule } from './file/file.module';
 import { ProjectController } from './projects/project.controller';
 import { ProjectModule } from './projects/project.module';
@@ -35,6 +36,7 @@ import { ProjectService } from './projects/project.service';
     UserController,
     CaptchaController,
     ProjectController,
+    FileController,
   ],
   providers: [
     UserService,

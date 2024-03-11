@@ -79,6 +79,9 @@ export class FileService {
       '🚀 ~ FileService ~ getProjectWorkSpace ~ rootDirId:',
       rootDirId,
     );
-    return this.workSpaceRepository.findBy({ parentFolder: rootDirId });
+    return this.workSpaceRepository.find({
+      select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
+      where: { parentFolder: rootDirId },
+    });
   }
 }

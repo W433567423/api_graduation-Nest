@@ -1,14 +1,16 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../users/user.service';
-import { newFolderReqDto } from './dtos/workSpace.req.dto';
+import { getFolderMenuReqDto, newFolderReqDto } from './dtos/workSpace.req.dto';
 import { FileService } from './file.service';
 
 @Controller('files')
@@ -35,5 +37,11 @@ export class FileController {
   async newFolder(@Body() data: newFolderReqDto) {
     this.fileService.createWorkSpaceFolder(data.projectName, data.parentId);
     return { msg: '新建文件夹成功' };
+  }
+  @Get('menu')
+  @ApiOperation({ summary: '获取文件夹下的目录' })
+  async getMenu(@Query() query: getFolderMenuReqDto) {
+    const res = await this.fileService.getProjectWorkSpace(query.parentId);
+    return { msg: '获取文件夹下的目录成功', data: res };
   }
 }

@@ -18,3 +18,12 @@ export class newFolderReqDto {
   @IsNotEmpty({ message: '父文件夹id不能为空' })
   readonly parentId: number;
 }
+
+export class getFolderMenuReqDto {
+  @ApiProperty({
+    description: '父文件夹id',
+    example: '0',
+  })
+  @IsNotEmpty({ message: '父文件夹id不能为空' })
+  readonly parentId: number;
+}
