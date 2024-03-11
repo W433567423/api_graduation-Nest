@@ -1,5 +1,6 @@
 import { AppEntity } from '@/modules/app.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '@/modules/users/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('workSpace')
 export class WorkFileEntity extends AppEntity {
@@ -48,4 +49,7 @@ export class WorkFileEntity extends AppEntity {
     nullable: true,
   })
   md: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.workFiles)
+  user: UserEntity;
 }

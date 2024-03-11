@@ -1,5 +1,6 @@
 import { AppEntity } from '@/modules/app.entity';
 import { AvatarsEntity } from '@/modules/file/entities/avatar.entity';
+import { WorkFileEntity } from '@/modules/file/entities/workSpace.entity';
 import { ProjectEntity } from '@/modules/projects/entities/project.entity';
 import {
   Column,
@@ -30,6 +31,10 @@ export class UserEntity extends AppEntity {
   @OneToMany(() => ProjectEntity, (project) => project.user)
   @JoinColumn()
   projects: ProjectEntity[];
+
+  @OneToMany(() => WorkFileEntity, (workFile) => workFile.user)
+  @JoinColumn()
+  workFiles: WorkFileEntity[];
 
   @OneToOne(() => AvatarsEntity, (avatar) => avatar.user)
   @JoinColumn()

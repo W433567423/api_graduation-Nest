@@ -8,7 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../users/user.service';
-import { uploadAvatarReqDto } from './dtos/avatar.req.dto';
+import { newFolderReqDto } from './dtos/workSpace.req.dto';
 import { FileService } from './file.service';
 
 @Controller('files')
@@ -23,17 +23,17 @@ export class FileController {
   @Post('avatar')
   @ApiOperation({ summary: '上传头像' })
   @UseInterceptors(FileInterceptor('avatar'))
-  async uploadAvatar(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() _data: uploadAvatarReqDto,
-  ) {
-    console.log('🚀 ~ FileController ~ _data:', _data);
+  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
     const user = await this.userService.getUser();
     const avatar = await this.fileService.uploadAvatar(user, file);
     await this.userService.updateUserAvatar(avatar);
-    return { message: '用户头像成功', data: avatar.fileUrl };
-    // @UploadedFile() avatar: Express.Multer.File,
-    // console.log('🚀 ~ FileController ~ avatar:', avatar);
-    // return await this.fileService.uploadAvatar();
+    return { msg: '用户头像成功', data: avatar.fileUrl };
+  }
+
+  @Post('newFolder')
+  @ApiOperation({ summary: '新建文件夹' })
+  async newFolder(@Body() data: newFolderReqDto) {
+    this.fileService.createWorkSpaceFolder(data.projectName, data.parentId);
+    return { msg: '新建文件夹成功' };
   }
 }

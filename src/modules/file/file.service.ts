@@ -63,12 +63,13 @@ export class FileService {
     }
   }
 
-  // 创建工作根目录
-  async createWorkSpace(folderName: string) {
+  // 新建工作区目录
+  async createWorkSpaceFolder(folderName: string, fileParentId = 0) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
-    file.parentFolder = 0;
+    file.parentFolder = fileParentId;
     file.isFolder = true;
+    file.user = await this.userService.getUser();
     return this.workSpaceRepository.save(file);
   }
 
@@ -78,6 +79,6 @@ export class FileService {
       '🚀 ~ FileService ~ getProjectWorkSpace ~ rootDirId:',
       rootDirId,
     );
-    return this.workSpaceRepository.findBy({ id: rootDirId });
+    return this.workSpaceRepository.findBy({ parentFolder: rootDirId });
   }
 }
