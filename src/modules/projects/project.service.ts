@@ -44,8 +44,8 @@ export class ProjectService {
     if (project.projectType === 'complex') {
       // 创建工作目录
       const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
-      this.fileService.create(project.id, rootFolderName);
-      project.rootFolder = rootFolderName;
+      const workspace = await this.fileService.create(rootFolderName);
+      project.rootWorkId = workspace.id;
     }
     return this.projectRepository.save(project);
   }

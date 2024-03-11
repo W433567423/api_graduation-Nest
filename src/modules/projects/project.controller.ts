@@ -82,9 +82,14 @@ export class ProjectController {
   @ApiOperation({ summary: '获取项目工作区目录' })
   @Get('workSpace')
   async getWorkSpace(@Query('projectId', ParseIntPipe) projectId: number) {
+    const projectWorkSpace =
+      await this.projectService.getProjectById(projectId);
     return {
       msg: '获取项目目录成功',
-      data: await this.fileService.getProjectWorkSpace(projectId),
+      data: await this.fileService.getProjectWorkSpace(
+        projectId,
+        projectWorkSpace!.rootWorkId,
+      ),
     };
   }
 
@@ -139,9 +144,9 @@ export class ProjectController {
 
   @ApiOperation({ summary: '删除项目' })
   @Delete('delete')
-  async delete(@Body() data: deleteProjectReqDto): Promise<IResData<null>> {
-    await this.projectService.deleteByIds(data.projectIds);
+  async delete(@Body() data: deleteProjectReqDto) {
+    const res = await this.projectService.deleteByIds(data.projectIds);
 
-    return { msg: '项目删除成功' };
+    return { msg: '项目删除成功', data: res };
   }
 }

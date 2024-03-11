@@ -64,21 +64,16 @@ export class FileService {
   }
 
   // 创建工作根目录
-  async create(projectId: number, folderName: string) {
+  async create(folderName: string) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
     file.parentFolder = 0;
-    file.user = await this.userService.getUser();
-    // const dbProject = await this.projectService.getProjectById(projectId);
-    // if (!dbProject) {
-    //   // 理论上不可能
-    //   throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
-    // }
-    this.workSpaceRepository.save(file);
+    file.isFolder = true;
+    return this.workSpaceRepository.save(file);
   }
 
   // 获取项目工作区目录
-  async getProjectWorkSpace(projectId: number) {
+  async getProjectWorkSpace(projectId: number, rootDirId: number) {
     // this.workSpaceRepository.findBy({ pr });
   }
 }
