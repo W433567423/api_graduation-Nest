@@ -64,7 +64,7 @@ export class FileService {
   }
 
   // 创建工作根目录
-  async create(folderName: string) {
+  async createWorkSpace(folderName: string) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
     file.parentFolder = 0;
@@ -73,7 +73,11 @@ export class FileService {
   }
 
   // 获取项目工作区目录
-  async getProjectWorkSpace(projectId: number, rootDirId: number) {
-    // this.workSpaceRepository.findBy({ pr });
+  async getProjectWorkSpace(rootDirId: number) {
+    console.log(
+      '🚀 ~ FileService ~ getProjectWorkSpace ~ rootDirId:',
+      rootDirId,
+    );
+    return this.workSpaceRepository.findBy({ id: rootDirId });
   }
 }

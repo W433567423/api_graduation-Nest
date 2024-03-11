@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   ParseIntPipe,
   Patch,
   Post,
@@ -45,7 +47,7 @@ export class ProjectController {
   async create(
     @Body() data: createProjectReqDto,
   ): Promise<IResData<{ projectId: number }>> {
-    const { id } = (await this.projectService.create(data)) as any;
+    const { id } = (await this.projectService.createProject(data)) as any;
 
     return { code: 201, msg: '项目创建成功', data: { projectId: id } };
   }
@@ -82,14 +84,13 @@ export class ProjectController {
   @ApiOperation({ summary: '获取项目工作区目录' })
   @Get('workSpace')
   async getWorkSpace(@Query('projectId', ParseIntPipe) projectId: number) {
-    const projectWorkSpace =
-      await this.projectService.getProjectById(projectId);
+    const dbProject = await this.projectService.getProjectById(projectId);
+    if (!dbProject) {
+      throw new HttpException('内部错误', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
     return {
       msg: '获取项目目录成功',
-      data: await this.fileService.getProjectWorkSpace(
-        projectId,
-        projectWorkSpace!.rootWorkId,
-      ),
+      data: await this.fileService.getProjectWorkSpace(dbProject.rootWorkId),
     };
   }
 

@@ -30,7 +30,7 @@ export class ProjectService {
     private readonly fileService: FileService,
   ) {}
   // 创建项目
-  async create(createParam: IPostCreateProject) {
+  async createProject(createParam: IPostCreateProject) {
     const user = await this.userService.getUser();
 
     await this.isExistProject(createParam.projectName, user);
@@ -44,7 +44,7 @@ export class ProjectService {
     if (project.projectType === 'complex') {
       // 创建工作目录
       const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
-      const workspace = await this.fileService.create(rootFolderName);
+      const workspace = await this.fileService.createWorkSpace(rootFolderName);
       project.rootWorkId = workspace.id;
     }
     return this.projectRepository.save(project);
