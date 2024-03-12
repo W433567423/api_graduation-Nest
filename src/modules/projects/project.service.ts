@@ -82,6 +82,7 @@ export class ProjectService {
           'disable',
           'projectType',
           'lastStatus',
+          'rootWorkId',
         ],
         where: { user },
       });
