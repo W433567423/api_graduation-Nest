@@ -73,6 +73,16 @@ export class FileService {
     return this.workSpaceRepository.save(file);
   }
 
+  // 新建工作区文件
+  async createWorkSpaceFile(folderName: string, fileParentId = 0) {
+    const file = new WorkFileEntity();
+    file.fileName = folderName;
+    file.parentFolder = fileParentId;
+    file.isFolder = false;
+    file.user = await this.userService.getUser();
+    return this.workSpaceRepository.save(file);
+  }
+
   // 获取项目工作区目录
   async getProjectWorkSpace(rootDirId: number) {
     console.log(

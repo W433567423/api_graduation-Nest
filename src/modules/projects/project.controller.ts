@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   ParseIntPipe,
   Patch,
   Post,
@@ -78,19 +76,6 @@ export class ProjectController {
     return {
       msg: '获取代码成功',
       data: await this.projectService.getProjectCode(projectId),
-    };
-  }
-
-  @ApiOperation({ summary: '获取项目工作区目录' })
-  @Get('workSpace')
-  async getWorkSpace(@Query('projectId', ParseIntPipe) projectId: number) {
-    const dbProject = await this.projectService.getProjectById(projectId);
-    if (!dbProject) {
-      throw new HttpException('内部错误', HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-    return {
-      msg: '获取项目目录成功',
-      data: await this.fileService.getProjectWorkSpace(dbProject.rootWorkId),
     };
   }
 

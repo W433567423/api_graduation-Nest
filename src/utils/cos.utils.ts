@@ -4,8 +4,9 @@ import {
   COS_SECRET_ID,
   COS_SECRET_KEY,
 } from '@/config/secret.config';
+import { CosError, UploadFileResult } from 'cos-nodejs-sdk-v5';
 import { createHash } from 'crypto';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import * as fs from 'fs';
 import { type ICosConfig } from './index';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -32,7 +33,7 @@ const uploadFile = async (config: ICosConfig) => {
         SliceSize:
           1024 * 1024 * 5 /* 触发分块上传的阈值，超过5MB使用分块上传，非必须 */,
       },
-      (err: string, data: any) => {
+      (err: CosError, data: UploadFileResult) => {
         if (err) {
           reject(err);
         } else {
