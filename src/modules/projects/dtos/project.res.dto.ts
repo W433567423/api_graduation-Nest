@@ -18,8 +18,7 @@ export class getProjectCodeResDto {
     description: '项目名称',
     example: 'test',
   })
-  @IsNotEmpty({ message: '项目名称不能为空' })
-  projectName: string;
+  projectName?: string;
 
   @ApiProperty({
     description: '项目代码',

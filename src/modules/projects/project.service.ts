@@ -17,7 +17,6 @@ import { FileService } from '../file/file.service';
 import { UserEntity } from '../users/entities/user.entity';
 import { UserService } from '../users/user.service';
 import { ProjectEntity } from './entities/project.entity';
-
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectService {
   constructor(
@@ -92,13 +91,15 @@ export class ProjectService {
   // 获取项目代码
   async getProjectCode(projectId: number) {
     const user = await this.userService.getUser();
-    const dbResult = await this.projectRepository.find({
-      select: ['code', 'projectName'],
-      where: { id: projectId, user },
-    });
+    const dbResult = await this.projectRepository
+      .createQueryBuilder('projects')
+      .where({ id: projectId })
+      .andWhere({ user: user })
+      .getOne();
+
     return {
-      projectName: dbResult?.[0].projectName,
-      code: dbResult?.[0]?.code || 'none code',
+      projectName: dbResult?.projectName,
+      code: dbResult?.code || 'none code',
     };
   }
 
@@ -125,7 +126,6 @@ export class ProjectService {
   ): Promise<returnRunCodeData> {
     await this.userService.getUser();
     const runResult = await runCode(code, type);
-    console.log('🚀 ~ ProjectService ~ runProjectCode ~ runResult:', runResult);
     if (runResult.success) {
       // 运行成功，保存代码
       await this.projectRepository.update(projectId, { code });

@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import * as dayjs from 'dayjs';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { IGetListRes } from '.';
 import { FileService } from '../file/file.service';
 import type { IResData } from '../index';
 import {
@@ -28,7 +29,6 @@ import {
   runProjectCodeReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto, getProjectCodeResDto } from './dtos/project.res.dto';
-import type { IGetListRes } from './index';
 import { ProjectService } from './project.service';
 
 @ApiTags('项目管理')
@@ -44,10 +44,13 @@ export class ProjectController {
   @Post('create')
   async create(
     @Body() data: createProjectReqDto,
-  ): Promise<IResData<{ projectId: number }>> {
-    const { id } = (await this.projectService.createProject(data)) as any;
-
-    return { code: 201, msg: '项目创建成功', data: { projectId: id } };
+  ): Promise<IResData<{ projectId: number; rootWorkId?: number }>> {
+    const res = (await this.projectService.createProject(data)) as any;
+    return {
+      code: 201,
+      msg: '项目创建成功',
+      data: { projectId: res.id, rootWorkId: res.rootWorkId },
+    };
   }
 
   @ApiOperation({ summary: '获取项目列表' })
