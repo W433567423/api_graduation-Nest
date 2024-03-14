@@ -128,7 +128,14 @@ export class ProjectService {
     const runResult = await runCode(code, type);
     if (runResult.success) {
       // 运行成功，保存代码
-      await this.projectRepository.update(projectId, { code });
+      await this.projectRepository.update(projectId, {
+        code,
+        lastStatus: 1,
+      });
+    } else {
+      await this.projectRepository.update(projectId, {
+        lastStatus: -1,
+      });
     }
 
     return runResult;

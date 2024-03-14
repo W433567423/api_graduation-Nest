@@ -1,13 +1,11 @@
 import { UserService } from '@/modules/users/user.service';
 import { uploadFile } from '@/utils/cos.utils';
 import { isExistDir } from '@/utils/fs.utile';
-import { Inject, Injectable, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
-import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
 import { AvatarsEntity } from './entities/avatar.entity';
 import { WorkFileEntity } from './entities/workSpace.entity';
@@ -15,7 +13,6 @@ import { WorkFileEntity } from './entities/workSpace.entity';
 @Injectable({ scope: Scope.REQUEST })
 export class FileService {
   constructor(
-    @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(AvatarsEntity)
     private readonly avatarRepository: Repository<AvatarsEntity>,
     @InjectRepository(WorkFileEntity)

@@ -21,10 +21,10 @@ export class newFolderReqDto {
   @ApiProperty({
     description: '文件夹/文件名称',
     example: 'test',
-    maxLength: 12,
+    maxLength: 20,
   })
   @IsNotEmpty({ message: '文件夹/文件名称不能为空' })
-  @MaxLength(12)
+  @MaxLength(20)
   readonly fileName: string;
 
   @ApiProperty({
@@ -48,10 +48,10 @@ export class newFileReqDto {
   @ApiProperty({
     description: '文件夹/文件名称',
     example: 'test',
-    maxLength: 12,
+    maxLength: 20,
   })
   @IsNotEmpty({ message: '文件夹/文件名称不能为空' })
-  @MaxLength(12)
+  @MaxLength(20)
   readonly fileName: string;
 
   @ApiProperty({
