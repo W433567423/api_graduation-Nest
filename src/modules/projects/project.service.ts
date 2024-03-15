@@ -141,6 +141,23 @@ export class ProjectService {
     return runResult;
   }
 
+  // 运行项目
+  async runComplexProject(projectId: number) {
+    const user = await this.userService.getUser();
+    const dbProject = await this.projectRepository.find({
+      where: {
+        id: projectId,
+        user,
+      },
+    });
+    console.log(
+      '🚀 ~ ProjectService ~ runComplexProject ~ dbProject:',
+      dbProject,
+    );
+
+    return dbProject;
+  }
+
   // 重命名项目
   async reName(projectId: number, newName: string) {
     const user = await this.userService.getUser();

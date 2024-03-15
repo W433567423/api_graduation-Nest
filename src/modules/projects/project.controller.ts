@@ -115,6 +115,17 @@ export class ProjectController {
     };
   }
 
+  @ApiOperation({ summary: '运行项目' })
+  @Post('code')
+  async runComplexCode(
+    @Query('projectId', ParseIntPipe) projectId: number,
+  ): Promise<IResData<any>> {
+    const result = await this.projectService.runComplexProject(projectId);
+    return {
+      msg: '代码运行成功',
+      data: result,
+    };
+  }
   @ApiOperation({ summary: '重命名项目' })
   @Patch('rename')
   async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {
