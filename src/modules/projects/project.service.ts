@@ -41,13 +41,10 @@ export class ProjectService {
     project.code = createParam.projectCode || '';
     project.user = user;
     if (project.projectType === 'complex') {
-      // 创建工作目录
+      // TODO 创建工作目录
       const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
-      const workspace = await this.fileService.createWorkSpaceFolder(
-        rootFolderName,
-        0,
-      );
-      project.rootWorkId = workspace.id;
+
+      project.rootWorkName = rootFolderName;
     }
     return this.projectRepository.save(project);
   }
@@ -81,7 +78,7 @@ export class ProjectService {
           'disable',
           'projectType',
           'lastStatus',
-          'rootWorkId',
+          'rootWorkName',
         ],
         where: { user },
       });

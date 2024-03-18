@@ -16,8 +16,8 @@ export class ProjectEntity extends AppEntity {
   @Column({ comment: '项目类型', type: 'varchar' })
   projectType: string;
 
-  @Column({ comment: '项目根目录id', type: 'int', nullable: true })
-  rootWorkId: number;
+  @Column({ comment: '项目根目录', type: 'varchar', nullable: true })
+  rootWorkName: string;
 
   @Column({ comment: '代码(仅简单模式)', type: 'longtext', nullable: true })
   code: string;
