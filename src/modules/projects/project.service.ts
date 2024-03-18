@@ -1,5 +1,5 @@
 import type { returnRunCodeData } from '@/utils/index.d';
-import { runCode } from '@/utils/runCode.utils';
+import { runCode, runInnerProject } from '@/utils/runCode.utils';
 import {
   HttpException,
   HttpStatus,
@@ -143,19 +143,19 @@ export class ProjectService {
 
   // 运行项目
   async runComplexProject(projectId: number) {
-    const user = await this.userService.getUser();
-    const dbProject = await this.projectRepository.find({
-      where: {
-        id: projectId,
-        user,
-      },
-    });
     console.log(
-      '🚀 ~ ProjectService ~ runComplexProject ~ dbProject:',
-      dbProject,
+      '🚀 ~ ProjectService ~ runComplexProject ~ projectId:',
+      projectId,
     );
-
-    return dbProject;
+    // const user = await this.userService.getUser();
+    // const dbProject = await this.projectRepository.findOne({
+    //   where: {
+    //     id: projectId,
+    //     user,
+    //   },
+    // });
+    const res = await runInnerProject();
+    return res;
   }
 
   // 重命名项目

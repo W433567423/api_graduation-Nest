@@ -116,7 +116,7 @@ export class ProjectController {
   }
 
   @ApiOperation({ summary: '运行项目' })
-  @Post('code')
+  @Post('run')
   async runComplexCode(
     @Query('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResData<any>> {
