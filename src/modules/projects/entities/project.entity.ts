@@ -1,6 +1,12 @@
 import { AppEntity } from '@/modules/app.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('projects')
 export class ProjectEntity extends AppEntity {
@@ -16,18 +22,22 @@ export class ProjectEntity extends AppEntity {
   @Column({ comment: '项目类型', type: 'varchar' })
   projectType: string;
 
-  @Column({ comment: '项目根目录', type: 'varchar', nullable: true })
+  @Column({ comment: '项目根目录(复杂模式)', type: 'varchar', nullable: true })
   rootWorkName: string;
 
-  @Column({ comment: '代码(仅简单模式)', type: 'longtext', nullable: true })
+  @Column({ comment: '项目入口(复杂模式)', type: 'varchar', nullable: true })
+  workIndex: string;
+
+  @Column({ comment: '代码(简单模式)', type: 'longtext', nullable: true })
   code: string;
 
-  @Column({ comment: '代码语言', type: 'varchar', nullable: true })
+  @Column({ comment: '代码语言(简单模式)', type: 'varchar', nullable: true })
   codeLanguage: string;
 
   @Column({ comment: '是否禁用项目', type: 'boolean', default: false })
   disable: boolean;
 
   @ManyToOne(() => UserEntity, (user) => user.projects)
+  @JoinColumn()
   user: UserEntity;
 }

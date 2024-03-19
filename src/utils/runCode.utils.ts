@@ -45,13 +45,13 @@ const runCode = async (code: string, type: string) => {
   }
 };
 
-const runInnerProject = async () => {
+const runInnerProject = async (rootPath: string, indexFile: string) => {
   return new Promise((resolve, rejects) => {
     let result = '';
-    const cwd = join(__dirname, '../../out_code/Diabetic-Rredict/');
+    const cwd = join(rootPath, 'Diabetic-Rredict/');
     const py = spawn(
       'python',
-      [`${join(__dirname, '../../out_code/Diabetic-Rredict/script.py')}`],
+      [`${join(__dirname, `Diabetic-Rredict/${indexFile}`)}`],
       { cwd: cwd },
     );
     py.stdout.on('data', (res) => {

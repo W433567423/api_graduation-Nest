@@ -1,4 +1,5 @@
 import type { returnRunCodeData } from '@/utils/index.d';
+import { joinWorkPath } from '@/utils/joinWorkPath';
 import { runCode, runInnerProject } from '@/utils/runCode.utils';
 import {
   HttpException,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as fs from 'fs';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
@@ -28,6 +30,7 @@ export class ProjectService {
     private readonly userService: UserService,
     private readonly fileService: FileService,
   ) {}
+  qbProjects = this.projectRepository.createQueryBuilder();
   // 创建项目
   async createProject(createParam: IPostCreateProject) {
     const user = await this.userService.getUser();
@@ -41,8 +44,10 @@ export class ProjectService {
     project.code = createParam.projectCode || '';
     project.user = user;
     if (project.projectType === 'complex') {
-      // TODO 创建工作目录
       const rootFolderName = `space${user.id}_${v4().split('-')[0]}`;
+      await fs.promises.mkdir(joinWorkPath(rootFolderName), {
+        recursive: true,
+      });
 
       project.rootWorkName = rootFolderName;
     }
@@ -51,38 +56,20 @@ export class ProjectService {
 
   // 获取项目列表
   async getList(page: number | undefined, size: number | undefined) {
-    const user = await this.userService.getUser();
-    if (page === undefined && size === undefined) {
-      return this.projectRepository.find({
-        select: [
-          'id',
-          'projectName',
-          'createTime',
-          'updateTime',
-          'disable',
-          'lastStatus',
-          'projectType',
-        ],
-        where: { user },
-      });
-      // return this.projectRepository.findAndCountBy({ user });
-    } else {
-      return this.projectRepository.find({
-        skip: page,
-        take: size,
-        select: [
-          'id',
-          'projectName',
-          'createTime',
-          'updateTime',
-          'disable',
-          'projectType',
-          'lastStatus',
-          'rootWorkName',
-        ],
-        where: { user },
-      });
-    }
+    return this.qbProjects
+      .select([
+        'id',
+        'projectName',
+        'createTime',
+        'updateTime',
+        'disable',
+        'lastStatus',
+        'projectType',
+      ])
+      .where('userId= :userId', { userId: this.request.user!.id })
+      .limit(size)
+      .offset(page)
+      .getMany();
   }
 
   // 获取项目代码
@@ -103,7 +90,6 @@ export class ProjectService {
   // 修改项目代码
   async changeProjectCode(projectId: number, code: string) {
     const user = await this.userService.getUser();
-    console.log(projectId, code);
 
     const dbProject = await this.projectRepository.findOneBy({
       id: projectId,
@@ -112,7 +98,7 @@ export class ProjectService {
     if (dbProject) {
       return await this.projectRepository.update(dbProject.id, { code });
     } else {
-      throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
+      throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     }
   }
   // 运行项目代码
@@ -140,19 +126,22 @@ export class ProjectService {
 
   // 运行项目
   async runComplexProject(projectId: number) {
-    console.log(
-      '🚀 ~ ProjectService ~ runComplexProject ~ projectId:',
-      projectId,
-    );
-    // const user = await this.userService.getUser();
-    // const dbProject = await this.projectRepository.findOne({
-    //   where: {
-    //     id: projectId,
-    //     user,
-    //   },
-    // });
-    const res = await runInnerProject();
-    return res;
+    const dbProject = await this.qbProjects
+      .where('id= :id', {
+        id: projectId,
+      })
+      .andWhere('userId= :userId', {
+        userId: this.request.user!.id,
+      })
+      .getOne();
+    if (!dbProject) {
+      throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
+    } else {
+      const workFoldPath = joinWorkPath(dbProject.rootWorkName);
+      const indexFile = 'script.py';
+      const res = await runInnerProject(workFoldPath, indexFile);
+      return res;
+    }
   }
 
   // 重命名项目
@@ -167,20 +156,17 @@ export class ProjectService {
       await this.isExistProject(newName, user);
       this.projectRepository.update(dbProject.id, { projectName: newName });
     } else {
-      throw new HttpException('未找到该项目', HttpStatus.NO_CONTENT);
+      throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     }
   }
 
   // 删除项目
   async deleteByIds(ids: number[]) {
     const user = await this.userService.getUser();
-    const qb = this.projectRepository.createQueryBuilder('project');
-    return await qb
-      .createQueryBuilder()
-      .delete()
-      .from(ProjectEntity)
+    return await this.qbProjects
       .where('userId = :userId', { userId: user.id })
       .andWhere('id IN (:ids)', { ids })
+      .delete()
       .execute();
   }
 
