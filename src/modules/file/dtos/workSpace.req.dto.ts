@@ -20,13 +20,13 @@ export enum IFileType {
 
 export class newFolderReqDto {
   @ApiProperty({
-    description: '文件夹/文件名称',
+    description: '文件夹名称',
     example: 'test',
     maxLength: 20,
   })
-  @IsNotEmpty({ message: '文件夹/文件名称不能为空' })
+  @IsNotEmpty({ message: '文件夹名称不能为空' })
   @MaxLength(20)
-  readonly fileName: string;
+  readonly foldName: string;
 
   @ApiProperty({
     description: '父文件夹id',

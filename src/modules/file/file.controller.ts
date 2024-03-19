@@ -39,9 +39,10 @@ export class FileController {
   @Post('newFolder')
   @ApiOperation({ summary: '新建文件夹' })
   async newFolder(@Body() data: newFolderReqDto) {
-    this.fileService.createFolderByParentId(data.fileName, data.parentId);
+    this.fileService.createFolderByParentId(data.foldName, data.parentId);
     return { msg: '新建文件夹成功' };
   }
+
   @Get('menu')
   @ApiOperation({ summary: '获取文件夹下的目录' })
   async getMenu(@Query() query: getFolderMenuReqDto) {

@@ -7,17 +7,15 @@ const isExistDir = (path: string, autoCreate = true) => {
   }
   return isExistDir;
 };
-const touchFile = async (path: string) => {
+const touchFile = async (path: string): Promise<string> => {
+  console.log('🚀 ~ touchFile ~ path:', path);
   return new Promise((resolve, rejects) => {
-    fs.writeFile(path, '', (error) => {
-      if (error) {
-        // 创建失败
-        rejects(`创建失败：${error}`);
-      } else {
-        // 创建成功
-        resolve('创建成功！');
-      }
-    });
+    try {
+      fs.writeFileSync(path, '');
+      resolve('文件创建成功');
+    } catch (e) {
+      rejects(`文件创建失败,${String(e)}`);
+    }
   });
 };
 

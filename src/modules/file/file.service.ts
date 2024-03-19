@@ -1,5 +1,6 @@
 import { uploadFile } from '@/utils/cos.utils';
-import { isExistDir } from '@/utils/fs.utile';
+import { isExistDir, touchFile } from '@/utils/fs.utile';
+import { joinWorkPath } from '@/utils/joinWorkPath';
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -69,21 +70,26 @@ export class FileService {
     file.parentFolder = fileParentId;
     file.isFolder = true;
     file.userId = this.getUserId();
+    // 新建实体文件夹
+    isExistDir(joinWorkPath(folderName));
     return this.workSpaceRepository.save(file);
   }
 
   // 新建工作区文件
   async createFileByParentId(
-    folderName: string,
+    fileName: string,
     fileParentId = 0,
     mimetype: IFileType | undefined,
   ) {
     const file = new WorkFileEntity();
-    file.fileName = folderName;
+    file.fileName = fileName;
     file.mimetype = mimetype || IFileType[''];
     file.parentFolder = fileParentId;
     file.isFolder = false;
     file.userId = this.getUserId();
+
+    // 新建实体文件
+    await touchFile(joinWorkPath(fileName));
     return this.workSpaceRepository.save(file);
   }
 

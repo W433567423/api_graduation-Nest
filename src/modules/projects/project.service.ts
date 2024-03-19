@@ -1,4 +1,3 @@
-import { touchFile } from '@/utils/fs.utile';
 import type { returnRunCodeData } from '@/utils/index.d';
 import { joinWorkPath } from '@/utils/joinWorkPath';
 import { runCode, runInnerProject } from '@/utils/runCode.utils';
@@ -11,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as fs from 'fs';
 import { join } from 'path';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
@@ -47,9 +45,6 @@ export class ProjectService {
         throw new HttpException('复杂项目必须创建入口', HttpStatus.FORBIDDEN);
       } else {
         const rootFolderName = `space${this.getUserId()}_${v4().split('-')[0]}`;
-        await fs.promises.mkdir(joinWorkPath(rootFolderName), {
-          recursive: true,
-        });
         const resWork = await this.fileService.createFolderByParentId(
           rootFolderName,
           0,
@@ -57,9 +52,6 @@ export class ProjectService {
         project.rootWorkName = rootFolderName;
         project.rootWorkFoldId = resWork.id;
         // DONE 创建入口文件
-        await touchFile(
-          join(joinWorkPath(rootFolderName), createParam.workIndexFile),
-        );
         await this.fileService.createFileByParentId(
           join(rootFolderName, createParam.workIndexFile),
           resWork.id,
@@ -73,8 +65,6 @@ export class ProjectService {
 
   // 获取项目列表
   async getList(page: number | undefined, size: number | undefined) {
-    console.log('🚀 ~ ProjectService ~ getList ~ size:', size);
-    console.log('🚀 ~ ProjectService ~ getList ~ page:', page);
     return this.qbProjects
       .select([
         'projects.id',
