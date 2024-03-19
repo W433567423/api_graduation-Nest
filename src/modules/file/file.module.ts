@@ -8,11 +8,11 @@ import { FileService } from './file.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AvatarsEntity, WorkFileEntity]),
     UserModule,
+    TypeOrmModule.forFeature([AvatarsEntity, WorkFileEntity]),
   ],
   controllers: [FileController],
   providers: [FileService],
-  exports: [TypeOrmModule, FileService],
+  exports: [],
 })
 export class FileModule {}

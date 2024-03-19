@@ -1,7 +1,6 @@
 import { AppEntity } from '@/modules/app.entity';
 import { AvatarsEntity } from '@/modules/file/entities/avatar.entity';
 import { WorkFileEntity } from '@/modules/file/entities/workSpace.entity';
-import { ProjectEntity } from '@/modules/projects/entities/project.entity';
 import {
   Column,
   Entity,
@@ -28,9 +27,9 @@ export class UserEntity extends AppEntity {
   @Column({ type: 'varchar', comment: '电子邮件' })
   email: string;
 
-  @OneToMany(() => ProjectEntity, (project) => project.user)
-  @JoinColumn()
-  projects: ProjectEntity[];
+  // @OneToMany(() => ProjectEntity, (project) => project.user)
+  // @JoinColumn()
+  // projects: ProjectEntity[];
 
   @OneToMany(() => WorkFileEntity, (workFile) => workFile.user)
   @JoinColumn()

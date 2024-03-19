@@ -17,7 +17,6 @@ import {
 import * as dayjs from 'dayjs';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { IGetListRes } from '.';
-import { FileService } from '../file/file.service';
 import type { IResData } from '../index';
 import {
   changeProjectCodeReqDto,
@@ -35,10 +34,7 @@ import { ProjectService } from './project.service';
 @ApiBearerAuth('JWT-auth')
 @Controller('projects')
 export class ProjectController {
-  constructor(
-    private readonly projectService: ProjectService,
-    private readonly fileService: FileService,
-  ) {}
+  constructor(private readonly projectService: ProjectService) {}
 
   @ApiOperation({ summary: '创建项目' })
   @Post('create')

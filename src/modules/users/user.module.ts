@@ -7,11 +7,11 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register(jwtConfig),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports: [TypeOrmModule, UserService],
+  exports: [UserService],
 })
 export class UserModule {}

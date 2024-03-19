@@ -1,17 +1,13 @@
 import { AppEntity } from '@/modules/app.entity';
-import { UserEntity } from '@/modules/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('projects')
 export class ProjectEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
+
+  @Column({ comment: '用户id', type: 'int' })
+  userId: number;
 
   @Column({ comment: '项目名称', type: 'varchar' })
   projectName: string;
@@ -26,7 +22,7 @@ export class ProjectEntity extends AppEntity {
   rootWorkName: string;
 
   @Column({ comment: '项目入口(复杂模式)', type: 'varchar', nullable: true })
-  workIndex: string;
+  workIndexFile: string;
 
   @Column({ comment: '代码(简单模式)', type: 'longtext', nullable: true })
   code: string;
@@ -37,7 +33,7 @@ export class ProjectEntity extends AppEntity {
   @Column({ comment: '是否禁用项目', type: 'boolean', default: false })
   disable: boolean;
 
-  @ManyToOne(() => UserEntity, (user) => user.projects)
-  @JoinColumn()
-  user: UserEntity;
+  // @ManyToOne(() => UserEntity, (user) => user.projects)
+  // @JoinColumn()
+  // user: UserEntity;
 }

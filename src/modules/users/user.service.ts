@@ -23,8 +23,10 @@ import { AvatarsEntity } from '../file/entities/avatar.entity';
 export class UserService {
   constructor(
     @Inject(REQUEST) private readonly request: IReqUser,
+
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+
     private jwtService: JwtService,
   ) {}
   // 用户名查询用户

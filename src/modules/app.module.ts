@@ -11,16 +11,10 @@ import { AuthGuard } from '@/global/guard/auth.guard';
 import UnifyResponseInterceptor from '@/global/interceptor/unify-response.interceptor';
 import LoggerMiddleware from '@/global/middleware/logger.middleware';
 
-import { CaptchaController } from '@/modules/captchas/captcha.controller';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
-import { UserController } from '@/modules/users/user.controller';
 import { UserModule } from '@/modules/users/user.module';
-import { UserService } from '@/modules/users/user.service';
-import { FileController } from './file/file.controller';
 import { FileModule } from './file/file.module';
-import { ProjectController } from './projects/project.controller';
 import { ProjectModule } from './projects/project.module';
-import { ProjectService } from './projects/project.service';
 
 @Module({
   imports: [
@@ -33,14 +27,15 @@ import { ProjectService } from './projects/project.service';
   ],
   controllers: [
     AppController,
-    UserController,
-    CaptchaController,
-    ProjectController,
-    FileController,
+    // UserController,
+    // CaptchaController,
+    // ProjectController,
+    // FileController,
   ],
   providers: [
-    UserService,
-    ProjectService,
+    // UserService,
+    // ProjectService,
+    // FileService,
     // 鉴权守卫
     {
       provide: APP_GUARD,

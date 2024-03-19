@@ -25,6 +25,12 @@ export class createProjectReqDto {
   readonly projectType: string;
 
   @ApiProperty({
+    description: '项目入口文件',
+    example: 'main.py',
+  })
+  readonly workIndexFile?: string;
+
+  @ApiProperty({
     description: '项目语言',
     example: 'JavaScript',
     required: false,
