@@ -15,7 +15,7 @@ export class ProjectEntity extends AppEntity {
   @Column({ comment: '上一次运行成功与否', type: 'int', default: 0 })
   lastStatus: number; // 0:未知,-1:错误,1:成功
 
-  @Column({ comment: '项目类型', type: 'varchar' })
+  @Column({ comment: '项目类型', type: 'varchar', enum: ['simple', 'complex'] })
   projectType: string;
 
   @Column({ comment: '项目根目录(复杂模式)', type: 'varchar', nullable: true })

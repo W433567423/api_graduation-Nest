@@ -1,3 +1,4 @@
+import { touchFile } from '@/utils/fs.utile';
 import type { returnRunCodeData } from '@/utils/index.d';
 import { joinWorkPath } from '@/utils/joinWorkPath';
 import { runCode, runInnerProject } from '@/utils/runCode.utils';
@@ -11,6 +12,7 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
+import { join } from 'path';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
@@ -47,6 +49,9 @@ export class ProjectService {
         });
         project.rootWorkName = rootFolderName;
         // TODO 创建入口文件
+        await touchFile(
+          join(joinWorkPath(rootFolderName), createParam.workIndexFile),
+        );
         project.workIndexFile = createParam.workIndexFile;
       }
     }
