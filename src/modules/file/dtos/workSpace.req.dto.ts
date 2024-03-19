@@ -28,20 +28,20 @@ export class newFolderReqDto {
   readonly fileName: string;
 
   @ApiProperty({
-    description: '父文件夹id',
+    description: '父文件夹名称',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹id不能为空' })
-  readonly parentId: number;
+  @IsNotEmpty({ message: '父文件夹名称不能为空' })
+  readonly parentFold: string;
 }
 
 export class getFolderMenuReqDto {
   @ApiProperty({
-    description: '父文件夹id',
+    description: '父文件夹名称',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹id不能为空' })
-  readonly parentId: number;
+  @IsNotEmpty({ message: '父文件夹名称不能为空' })
+  readonly parentFold: string;
 }
 
 export class newFileReqDto {
@@ -55,11 +55,11 @@ export class newFileReqDto {
   readonly fileName: string;
 
   @ApiProperty({
-    description: '父文件夹id',
+    description: '父文件夹名称',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹id不能为空' })
-  readonly parentId: number;
+  @IsNotEmpty({ message: '父文件夹名称不能为空' })
+  readonly parentFold: string;
 
   @ApiProperty({
     description: '内容',

@@ -25,6 +25,8 @@ export class ProjectService {
     @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
+    // @InjectRepository(WorkFileEntity)
+    // private readonly workFileRepository: Repository<WorkFileEntity>,
   ) {}
   qbProjects = this.projectRepository.createQueryBuilder('projects');
   // 创建项目
