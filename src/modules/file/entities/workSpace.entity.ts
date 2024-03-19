@@ -1,12 +1,14 @@
 import { AppEntity } from '@/modules/app.entity';
-import { UserEntity } from '@/modules/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IFileType } from '../dtos/workSpace.req.dto';
 
 @Entity('workSpace')
 export class WorkFileEntity extends AppEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
+
+  @Column({ comment: '用户id', type: 'int' })
+  userId: number;
 
   @Column({ type: 'varchar', comment: '文件(夹)名称' })
   fileName: string;
@@ -51,6 +53,6 @@ export class WorkFileEntity extends AppEntity {
   })
   md: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.workFiles)
-  user: UserEntity;
+  // @ManyToOne(() => UserEntity, (user) => user.workFiles)
+  // user: UserEntity;
 }

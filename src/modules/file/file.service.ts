@@ -1,11 +1,12 @@
-import { UserService } from '@/modules/users/user.service';
 import { uploadFile } from '@/utils/cos.utils';
 import { isExistDir } from '@/utils/fs.utile';
-import { Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, Scope } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
+import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
 import { IFileType } from './dtos/workSpace.req.dto';
 import { AvatarsEntity } from './entities/avatar.entity';
@@ -14,11 +15,11 @@ import { WorkFileEntity } from './entities/workSpace.entity';
 @Injectable({ scope: Scope.REQUEST })
 export class FileService {
   constructor(
+    @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(AvatarsEntity)
     private readonly avatarRepository: Repository<AvatarsEntity>,
     @InjectRepository(WorkFileEntity)
     private readonly workSpaceRepository: Repository<WorkFileEntity>,
-    private readonly userService: UserService,
     // private readonly projectService: ProjectService,
   ) {}
   // 上传用户头像
@@ -67,7 +68,7 @@ export class FileService {
     file.fileName = folderName;
     file.parentFolder = fileParentId;
     file.isFolder = true;
-    file.user = await this.userService.getUser();
+    file.userId = this.getUserId();
     return this.workSpaceRepository.save(file);
   }
 
@@ -82,7 +83,7 @@ export class FileService {
     file.mimetype = mimetype || IFileType[''];
     file.parentFolder = fileParentId;
     file.isFolder = false;
-    file.user = await this.userService.getUser();
+    file.userId = this.getUserId();
     return this.workSpaceRepository.save(file);
   }
 
@@ -90,7 +91,10 @@ export class FileService {
   async getFileListByParentId(parentId: number) {
     return this.workSpaceRepository.find({
       select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
-      where: { parentFolder: parentId },
+      where: { parentFolder: parentId, userId: this.getUserId() },
     });
+  }
+  getUserId() {
+    return this.request.user!.id;
   }
 }

@@ -1,11 +1,9 @@
 import { AppEntity } from '@/modules/app.entity';
 import { AvatarsEntity } from '@/modules/file/entities/avatar.entity';
-import { WorkFileEntity } from '@/modules/file/entities/workSpace.entity';
 import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -31,9 +29,9 @@ export class UserEntity extends AppEntity {
   // @JoinColumn()
   // projects: ProjectEntity[];
 
-  @OneToMany(() => WorkFileEntity, (workFile) => workFile.user)
-  @JoinColumn()
-  workFiles: WorkFileEntity[];
+  // @OneToMany(() => WorkFileEntity, (workFile) => workFile.user)
+  // @JoinColumn()
+  // workFiles: WorkFileEntity[];
 
   @OneToOne(() => AvatarsEntity, (avatar) => avatar.user)
   @JoinColumn()
