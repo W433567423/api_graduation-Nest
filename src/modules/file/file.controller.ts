@@ -39,20 +39,24 @@ export class FileController {
   @Post('newFolder')
   @ApiOperation({ summary: '新建文件夹' })
   async newFolder(@Body() data: newFolderReqDto) {
-    this.fileService.createWorkSpaceFolder(data.fileName, 0);
+    this.fileService.createFolderByParentId(data.fileName, data.parentId);
     return { msg: '新建文件夹成功' };
   }
   @Get('menu')
   @ApiOperation({ summary: '获取文件夹下的目录' })
   async getMenu(@Query() query: getFolderMenuReqDto) {
-    const res = await this.fileService.getProjectWorkSpace(0);
+    const res = await this.fileService.getFileListByParentId(query.parentId);
     return { msg: '获取文件夹下的目录成功', data: res };
   }
 
   @Post('newFile')
   @ApiOperation({ summary: '新建文件' })
   async newFile(@Body() data: newFileReqDto) {
-    this.fileService.createWorkSpaceFile(data.fileName, 0);
+    this.fileService.createFileByParentId(
+      data.fileName,
+      data.parentId,
+      data.mimetype,
+    );
     return { msg: '新建文件夹成功' };
   }
 }

@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../users/entities/user.entity';
+import { IFileType } from './dtos/workSpace.req.dto';
 import { AvatarsEntity } from './entities/avatar.entity';
 import { WorkFileEntity } from './entities/workSpace.entity';
 
@@ -61,7 +62,7 @@ export class FileService {
   }
 
   // 新建工作区目录
-  async createWorkSpaceFolder(folderName: string, fileParentId = 0) {
+  async createFolderByParentId(folderName: string, fileParentId = 0) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
     file.parentFolder = fileParentId;
@@ -71,9 +72,14 @@ export class FileService {
   }
 
   // 新建工作区文件
-  async createWorkSpaceFile(folderName: string, fileParentId = 0) {
+  async createFileByParentId(
+    folderName: string,
+    fileParentId = 0,
+    mimetype: IFileType | undefined,
+  ) {
     const file = new WorkFileEntity();
     file.fileName = folderName;
+    file.mimetype = mimetype || IFileType[''];
     file.parentFolder = fileParentId;
     file.isFolder = false;
     file.user = await this.userService.getUser();
@@ -81,14 +87,10 @@ export class FileService {
   }
 
   // 获取项目工作区目录
-  async getProjectWorkSpace(rootDirId: number) {
-    console.log(
-      '🚀 ~ FileService ~ getProjectWorkSpace ~ rootDirId:',
-      rootDirId,
-    );
+  async getFileListByParentId(parentId: number) {
     return this.workSpaceRepository.find({
       select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
-      where: { parentFolder: rootDirId },
+      where: { parentFolder: parentId },
     });
   }
 }

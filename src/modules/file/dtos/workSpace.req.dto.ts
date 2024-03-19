@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength } from 'class-validator';
 
-enum IFileType {
+export enum IFileType {
   'text/html',
   'text/plain',
   'application/rtf',
@@ -15,6 +15,7 @@ enum IFileType {
   'video/x-msvideo',
   'application/x-gzip',
   'application/x-tar',
+  '',
 }
 
 export class newFolderReqDto {
@@ -28,20 +29,20 @@ export class newFolderReqDto {
   readonly fileName: string;
 
   @ApiProperty({
-    description: '父文件夹名称',
+    description: '父文件夹id',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹名称不能为空' })
-  readonly parentFold: string;
+  @IsNotEmpty({ message: '父文件夹id不能为空' })
+  readonly parentId: number;
 }
 
 export class getFolderMenuReqDto {
   @ApiProperty({
-    description: '父文件夹名称',
+    description: '父文件夹id',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹名称不能为空' })
-  readonly parentFold: string;
+  @IsNotEmpty({ message: '父文件夹id不能为空' })
+  readonly parentId: number;
 }
 
 export class newFileReqDto {
@@ -55,11 +56,11 @@ export class newFileReqDto {
   readonly fileName: string;
 
   @ApiProperty({
-    description: '父文件夹名称',
+    description: '父文件夹id',
     example: '0',
   })
-  @IsNotEmpty({ message: '父文件夹名称不能为空' })
-  readonly parentFold: string;
+  @IsNotEmpty({ message: '父文件夹id不能为空' })
+  readonly parentId: number;
 
   @ApiProperty({
     description: '内容',

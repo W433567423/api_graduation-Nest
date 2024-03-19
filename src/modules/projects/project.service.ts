@@ -17,6 +17,8 @@ import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
+import { IFileType } from '../file/dtos/workSpace.req.dto';
+import { FileService } from '../file/file.service';
 import { UserEntity } from '../users/entities/user.entity';
 import { ProjectEntity } from './entities/project.entity';
 @Injectable({ scope: Scope.REQUEST })
@@ -25,8 +27,7 @@ export class ProjectService {
     @Inject(REQUEST) private readonly request: IReqUser,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
-    // @InjectRepository(WorkFileEntity)
-    // private readonly workFileRepository: Repository<WorkFileEntity>,
+    private readonly fileService: FileService,
   ) {}
   qbProjects = this.projectRepository.createQueryBuilder('projects');
   // 创建项目
@@ -49,10 +50,20 @@ export class ProjectService {
         await fs.promises.mkdir(joinWorkPath(rootFolderName), {
           recursive: true,
         });
+        const resWork = await this.fileService.createFolderByParentId(
+          rootFolderName,
+          0,
+        );
         project.rootWorkName = rootFolderName;
-        // TODO 创建入口文件
+        project.rootWorkFoldId = resWork.id;
+        // DONE 创建入口文件
         await touchFile(
           join(joinWorkPath(rootFolderName), createParam.workIndexFile),
+        );
+        await this.fileService.createFileByParentId(
+          join(rootFolderName, createParam.workIndexFile),
+          resWork.id,
+          IFileType[''],
         );
         project.workIndexFile = createParam.workIndexFile;
       }

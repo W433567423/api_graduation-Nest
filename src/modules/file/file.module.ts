@@ -13,6 +13,6 @@ import { FileService } from './file.service';
   ],
   controllers: [FileController],
   providers: [FileService],
-  exports: [],
+  exports: [FileService],
 })
 export class FileModule {}

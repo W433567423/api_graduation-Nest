@@ -1,6 +1,7 @@
 import { AppEntity } from '@/modules/app.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IFileType } from '../dtos/workSpace.req.dto';
 
 @Entity('workSpace')
 export class WorkFileEntity extends AppEntity {
@@ -23,12 +24,12 @@ export class WorkFileEntity extends AppEntity {
   })
   fileUrl: string;
 
-  @Column({
-    type: 'varchar',
-    comment: '文件内容',
-    nullable: true,
-  })
-  content: string;
+  // @Column({
+  //   type: 'varchar',
+  //   comment: '文件内容',
+  //   nullable: true,
+  // })
+  // content: string;
 
   @Column({
     type: 'int',
@@ -41,7 +42,7 @@ export class WorkFileEntity extends AppEntity {
     comment: '文件类型',
     nullable: true,
   })
-  mimetype: string;
+  mimetype: IFileType;
 
   @Column({
     type: 'varchar',
