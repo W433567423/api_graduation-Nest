@@ -40,12 +40,12 @@ export class ProjectController {
   @Post('create')
   async create(
     @Body() data: createProjectReqDto,
-  ): Promise<IResData<{ projectId: number; rootWorkId?: number }>> {
-    const res = (await this.projectService.createProject(data)) as any;
+  ): Promise<IResData<{ projectId: number; rootWorkFoldId?: number }>> {
+    const res = await this.projectService.createProject(data);
     return {
       code: 201,
       msg: '项目创建成功',
-      data: { projectId: res.id, rootWorkId: res.rootWorkId },
+      data: { projectId: res.id, rootWorkFoldId: res.rootWorkFoldId },
     };
   }
 

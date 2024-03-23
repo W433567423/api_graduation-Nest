@@ -10,12 +10,10 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { join } from 'path';
 import { Repository } from 'typeorm';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
-import { IFileType } from '../file/dtos/workSpace.req.dto';
 import { FileService } from '../file/file.service';
 import { UserEntity } from '../users/entities/user.entity';
 import { ProjectEntity } from './entities/project.entity';
@@ -41,24 +39,14 @@ export class ProjectService {
       project.codeLanguage = createParam.projectLanguage || '';
       project.code = createParam.projectCode || '';
     } else {
-      if (!createParam.workIndexFile) {
-        throw new HttpException('复杂项目必须创建入口', HttpStatus.FORBIDDEN);
-      } else {
-        const rootFolderName = `space${this.getUserId()}_${v4().split('-')[0]}`;
-        const resWork = await this.fileService.createFolderByParentId(
-          rootFolderName,
-          0,
-        );
-        project.rootWorkName = rootFolderName;
-        project.rootWorkFoldId = resWork.id;
-        // DONE 创建入口文件
-        await this.fileService.createFileByParentId(
-          join(rootFolderName, createParam.workIndexFile),
-          resWork.id,
-          IFileType[''],
-        );
-        project.workIndexFile = createParam.workIndexFile;
-      }
+      const rootFolderName = `space${this.getUserId()}_${v4().split('-')[0]}`;
+      const resWork = await this.fileService.createFolderByParentId(
+        rootFolderName,
+        0,
+      );
+      project.rootWorkName = rootFolderName;
+      project.rootWorkFoldId = resWork.id;
+      project.runCommand = createParam.runCommand;
     }
     return this.projectRepository.save(project);
   }
@@ -68,6 +56,7 @@ export class ProjectService {
     return this.qbProjects
       .select([
         'projects.id',
+        'projects.rootWorkFoldId',
         'projects.projectName',
         'projects.projectType',
         'projects.disable',
@@ -142,9 +131,9 @@ export class ProjectService {
     if (!dbProject) {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
-      const workFoldPath = joinWorkPath(dbProject.rootWorkName);
-      const indexFile = 'script.py';
-      const res = await runInnerProject(workFoldPath, indexFile);
+      const workFoldPath = joinWorkPath(dbProject.rootWorkName!);
+      // const indexFile = 'script.py';
+      const res = await runInnerProject(workFoldPath, 'indexFile');
       return res;
     }
   }

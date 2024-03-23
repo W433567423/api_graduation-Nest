@@ -65,13 +65,16 @@ export class FileService {
 
   // 新建工作区目录
   async createFolderByParentId(folderName: string, fileParentId = 0) {
+    const parentFolderDb = await this.workSpaceRepository.findOneBy({
+      id: fileParentId,
+    });
     const file = new WorkFileEntity();
-    file.fileName = folderName;
+    file.fileName = path.join(parentFolderDb?.fileName || '', folderName);
     file.parentFolder = fileParentId;
     file.isFolder = true;
     file.userId = this.getUserId();
     // 新建实体文件夹
-    isExistDir(joinWorkPath(folderName));
+    isExistDir(joinWorkPath(file.fileName));
     return this.workSpaceRepository.save(file);
   }
 
@@ -79,26 +82,34 @@ export class FileService {
   async createFileByParentId(
     fileName: string,
     fileParentId = 0,
-    mimetype: IFileType | undefined,
+    mimetype?: IFileType,
   ) {
+    const parentFolderDb = await this.workSpaceRepository.findOneBy({
+      id: fileParentId,
+    });
     const file = new WorkFileEntity();
-    file.fileName = fileName;
+    file.fileName = path.join(parentFolderDb!.fileName, fileName);
     file.mimetype = mimetype || IFileType[''];
     file.parentFolder = fileParentId;
     file.isFolder = false;
     file.userId = this.getUserId();
 
     // 新建实体文件
-    await touchFile(joinWorkPath(fileName));
+    await touchFile(joinWorkPath(file.fileName));
     return this.workSpaceRepository.save(file);
   }
 
   // 获取项目工作区目录
   async getFileListByParentId(parentId: number) {
-    return this.workSpaceRepository.find({
+    const dbRes = await this.workSpaceRepository.find({
       select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
       where: { parentFolder: parentId, userId: this.getUserId() },
     });
+    dbRes.forEach((e) => {
+      e.fileName = e.fileName.split('\\').pop() || '';
+      return e;
+    });
+    return dbRes;
   }
   getUserId() {
     return this.request.user!.id;

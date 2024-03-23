@@ -47,17 +47,14 @@ export class FileController {
   @ApiOperation({ summary: '获取文件夹下的目录' })
   async getMenu(@Query() query: getFolderMenuReqDto) {
     const res = await this.fileService.getFileListByParentId(query.parentId);
+
     return { msg: '获取文件夹下的目录成功', data: res };
   }
 
   @Post('newFile')
   @ApiOperation({ summary: '新建文件' })
   async newFile(@Body() data: newFileReqDto) {
-    this.fileService.createFileByParentId(
-      data.fileName,
-      data.parentId,
-      data.mimetype,
-    );
+    this.fileService.createFileByParentId(data.fileName, data.parentId);
     return { msg: '新建文件夹成功' };
   }
 }

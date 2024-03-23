@@ -28,19 +28,23 @@ export class ProjectEntity extends AppEntity {
     type: 'varchar',
     nullable: true,
   })
-  rootWorkFoldId: number;
+  rootWorkFoldId?: number;
 
   @Column({ comment: '项目根目录(复杂模式)', type: 'varchar', nullable: true })
-  rootWorkName: string;
+  rootWorkName?: string;
 
-  @Column({ comment: '项目入口(复杂模式)', type: 'varchar', nullable: true })
-  workIndexFile: string;
+  @Column({
+    comment: '项目运行命令(复杂模式)',
+    type: 'varchar',
+    nullable: true,
+  })
+  runCommand?: string;
 
   @Column({ comment: '代码(简单模式)', type: 'longtext', nullable: true })
-  code: string;
+  code?: string;
 
   @Column({ comment: '代码语言(简单模式)', type: 'varchar', nullable: true })
-  codeLanguage: string;
+  codeLanguage?: string;
 
   @Column({ comment: '是否禁用项目', type: 'boolean', default: false })
   disable: boolean;

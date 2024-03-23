@@ -68,11 +68,4 @@ export class newFileReqDto {
     required: false,
   })
   readonly content?: number;
-
-  @ApiProperty({
-    description: '文件的 MIME 类型',
-    example: 'image/jpeg',
-    required: false,
-  })
-  readonly mimetype?: IFileType;
 }
