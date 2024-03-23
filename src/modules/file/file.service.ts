@@ -118,6 +118,32 @@ export class FileService {
     });
     return dbRes;
   }
+
+  // 上传文件到工作区
+  async updateFileToWork(
+    file: Express.Multer.File,
+    data: { fileName: string; parentId: number },
+  ) {
+    const workFile = new WorkFileEntity();
+    const parentFolderDb = await this.workSpaceRepository.findOneBy({
+      id: data.parentId,
+    });
+    const ext = file.originalname.split('.').pop() || '';
+    workFile.fileName = path.join(
+      parentFolderDb!.fileName,
+      data.fileName + `.${ext}`,
+    );
+    workFile.isFolder = false;
+    workFile.fileUrl = '';
+    workFile.parentFolder = data.parentId;
+    workFile.mimetype = file.mimetype as IFileType;
+    workFile.userId = this.getUserId();
+    fs.writeFileSync(joinWorkPath(workFile.fileName), file.buffer);
+    fs.rmSync(joinWorkPath(workFile.fileName));
+    return this.workSpaceRepository.save(workFile);
+  }
+
+  // 获取用户id
   getUserId() {
     return this.request.user!.id;
   }

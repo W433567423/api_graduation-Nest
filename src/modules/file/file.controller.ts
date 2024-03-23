@@ -17,6 +17,7 @@ import {
   getFolderMenuReqDto,
   newFileReqDto,
   newFolderReqDto,
+  uploadFileReqDto,
 } from './dtos/workSpace.req.dto';
 import { FileService } from './file.service';
 
@@ -69,5 +70,16 @@ export class FileController {
       data.mimetype,
     );
     return { msg: '新建文件夹成功' };
+  }
+
+  @Post('file')
+  @ApiOperation({ summary: '上传文件到工作区' })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() data: uploadFileReqDto,
+  ) {
+    await this.fileService.updateFileToWork(file, data);
+    return { msg: '上传成功' };
   }
 }

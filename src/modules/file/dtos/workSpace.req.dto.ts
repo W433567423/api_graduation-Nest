@@ -70,3 +70,21 @@ export class newFileReqDto {
   })
   readonly mimetype?: IFileType;
 }
+
+export class uploadFileReqDto {
+  @ApiProperty({
+    description: '文件名称',
+    example: 'test',
+    maxLength: 20,
+  })
+  @IsNotEmpty({ message: '文件名称不能为空' })
+  @MaxLength(20)
+  readonly fileName: string;
+
+  @ApiProperty({
+    description: '父文件夹id',
+    example: '0',
+  })
+  @IsNotEmpty({ message: '父文件夹id不能为空' })
+  readonly parentId: number;
+}
