@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsNumberString, MaxLength, Min } from 'class-validator';
 
 export enum IFileType {
   'text/html',
@@ -39,10 +39,12 @@ export class newFolderReqDto {
 export class getFolderMenuReqDto {
   @ApiProperty({
     description: '父文件夹id',
-    example: '0',
+    example: '1',
   })
   @IsNotEmpty({ message: '父文件夹id不能为空' })
-  readonly parentId: number;
+  @IsNumberString({}, { message: '必须是数字' })
+  @Min(1)
+  readonly parentId: string;
 }
 
 export class newFileReqDto {

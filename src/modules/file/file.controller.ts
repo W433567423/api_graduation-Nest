@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  ParseIntPipe,
   Post,
   Query,
   UploadedFile,
@@ -45,8 +46,12 @@ export class FileController {
 
   @Get('menu')
   @ApiOperation({ summary: '获取文件夹下的目录' })
-  async getMenu(@Query() query: getFolderMenuReqDto) {
-    const res = await this.fileService.getFileListByParentId(query.parentId);
+  async getMenu(
+    @Query() query: getFolderMenuReqDto,
+    @Query('parentId', ParseIntPipe) parentId: number,
+  ) {
+    console.log('🚀 ~ FileController ~ query:', query);
+    const res = await this.fileService.getFileListByParentId(parentId);
 
     return { msg: '获取文件夹下的目录成功', data: res };
   }

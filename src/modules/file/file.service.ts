@@ -101,6 +101,10 @@ export class FileService {
 
   // 获取项目工作区目录
   async getFileListByParentId(parentId: number) {
+    console.log(
+      '🚀 ~ FileService ~ getFileListByParentId ~ parentId:',
+      parentId,
+    );
     const dbRes = await this.workSpaceRepository.find({
       select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
       where: { parentFolder: parentId, userId: this.getUserId() },
