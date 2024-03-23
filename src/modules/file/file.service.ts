@@ -82,7 +82,7 @@ export class FileService {
   async createFileByParentId(
     fileName: string,
     fileParentId = 0,
-    mimetype?: IFileType,
+    mimetype: IFileType | undefined,
   ) {
     const parentFolderDb = await this.workSpaceRepository.findOneBy({
       id: fileParentId,
@@ -101,12 +101,15 @@ export class FileService {
 
   // 获取项目工作区目录
   async getFileListByParentId(parentId: number) {
-    console.log(
-      '🚀 ~ FileService ~ getFileListByParentId ~ parentId:',
-      parentId,
-    );
     const dbRes = await this.workSpaceRepository.find({
-      select: ['id', 'fileName', 'updateTime', 'isFolder', 'parentFolder'],
+      select: [
+        'id',
+        'fileName',
+        'updateTime',
+        'isFolder',
+        'parentFolder',
+        'mimetype',
+      ],
       where: { parentFolder: parentId, userId: this.getUserId() },
     });
     dbRes.forEach((e) => {

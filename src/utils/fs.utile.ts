@@ -8,7 +8,6 @@ const isExistDir = (path: string, autoCreate = true) => {
   return isExistDir;
 };
 const touchFile = async (path: string): Promise<string> => {
-  console.log('🚀 ~ touchFile ~ path:', path);
   return new Promise((resolve, rejects) => {
     try {
       fs.writeFileSync(path, '');

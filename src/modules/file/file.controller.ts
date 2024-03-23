@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   ParseIntPipe,
   Post,
   Query,
@@ -50,16 +52,22 @@ export class FileController {
     @Query() query: getFolderMenuReqDto,
     @Query('parentId', ParseIntPipe) parentId: number,
   ) {
-    console.log('🚀 ~ FileController ~ query:', query);
-    const res = await this.fileService.getFileListByParentId(parentId);
-
-    return { msg: '获取文件夹下的目录成功', data: res };
+    if (Number(query.parentId) < 1)
+      throw new HttpException('禁止获取', HttpStatus.FORBIDDEN);
+    else {
+      const res = await this.fileService.getFileListByParentId(parentId);
+      return { msg: '获取文件夹下的目录成功', data: res };
+    }
   }
 
   @Post('newFile')
   @ApiOperation({ summary: '新建文件' })
   async newFile(@Body() data: newFileReqDto) {
-    this.fileService.createFileByParentId(data.fileName, data.parentId);
+    this.fileService.createFileByParentId(
+      data.fileName,
+      data.parentId,
+      data.mimetype,
+    );
     return { msg: '新建文件夹成功' };
   }
 }
