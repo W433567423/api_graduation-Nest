@@ -14,6 +14,7 @@ import LoggerMiddleware from '@/global/middleware/logger.middleware';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
 import { UserModule } from '@/modules/users/user.module';
 import { FileModule } from './file/file.module';
+import { PinanModule } from './pinan/pinan.module';
 import { ProjectModule } from './projects/project.module';
 
 @Module({
@@ -24,18 +25,10 @@ import { ProjectModule } from './projects/project.module';
     CaptchaModule,
     ProjectModule,
     FileModule,
+    PinanModule,
   ],
-  controllers: [
-    AppController,
-    // UserController,
-    // CaptchaController,
-    // ProjectController,
-    // FileController,
-  ],
+  controllers: [AppController],
   providers: [
-    // UserService,
-    // ProjectService,
-    // FileService,
     // 鉴权守卫
     {
       provide: APP_GUARD,

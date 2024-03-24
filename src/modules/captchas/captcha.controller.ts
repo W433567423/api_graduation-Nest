@@ -19,8 +19,8 @@ import * as svgCaptcha from 'svg-captcha';
 import type { IResData } from '../index';
 
 @ApiTags('验证码')
-@Controller('captcha')
 @NoAuth()
+@Controller('captcha')
 export class CaptchaController {
   constructor() {}
   @ApiOperation({ summary: '获取图形验证码' })
