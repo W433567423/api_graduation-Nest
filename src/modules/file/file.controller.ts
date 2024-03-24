@@ -4,17 +4,21 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Param,
   ParseIntPipe,
   Post,
-  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserService } from '../users/user.service';
 import {
-  getFolderMenuReqDto,
   newFileReqDto,
   newFolderReqDto,
   uploadFileReqDto,
@@ -47,14 +51,16 @@ export class FileController {
     return { msg: '新建文件夹成功' };
   }
 
-  @Get('menu')
+  @Get('menu/:parentId')
   @ApiOperation({ summary: '获取文件夹下的目录' })
-  async getMenu(
-    @Query() query: getFolderMenuReqDto,
-    @Query('parentId', ParseIntPipe) parentId: number,
-  ) {
-    if (Number(query.parentId) < 1)
-      throw new HttpException('禁止获取', HttpStatus.FORBIDDEN);
+  @ApiParam({
+    name: 'parentId',
+    description: '父文件的id',
+    required: true,
+    example: '6',
+  })
+  async getMenu(@Param('parentId', ParseIntPipe) parentId: number) {
+    if (parentId < 1) throw new HttpException('禁止获取', HttpStatus.FORBIDDEN);
     else {
       const res = await this.fileService.getFileListByParentId(parentId);
       return { msg: '获取文件夹下的目录成功', data: res };
@@ -81,5 +87,14 @@ export class FileController {
   ) {
     await this.fileService.updateFileToWork(file, data);
     return { msg: '上传成功' };
+  }
+
+  @Get('cat/:fileId')
+  @ApiOperation({ summary: '查看文件' })
+  @ApiParam({ description: '文件的id', required: true, name: 'fileId' })
+  @UseInterceptors(FileInterceptor('file'))
+  async catFile(@Param('fileId', ParseIntPipe) fileId: number) {
+    console.log('🚀 ~ FileController ~ catFile ~ res:', fileId);
+    return { msg: '查看文件' };
   }
 }

@@ -35,7 +35,7 @@ export class WorkFileEntity extends AppEntity {
 
   @Column({
     type: 'int',
-    comment: '父目录',
+    comment: '父目录id',
   })
   parentFolder: number;
 

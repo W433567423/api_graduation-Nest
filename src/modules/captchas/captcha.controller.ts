@@ -1,10 +1,5 @@
 import { NoAuth } from '@/global/decorator';
 import {
-  getCaptchaReqDto,
-  getEmailCaptchaReqDto,
-  getPhoneCaptchaReqDto,
-} from '@/modules/captchas/dtos/captcha.req.dto';
-import {
   getCaptchaResDto,
   getEmailCaptchaResDto,
   getPhoneCaptchaResDto,
@@ -19,7 +14,7 @@ import {
   Query,
   Session,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as svgCaptcha from 'svg-captcha';
 import type { IResData } from '../index';
 
@@ -34,34 +29,56 @@ export class CaptchaController {
     description: '系统成功响应',
     type: getCaptchaResDto,
   })
+  @ApiQuery({
+    name: 'width',
+    description: 'svg的长度(px)',
+    type: Number,
+    required: false,
+    example: 200,
+  })
+  @ApiQuery({
+    name: 'height',
+    description: 'svg的宽度(px)',
+    type: Number,
+    required: false,
+    example: 200,
+  })
   @Get()
   async getCaptcha(
     @Session() session: Record<string, any>,
-    @Query() query: getCaptchaReqDto,
+    @Query('width') width: number,
+    @Query('height') height: number,
   ): Promise<IResData<string>> {
     const captcha = svgCaptcha.create({
       size: 4,
       noise: 2,
-      ...query,
+      width,
+      height,
     });
     session.captcha = captcha.text;
 
     return { msg: '获取图形验证码成功', data: captcha.data };
   }
 
+  // TODO 未实现
   @ApiOperation({ summary: '获取手机验证码' })
   @ApiResponse({
     status: '2XX',
     description: '系统成功响应',
     type: getPhoneCaptchaResDto,
   })
+  @ApiQuery({
+    name: 'phoneNum',
+    required: true,
+    example: '17762647331',
+    type: String,
+  })
   @Get('phone')
   async getPhoneCaptcha(
-    @Query() query: getPhoneCaptchaReqDto,
+    @Query('phoneNum') phoneNum: string,
     @Session() session: Record<string, any>,
   ): Promise<IResData<number>> {
     const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-    const { phoneNum } = query;
     console.log(phoneNum);
     if (!phoneNum || !phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
@@ -78,13 +95,18 @@ export class CaptchaController {
     description: '系统成功响应',
     type: getEmailCaptchaResDto,
   })
+  @ApiQuery({
+    name: 'emailNum',
+    required: true,
+    example: 't433567423@163.com',
+    type: String,
+  })
   @Get('email')
   async getEmailCaptcha(
-    @Query() query: getEmailCaptchaReqDto,
+    @Query('emailNum') emailNum: string,
     @Session() session: { emailCaptchaServer: number | undefined },
   ): Promise<IResData<number>> {
     const emailRex = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-    const { emailNum } = query;
     if (!emailNum || !emailRex.test(emailNum)) {
       throw new HttpException('邮箱不正确', HttpStatus.FORBIDDEN);
     }

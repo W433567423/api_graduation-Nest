@@ -1,6 +1,6 @@
+import { successResDto } from '@/modules/api-dtos/app.res.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { successResDto } from '@/modules/api-dtos/app.res.dto';
 
 export class getCaptchaResDto extends successResDto<string> {
   @ApiProperty({
@@ -8,7 +8,7 @@ export class getCaptchaResDto extends successResDto<string> {
     example: `<svg />`,
   })
   @IsNotEmpty({ message: '返回信息不能为空' })
-  readonly valida: string;
+  readonly valid: string;
 }
 
 export class getPhoneCaptchaResDto extends successResDto<number> {

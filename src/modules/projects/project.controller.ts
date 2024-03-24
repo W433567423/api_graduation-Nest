@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   ParseIntPipe,
   Patch,
   Post,
@@ -10,7 +11,10 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -21,9 +25,7 @@ import type { IResData } from '../index';
 import {
   changeProjectCodeReqDto,
   createProjectReqDto,
-  deleteProjectReqDto,
   disableProjectReqDto,
-  getListReqDto,
   reNameProjectReqDto,
   runProjectCodeReqDto,
 } from './dtos/project.req.dto';
@@ -50,14 +52,25 @@ export class ProjectController {
   }
 
   @ApiOperation({ summary: '获取项目列表' })
-  @Get('list')
   @ApiResponse({
     status: '2XX',
     description: '系统成功响应',
     type: getListResDto,
   })
+  @ApiQuery({
+    name: 'page',
+    description: '页码',
+    required: true,
+    example: 0,
+  })
+  @ApiQuery({
+    name: 'size',
+    description: '每页的数量',
+    required: true,
+    example: 0,
+  })
+  @Get('list')
   async getList(
-    @Query() _query: getListReqDto,
     @Query('page', ParseIntPipe) page: number,
     @Query('size', ParseIntPipe) size: number,
   ): Promise<IResData<IGetListRes>> {
@@ -68,9 +81,15 @@ export class ProjectController {
   }
 
   @ApiOperation({ summary: '获取项目代码' })
-  @Get('code')
+  @ApiParam({
+    name: 'projectId',
+    description: '项目的id',
+    example: '0',
+    required: true,
+  })
+  @Get('code/:parentId')
   async getCode(
-    @Query('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResData<getProjectCodeResDto>> {
     return {
       msg: '获取代码成功',
@@ -79,14 +98,25 @@ export class ProjectController {
   }
 
   @ApiOperation({ summary: '修改项目代码' })
-  @Patch('code')
+  @ApiParam({
+    name: 'projectId',
+    description: '项目id',
+    required: true,
+    example: '0',
+  })
+  @ApiBody({
+    type: changeProjectCodeReqDto,
+  })
+  @Patch('code/:projectId')
   async changeCode(
-    @Query('projectId', ParseIntPipe) projectId: number,
-    @Body() data: changeProjectCodeReqDto,
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body('code') code: string,
+    @Body('code') codeLanguage?: string,
   ): Promise<IResData<UpdateResult>> {
+    console.log('🚀 ~ ProjectController ~ codeLanguage:', codeLanguage);
     return {
       msg: '修改代码成功',
-      data: await this.projectService.changeProjectCode(projectId, data.code),
+      data: await this.projectService.changeProjectCode(projectId, code),
     };
   }
 
@@ -123,25 +153,42 @@ export class ProjectController {
     };
   }
   @ApiOperation({ summary: '重命名项目' })
-  @Patch('rename')
-  async auth(@Body() data: reNameProjectReqDto): Promise<IResData<null>> {
-    await this.projectService.reName(data.projectId, data.newName);
+  @ApiParam({
+    name: 'projectId',
+    description: '项目id',
+    required: true,
+    example: '0',
+  })
+  @ApiBody({
+    type: reNameProjectReqDto,
+  })
+  @Patch('rename/:projectId')
+  async auth(
+    @Body('newName') newName: string,
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ): Promise<IResData<null>> {
+    await this.projectService.reName(projectId, newName);
 
     return { msg: '项目重命名成功' };
   }
 
-  @ApiOperation({ summary: '禁用项目' })
+  @ApiOperation({ summary: '禁用项目(批量)' })
+  @ApiBody({ type: disableProjectReqDto })
   @Patch('disable')
-  async disable(@Body() data: disableProjectReqDto): Promise<IResData<null>> {
-    await this.projectService.setProjectDisable(data.projectIds, data.disable);
+  async disable(
+    @Body('projectIds') projectIds: number[],
+    @Body('disable') disable: boolean,
+  ): Promise<IResData<null>> {
+    await this.projectService.setProjectDisable(projectIds, disable);
 
     return { msg: '项目改变禁用状态成功' };
   }
 
-  @ApiOperation({ summary: '删除项目' })
+  @ApiOperation({ summary: '删除项目(批量)' })
+  @ApiBody({ type: disableProjectReqDto })
   @Delete('delete')
-  async delete(@Body() data: deleteProjectReqDto) {
-    const res = await this.projectService.deleteByIds(data.projectIds);
+  async delete(@Body('projectIds') projectIds: number[]) {
+    const res = await this.projectService.deleteByIds(projectIds);
 
     return { msg: '项目删除成功', data: res };
   }
