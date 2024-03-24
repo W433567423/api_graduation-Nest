@@ -1,10 +1,10 @@
+import { SERVER_PORT } from '@/config/root.config';
+import { statusFive, statusFour } from '@/config/status.config';
+import { swaggerPrefix } from '@/config/swagger.config';
+import { NoAuth } from '@/global/decorator';
+import { successResDto } from '@/modules/api-dtos/app.res.dto';
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { swaggerPrefix } from '@/config/swagger.config';
-import { SERVER_PORT } from '@/config/session.config';
-import { statusFive, statusFour } from '@/config/status.config';
-import { successResDto } from '@/modules/api-dtos/app.res.dto';
-import { NoAuth } from '@/global/decorator';
 import type { IResData } from './index';
 
 @ApiTags('入口')

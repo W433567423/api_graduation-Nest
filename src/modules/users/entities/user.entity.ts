@@ -25,6 +25,9 @@ export class UserEntity extends AppEntity {
   @Column({ type: 'varchar', comment: '电子邮件' })
   email: string;
 
+  @Column({ type: 'varchar', comment: '平安的cookie', nullable: true })
+  pinan: string;
+
   // @OneToMany(() => ProjectEntity, (project) => project.user)
   // @JoinColumn()
   // projects: ProjectEntity[];

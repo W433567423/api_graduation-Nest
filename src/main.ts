@@ -4,7 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger';
 
 import { swaggerOptions, swaggerPrefix } from '@/config/swagger.config';
 import { corsConfig } from './config/cors.config';
-import { SERVER_PORT, sessionConfig } from './config/session.config';
+import { SERVER_PORT, sessionConfig } from './config/root.config';
 
 import { init } from '@/beforeNest';
 import { AppModule } from './modules/app.module';

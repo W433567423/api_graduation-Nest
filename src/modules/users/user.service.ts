@@ -29,6 +29,7 @@ export class UserService {
 
     private jwtService: JwtService,
   ) {}
+
   // 用户名查询用户
   async isExistByName(username: string, status: 'login' | 'registry') {
     const user = await this.userRepository.findOne({ where: { username } });
@@ -135,6 +136,16 @@ export class UserService {
       relations: ['avatar'],
     });
     user!.avatar = avatar;
+    return this.userRepository.update(userId, user!);
+  }
+
+  // 更新用户平安Cookie
+  async updatePinanCookie(cookie: string) {
+    const userId = this.request.user!.id;
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    user!.pinan = cookie;
     return this.userRepository.update(userId, user!);
   }
 }
