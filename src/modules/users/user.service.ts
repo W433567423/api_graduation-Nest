@@ -118,12 +118,17 @@ export class UserService {
 
   // 获取用户
   async getUser() {
+    if (!this.request.user?.id) {
+      console.log('用户id不存在');
+      throw new HttpException('未登录', HttpStatus.UNAUTHORIZED);
+    }
     const user = await this.userRepository.findOneBy({
       id: this.request.user?.id,
     });
     if (!user) {
       // 理论上不可能
-      throw new HttpException('该用户名不存在', HttpStatus.FORBIDDEN);
+      console.log('找不到用户');
+      throw new HttpException('该用户名不存在', HttpStatus.UNAUTHORIZED);
     }
     return user;
   }
@@ -141,11 +146,8 @@ export class UserService {
 
   // 更新用户平安Cookie
   async updatePinanCookie(cookie: string) {
-    const userId = this.request.user!.id;
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
-    user!.pinan = cookie;
-    return this.userRepository.update(userId, user!);
+    const user = await this.getUser();
+    user.pinan = cookie;
+    return this.userRepository.update(user.id, user);
   }
 }

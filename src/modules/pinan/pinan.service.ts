@@ -16,6 +16,7 @@ export class PinanService {
     const res = await firstValueFrom(this.httpService.post(url, loginData));
 
     const cookie = res.headers?.['set-cookie']?.[0].split(';').shift();
+    console.log('🚀 ~ PinanService ~ login ~ res.headers:', res.headers);
     console.log('🚀 ~ 获取Cookie成功 ~:', cookie);
     if (!cookie) {
       throw new HttpException(
@@ -31,18 +32,17 @@ export class PinanService {
   }
 
   // 获取产码信息
-  async getProductMessage(Cookie: string, page = 1, limit = 20) {
-    console.log('🚀 ~ PinanService ~ getProductMessage ~ Cookie:', Cookie);
+  async getProductMessage(page = 1, limit = 20) {
+    const { pinan } = await this.userService.getUser();
 
     const url = `https://g63a2.danimmp.net/api/ApiOrder/Yu_list_get?page=${page}&limit=${limit}`;
     const { data } = await firstValueFrom(
       this.httpService.get(url, {
         headers: {
-          Cookie,
+          Cookie: pinan,
         },
       }),
     );
-    console.log('🚀 ~ PinanService ~ getProductMessage ~ data:', typeof data);
     if (typeof data === 'string') {
       this.userService.updatePinanCookie('');
       throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);

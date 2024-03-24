@@ -1,4 +1,3 @@
-import { NoAuth } from '@/global/decorator';
 import {
   Body,
   Controller,
@@ -12,7 +11,6 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { pinanLoginReqDto } from './dtos/pinan.req.dot';
 import { PinanService } from './pinan.service';
 
-@NoAuth()
 @ApiTags('平安平台')
 @Controller('pinan')
 export class PinanController {
@@ -47,15 +45,10 @@ export class PinanController {
     description: '每页数量',
   })
   getProductMessage(
-    @Session() session: { pinanCookie: string | undefined },
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
   ) {
-    const res = this.pinanService.getProductMessage(
-      session.pinanCookie || '',
-      page,
-      limit,
-    );
+    const res = this.pinanService.getProductMessage(page, limit);
     return res;
   }
 }
