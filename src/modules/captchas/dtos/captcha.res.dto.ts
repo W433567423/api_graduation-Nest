@@ -14,7 +14,7 @@ export class getCaptchaResDto extends successResDto<string> {
 export class getPhoneCaptchaResDto extends successResDto<number> {
   @ApiProperty({
     description: '手机验证码',
-    example: `123456`,
+    example: `333333`,
   })
   @IsNotEmpty({ message: '返回信息不能为空' })
   readonly data: number;
@@ -22,7 +22,7 @@ export class getPhoneCaptchaResDto extends successResDto<number> {
 export class getEmailCaptchaResDto extends successResDto<number> {
   @ApiProperty({
     description: '邮箱验证码',
-    example: `123456`,
+    example: `333333`,
   })
   @IsNotEmpty({ message: '返回信息不能为空' })
   readonly data: number;

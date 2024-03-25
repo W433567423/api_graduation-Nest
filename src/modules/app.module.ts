@@ -14,7 +14,7 @@ import LoggerMiddleware from '@/global/middleware/logger.middleware';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
 import { UserModule } from '@/modules/users/user.module';
 import { FileModule } from './file/file.module';
-import { PinanModule } from './pinan/pinan.module';
+import { PeaceModule } from './peace/peace.module';
 import { ProjectModule } from './projects/project.module';
 
 @Module({
@@ -25,7 +25,7 @@ import { ProjectModule } from './projects/project.module';
     CaptchaModule,
     ProjectModule,
     FileModule,
-    PinanModule,
+    PeaceModule,
   ],
   controllers: [AppController],
   providers: [

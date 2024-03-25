@@ -145,9 +145,9 @@ export class UserService {
   }
 
   // 更新用户平安Cookie
-  async updatePinanCookie(cookie: string) {
+  async updatePeaceCookie(cookie: string) {
     const user = await this.getUser();
-    user.pinan = cookie;
+    user.peace = cookie;
     return this.userRepository.update(user.id, user);
   }
 }

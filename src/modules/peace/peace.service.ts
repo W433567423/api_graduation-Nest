@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { UserService } from '../users/user.service';
 
 @Injectable()
-export class PinanService {
+export class PeaceService {
   constructor(
     private readonly httpService: HttpService,
     private readonly userService: UserService,
@@ -16,7 +16,7 @@ export class PinanService {
     const res = await firstValueFrom(this.httpService.post(url, loginData));
 
     const cookie = res.headers?.['set-cookie']?.[0].split(';').shift();
-    console.log('🚀 ~ PinanService ~ login ~ res.headers:', res.headers);
+    console.log('🚀 ~ PeaceService ~ login ~ res.headers:', res.headers);
     console.log('🚀 ~ 获取Cookie成功 ~:', cookie);
     if (!cookie) {
       throw new HttpException(
@@ -24,7 +24,7 @@ export class PinanService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    this.userService.updatePinanCookie(cookie);
+    this.userService.updatePeaceCookie(cookie);
     return {
       cookie,
       data: res.data as { data: { code: number; msg: string } },
@@ -33,18 +33,18 @@ export class PinanService {
 
   // 获取产码信息
   async getProductMessage(page = 1, limit = 20) {
-    const { pinan } = await this.userService.getUser();
+    const { peace } = await this.userService.getUser();
 
     const url = `https://g63a2.danimmp.net/api/ApiOrder/Yu_list_get?page=${page}&limit=${limit}`;
     const { data } = await firstValueFrom(
       this.httpService.get(url, {
         headers: {
-          Cookie: pinan,
+          Cookie: peace,
         },
       }),
     );
     if (typeof data === 'string') {
-      this.userService.updatePinanCookie('');
+      this.userService.updatePeaceCookie('');
       throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
     }
 

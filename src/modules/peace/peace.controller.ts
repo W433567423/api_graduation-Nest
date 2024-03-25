@@ -8,23 +8,23 @@ import {
   Session,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { pinanLoginReqDto } from './dtos/pinan.req.dot';
-import { PinanService } from './pinan.service';
+import { peaceLoginReqDto } from './dtos/peace.req.dot';
+import { PeaceService } from './peace.service';
 
 @ApiTags('平安平台')
-@Controller('pinan')
-export class PinanController {
-  constructor(private readonly pinanService: PinanService) {}
+@Controller('peace')
+export class PeaceController {
+  constructor(private readonly peaceService: PeaceService) {}
 
   @ApiOperation({ summary: '登录' })
   @Post('login')
   async login(
-    @Body() data: pinanLoginReqDto,
-    @Session() session: { pinanCookie: string | undefined },
+    @Body() data: peaceLoginReqDto,
+    @Session() session: { peaceCookie: string | undefined },
   ) {
-    const res = await this.pinanService.login(data);
+    const res = await this.peaceService.login(data);
 
-    session.pinanCookie = res.cookie;
+    session.peaceCookie = res.cookie;
     return res.data;
   }
 
@@ -48,7 +48,7 @@ export class PinanController {
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit: number,
   ) {
-    const res = this.pinanService.getProductMessage(page, limit);
+    const res = this.peaceService.getProductMessage(page, limit);
     return res;
   }
 }
