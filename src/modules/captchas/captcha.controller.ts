@@ -45,7 +45,7 @@ export class CaptchaController {
   })
   @Get()
   async getCaptcha(
-    @Session() session: Record<string, any>,
+    @Session() session: { captcha: string },
     @Query('width') width: number,
     @Query('height') height: number,
   ): Promise<IResData<string>> {

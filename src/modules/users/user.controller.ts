@@ -53,18 +53,19 @@ export class UserController {
   @Post('login')
   async login(
     @Body() signupData: userLoginReqDto,
-    @Session() session: { captchaServer: string | undefined },
+    @Session() session: { captcha: string | undefined },
   ): Promise<IResData<string>> {
     const { username, password, valid } = signupData;
 
-    const { captchaServer } = session;
+    const { captcha } = session;
+    console.log('🚀 ~ UserController ~ captcha:', captcha);
 
     return {
       data: await this.userService.login(
         username,
         password,
         valid,
-        captchaServer || '',
+        captcha || '',
       ),
     };
   }
