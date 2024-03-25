@@ -5,7 +5,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  Session,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { peaceLoginReqDto } from './dtos/peace.req.dot';
@@ -18,14 +17,10 @@ export class PeaceController {
 
   @ApiOperation({ summary: '登录' })
   @Post('login')
-  async login(
-    @Body() data: peaceLoginReqDto,
-    @Session() session: { peaceCookie: string | undefined },
-  ) {
+  async login(@Body() data: peaceLoginReqDto) {
     const res = await this.peaceService.login(data);
 
-    session.peaceCookie = res.cookie;
-    return res.data;
+    return { data: { peaceCookie: res.cookie, peaceUser: res.data } };
   }
 
   @ApiOperation({ summary: '获取产码信息' })

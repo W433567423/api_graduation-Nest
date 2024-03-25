@@ -64,10 +64,13 @@ export class UserService {
     });
 
     // 登录
-    return await this.jwtService.signAsync({
-      id: dbUser.id,
-      username: dbUser.username,
-    });
+    return {
+      user: dbUser,
+      token: await this.jwtService.signAsync({
+        id: dbUser.id,
+        username: dbUser.username,
+      }),
+    };
   }
 
   // 登录服务
@@ -86,10 +89,13 @@ export class UserService {
     eqPassword(dbUser.password, md5Password(password));
 
     // 登录
-    return await this.jwtService.signAsync({
-      id: dbUser.id,
-      username: dbUser.username,
-    });
+    return {
+      user: dbUser,
+      token: await this.jwtService.signAsync({
+        id: dbUser.id,
+        username: dbUser.username,
+      }),
+    };
     // return makeToken(dbUser);
   }
 
