@@ -35,8 +35,6 @@ export class PeaceService {
   // 获取目录
   async getMenu() {
     const { peace } = await this.userService.getUser();
-    console.log('🚀 ~ PeaceService ~ getMenu ~ peace:', peace);
-
     const url = 'https://g63a2.danimmp.net/Pay_user/GetSystemsetList';
     const { data } = await firstValueFrom(
       this.httpService.post(
@@ -60,7 +58,7 @@ export class PeaceService {
   async getProductMessage(page = 1, limit = 20) {
     const { peace } = await this.userService.getUser();
 
-    const url = `https://g63a2.danimmp.net/api/ApiOrder/Yu_list_get?page=${page}&limit=${limit}`;
+    const url = `${this.baseUrl}/api/ApiOrder/Yu_list_get?page=${page}&limit=${limit}`;
     const { data } = await firstValueFrom(
       this.httpService.get(url, {
         headers: {
@@ -79,7 +77,26 @@ export class PeaceService {
   async getPayMessage(page = 1, limit = 20) {
     const { peace } = await this.userService.getUser();
 
-    const url = `https://g63a2.danimmp.net/Pay_user/Pay_moneyList?page=${page}&limit=${limit}`;
+    const url = `${this.baseUrl}/Pay_user/Pay_moneyList?page=${page}&limit=${limit}`;
+    const { data } = await firstValueFrom(
+      this.httpService.get(url, {
+        headers: {
+          Cookie: peace,
+        },
+      }),
+    );
+    if (typeof data === 'string') {
+      this.userService.updatePeaceCookie('');
+      throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
+    }
+
+    return data;
+  }
+  // 获取通道
+  async getChannelList(page = 1, limit = 20) {
+    const { peace } = await this.userService.getUser();
+
+    const url = `${this.baseUrl}/api/Channel/ChannelList?page=${page}&limit=${limit}`;
     const { data } = await firstValueFrom(
       this.httpService.get(url, {
         headers: {
@@ -97,10 +114,6 @@ export class PeaceService {
 
   // 获取平安平台信息(POST)
   async POST(url: string, postData = {}) {
-    console.log(
-      '🚀 ~ PeaceService ~ POST ~ this.baseUrl + url:',
-      this.baseUrl + url,
-    );
     const { peace } = await this.userService.getUser();
     const { data } = await firstValueFrom(
       this.httpService.post(this.baseUrl + url, postData, {

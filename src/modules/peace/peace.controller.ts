@@ -95,4 +95,28 @@ export class PeaceController {
     const res = this.peaceService.getPayMessage(page, limit);
     return res;
   }
+
+  @ApiOperation({ summary: '获取通道列表' })
+  @Get('channelList')
+  @ApiQuery({
+    name: 'page',
+    example: 1,
+    required: true,
+    type: Number,
+    description: '页码',
+  })
+  @ApiQuery({
+    name: 'limit',
+    example: 20,
+    required: true,
+    type: Number,
+    description: '每页数量',
+  })
+  channelList(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+  ) {
+    const res = this.peaceService.getChannelList(page, limit);
+    return res;
+  }
 }
