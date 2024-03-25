@@ -9,6 +9,7 @@ export class PeaceService {
     private readonly httpService: HttpService,
     private readonly userService: UserService,
   ) {}
+  baseUrl = 'https://g63a2.danimmp.net';
 
   // 登录
   async login(loginData: { username: string; password: string; code: number }) {
@@ -31,6 +32,30 @@ export class PeaceService {
     };
   }
 
+  // 获取目录
+  async getMenu() {
+    const { peace } = await this.userService.getUser();
+    console.log('🚀 ~ PeaceService ~ getMenu ~ peace:', peace);
+
+    const url = 'https://g63a2.danimmp.net/Pay_user/GetSystemsetList';
+    const { data } = await firstValueFrom(
+      this.httpService.post(
+        url,
+        {},
+        {
+          headers: {
+            Cookie: peace,
+          },
+        },
+      ),
+    );
+    if (typeof data === 'string') {
+      this.userService.updatePeaceCookie('');
+      throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
+    }
+    return data;
+  }
+
   // 获取产码信息
   async getProductMessage(page = 1, limit = 20) {
     const { peace } = await this.userService.getUser();
@@ -49,6 +74,67 @@ export class PeaceService {
     }
 
     return data;
-    // .pipe(map((res) => res.data));
+  }
+  // 获取充值信息
+  async getPayMessage(page = 1, limit = 20) {
+    const { peace } = await this.userService.getUser();
+
+    const url = `https://g63a2.danimmp.net/Pay_user/Pay_moneyList?page=${page}&limit=${limit}`;
+    const { data } = await firstValueFrom(
+      this.httpService.get(url, {
+        headers: {
+          Cookie: peace,
+        },
+      }),
+    );
+    if (typeof data === 'string') {
+      this.userService.updatePeaceCookie('');
+      throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
+    }
+
+    return data;
+  }
+
+  // 获取平安平台信息(POST)
+  async POST(url: string, postData = {}) {
+    console.log(
+      '🚀 ~ PeaceService ~ POST ~ this.baseUrl + url:',
+      this.baseUrl + url,
+    );
+    const { peace } = await this.userService.getUser();
+    const { data } = await firstValueFrom(
+      this.httpService.post(this.baseUrl + url, postData, {
+        headers: {
+          Cookie: peace,
+        },
+      }),
+    );
+    if (typeof data === 'string') {
+      this.userService.updatePeaceCookie('');
+      throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
+    }
+
+    return data;
+  }
+  // 获取平安平台信息(Get)
+  async GET(url: string) {
+    console.log(
+      '🚀 ~ PeaceService ~ GET ~ this.baseUrl + url:',
+      this.baseUrl + url,
+    );
+    const { peace } = await this.userService.getUser();
+    const { data } = await firstValueFrom(
+      this.httpService.get(this.baseUrl + url, {
+        headers: {
+          Cookie: peace,
+        },
+      }),
+    );
+    if (typeof data === 'string') {
+      this.userService.updatePeaceCookie('');
+      throw new HttpException('请先登录', HttpStatus.UNAUTHORIZED);
+    }
+
+    return data;
   }
 }

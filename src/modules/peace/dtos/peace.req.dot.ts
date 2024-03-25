@@ -14,3 +14,12 @@ export class peaceLoginReqDto {
   @IsNotEmpty({ message: '动态码不能为空' })
   readonly code: number;
 }
+
+export class peacePostReqDto {
+  @ApiProperty({ description: '链接', example: '/api' })
+  @IsNotEmpty({ message: '链接不能为空' })
+  readonly url: string;
+
+  @ApiProperty({ description: '请求的data参数', example: '/api' })
+  readonly data?: any;
+}
