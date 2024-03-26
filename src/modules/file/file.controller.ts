@@ -75,7 +75,7 @@ export class FileController {
       data.parentId,
       data.mimetype,
     );
-    return { msg: '新建文件夹成功' };
+    return { msg: '新建文件成功' };
   }
 
   @Post('file')

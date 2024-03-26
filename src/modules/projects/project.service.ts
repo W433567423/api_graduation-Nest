@@ -80,7 +80,7 @@ export class ProjectService {
 
     return {
       projectName: dbResult?.projectName,
-      code: dbResult?.code || 'none code',
+      code: dbResult?.code || '',
     };
   }
 

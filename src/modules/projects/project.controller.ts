@@ -87,7 +87,7 @@ export class ProjectController {
     example: '0',
     required: true,
   })
-  @Get('code/:parentId')
+  @Get('code/:projectId')
   async getCode(
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResData<getProjectCodeResDto>> {

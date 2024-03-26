@@ -112,42 +112,50 @@ export class FileService {
       ],
       where: { parentFolder: parentId, userId: this.getUserId() },
     });
-    const curMenu = joinWorkPath(
-      dbRes[0].fileName.replace(dbRes[0].fileName.split('\\').pop() || '', ''),
-    );
-    // TODO 扫描文件上传
-    const items = fs.readdirSync(curMenu);
-    if (dbRes.length !== items.length) {
-      const dbFileNames = dbRes?.map((e) => e.fileName.split('\\').pop());
+    if (dbRes.length) {
+      const filename = dbRes[0]?.fileName;
 
-      const parentFolderDb = await this.workSpaceRepository.findOneBy({
-        id: parentId,
-      });
-      const workFiles: WorkFileEntity[] = [];
-      items.forEach((e) => {
-        if (!dbFileNames.includes(e)) {
-          const stat = fs.statSync(path.join(curMenu, e));
-          if (stat.isFile() || stat.isDirectory()) {
-            const workFile = new WorkFileEntity();
-            workFile.fileName = path.join(parentFolderDb!.fileName, e);
-            workFile.isFolder = stat.isDirectory();
-            workFile.parentFolder = parentId;
-            workFile.mimetype = getMimeType(e);
-            workFile.userId = this.getUserId();
-            workFile.createTime = stat.birthtime;
-            workFile.updateTime = stat.mtime;
-            workFiles.push(workFile);
+      const curMenu = joinWorkPath(
+        filename.substring(
+          0,
+          filename.split(path.sep).join('/').lastIndexOf('/'),
+        ),
+      );
+      // DONE 扫描文件上传
+      const items = fs.readdirSync(curMenu);
+
+      if (dbRes.length !== items.length) {
+        const dbFileNames = dbRes?.map((e) => e.fileName.split('\\').pop());
+
+        const parentFolderDb = await this.workSpaceRepository.findOneBy({
+          id: parentId,
+        });
+        const workFiles: WorkFileEntity[] = [];
+        items.forEach((e) => {
+          if (!dbFileNames.includes(e)) {
+            const stat = fs.statSync(path.join(curMenu, e));
+            if (stat.isFile() || stat.isDirectory()) {
+              const workFile = new WorkFileEntity();
+              workFile.fileName = path.join(parentFolderDb!.fileName, e);
+              workFile.isFolder = stat.isDirectory();
+              workFile.parentFolder = parentId;
+              workFile.mimetype = getMimeType(e);
+              workFile.userId = this.getUserId();
+              workFile.createTime = stat.birthtime;
+              workFile.updateTime = stat.mtime;
+              workFiles.push(workFile);
+            }
           }
-        }
-      });
-      this.workSpaceRepository.save(workFiles);
-    }
+        });
+        this.workSpaceRepository.save(workFiles);
+      }
 
-    dbRes.forEach((e) => {
-      e.fileName = e.fileName.split('\\').pop() || '';
-      return e;
-    });
-    return dbRes;
+      dbRes.forEach((e) => {
+        e.fileName = e.fileName.split('\\').pop() || '';
+        return e;
+      });
+      return dbRes;
+    }
   }
 
   // 上传文件到工作区
