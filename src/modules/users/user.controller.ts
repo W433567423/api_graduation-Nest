@@ -63,7 +63,6 @@ export class UserController {
     const { username, password, valid } = signupData;
 
     const { captcha } = session;
-    console.log('🚀 ~ UserController ~ captcha:', captcha);
 
     return {
       data: await this.userService.login(

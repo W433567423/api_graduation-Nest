@@ -126,7 +126,6 @@ export class FileService {
       const workFiles: WorkFileEntity[] = [];
       items.forEach((e) => {
         if (!dbFileNames.includes(e)) {
-          console.log('扫描到未上传的文件', e);
           const stat = fs.statSync(path.join(curMenu, e));
           if (stat.isFile() || stat.isDirectory()) {
             const workFile = new WorkFileEntity();

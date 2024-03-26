@@ -79,12 +79,10 @@ export class CaptchaController {
     @Session() session: Record<string, any>,
   ): Promise<IResData<number>> {
     const phoneRex = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-    console.log(phoneNum);
     if (!phoneNum || !phoneRex.test(phoneNum)) {
       throw new HttpException('手机号不正确', HttpStatus.FORBIDDEN);
     }
     const code = createValidCode();
-    console.log('手机号码', phoneNum, code);
     session.phoneCaptcha = code;
     return { msg: '获取手机验证码成功' };
   }
