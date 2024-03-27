@@ -1,5 +1,4 @@
 import { spawn } from 'child_process';
-
 import { join } from 'path';
 import { NodeVM, VMScript } from 'vm2';
 import { joinWorkPath } from './joinWorkPath';
@@ -46,17 +45,21 @@ const runCode = async (code: string, type: string) => {
   }
 };
 
-const runInnerProject = async (indexFile: string) => {
+const runInnerProject = async (
+  cb: (data: string) => string,
+  indexFile: string,
+) => {
   const index = joinWorkPath(indexFile);
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
   console.log('🚀 ~ runInnerProject ~ cwd:', cwd);
 
   return new Promise((resolve, rejects) => {
-    let result = '';
+    const result = '';
     const py = spawn('python', [index], { cwd });
     py.stdout.on('data', (res) => {
       console.log('🚀 ~ py.stdout.on ~ res.toString():', res.toString());
-      result = res.toString();
+      cb(res.toString);
+      // socketsGateway.handleSendMessage(res.toString(), 'runCode' as any);
     });
     py.stderr.on('data', (res) => {
       console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
