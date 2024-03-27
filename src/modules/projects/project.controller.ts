@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Sse,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -205,5 +206,25 @@ export class ProjectController {
     const res = await this.projectService.deleteByIds(projectIds);
 
     return { msg: '项目删除成功', data: res };
+  }
+
+  @ApiOperation({ summary: '运行项目Sse' })
+  @ApiParam({
+    name: 'projectId',
+    description: '项目id',
+    required: true,
+    example: '0',
+  })
+  @Sse('run/:projectId')
+  async sse(@Param('projectId', ParseIntPipe) projectId: number) {
+    const result = await this.projectService.runComplexProject(projectId);
+    return result;
+    // console.log('🚀 ~ ProjectController ~ sse ~ projectId:', projectId);
+    // return new Observable((observer) => {
+    //   observer.next({ data: { msg: 'test1' } });
+    //   setTimeout(() => {
+    //     observer.next({ data: { msg: 'test2' } });
+    //   }, 3000);
+    // });
   }
 }

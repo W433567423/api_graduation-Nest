@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 
 import { join } from 'path';
+import { Observable } from 'rxjs';
 import { NodeVM, VMScript } from 'vm2';
 import { joinWorkPath } from './joinWorkPath';
 interface returnRunCodeData {
@@ -46,26 +47,47 @@ const runCode = async (code: string, type: string) => {
   }
 };
 
-const runInnerProject = async (indexFile: string) => {
+const runInnerProject = (indexFile: string) => {
   const index = joinWorkPath(indexFile);
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
   console.log('🚀 ~ runInnerProject ~ cwd:', cwd);
 
-  return new Promise((resolve, rejects) => {
-    let result = '';
+  const observable = new Observable((subscriber) => {
     const py = spawn('python', [index], { cwd });
     py.stdout.on('data', (res) => {
-      console.log('🚀 ~ py.stdout.on ~ res.toString():', res.toString());
-      result = res.toString();
+      subscriber.next({ data: res.toString() });
     });
     py.stderr.on('data', (res) => {
-      console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
-      rejects(res.toString());
+      subscriber.next({ data: res.toString() });
     });
     py.on('close', (code) => {
-      resolve(result);
       console.log(`子进程退出：退出代码code ${code}`);
+      subscriber.complete();
     });
   });
+  return observable;
+
+  // return new Promise((resolve, rejects) => {
+
+  //   resolve(
+  //     new Observable((observer) => {
+  //       let result = '';
+  //       const py = spawn('python', [index], { cwd });
+  //       py.stdout.on('data', (res) => {
+  //         console.log('🚀 ~ py.stdout.on ~ res.toString():', res.toString());
+  //         result = res.toString();
+  //         observer.next({ data: { msg: res.toString() } });
+  //       });
+  //       py.stderr.on('data', (res) => {
+  //         console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
+  //         rejects(res.toString());
+  //       });
+  //       py.on('close', (code) => {
+  //         resolve(result);
+  //         console.log(`子进程退出：退出代码code ${code}`);
+  //       });
+  //     }),
+  //   );
+  // });
 };
 export { runCode, runInnerProject, type returnRunCodeData };
