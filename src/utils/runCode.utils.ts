@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import { join } from 'path';
 
 import { NodeVM, VMScript } from 'vm2';
+import { joinWorkPath } from './joinWorkPath';
 interface returnRunCodeData {
   success: boolean;
   data: Array<string>;
@@ -45,14 +46,14 @@ const runCode = async (code: string, type: string) => {
   }
 };
 
-const runInnerProject = async (rootPath: string, indexFile: string) => {
+const runInnerProject = async (indexFile: string) => {
   return new Promise((resolve, rejects) => {
     let result = '';
-    const cwd = join(rootPath, 'Diabetic-Rredict/');
-    const py = spawn(
-      'python',
-      [`${join(__dirname, `Diabetic-Rredict/${indexFile}`)}`],
-      { cwd: cwd },
+    const cwd = joinWorkPath('Diabetic-Rredict/');
+    const py = spawn('python', [join(cwd, indexFile)], { cwd: cwd });
+    console.log(
+      '🚀 ~ returnnewPromise ~ join(cwd, indexFile):',
+      join(cwd, indexFile),
     );
     py.stdout.on('data', (res) => {
       result = res.toString();

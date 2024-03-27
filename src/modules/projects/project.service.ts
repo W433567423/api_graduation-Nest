@@ -1,5 +1,4 @@
 import type { returnRunCodeData } from '@/utils/index.d';
-import { joinWorkPath } from '@/utils/joinWorkPath';
 import { runCode, runInnerProject } from '@/utils/runCode.utils';
 import {
   HttpException,
@@ -131,9 +130,8 @@ export class ProjectService {
     if (!dbProject) {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
-      const workFoldPath = joinWorkPath(dbProject.rootWorkName!);
       // const indexFile = 'script.py';
-      const res = await runInnerProject(workFoldPath, 'indexFile');
+      const res = await runInnerProject('index.python');
       return res;
     }
   }
