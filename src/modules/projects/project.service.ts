@@ -10,11 +10,11 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
 import { FileService } from '../file/file.service';
-import { UserEntity } from '../users/entities/user.entity';
 import { ProjectEntity } from './entities/project.entity';
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectService {
@@ -45,7 +45,7 @@ export class ProjectService {
       );
       project.rootWorkName = rootFolderName;
       project.rootWorkFoldId = resWork.id;
-      project.runCommand = createParam.runCommand;
+      project.indexFile = createParam.indexFile;
     }
     return this.projectRepository.save(project);
   }
@@ -170,14 +170,17 @@ export class ProjectService {
       .execute();
   }
 
-  // 设置运行状态
-  async setProjectStatus(user: UserEntity, projectId: number, status: number) {
+  // 设置项目
+  async setProject(
+    projectId: number,
+    config: QueryDeepPartialEntity<ProjectEntity>,
+  ) {
     const dbProject = await this.projectRepository.findOneBy({
       id: projectId,
       userId: this.getUserId(),
     });
     if (dbProject) {
-      this.projectRepository.update(projectId, { lastStatus: status });
+      this.projectRepository.update(projectId, config);
     } else {
       throw new HttpException('禁止修改他人项目!', HttpStatus.FORBIDDEN);
     }

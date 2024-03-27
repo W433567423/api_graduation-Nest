@@ -34,11 +34,11 @@ export class ProjectEntity extends AppEntity {
   rootWorkName?: string;
 
   @Column({
-    comment: '项目运行命令(复杂模式)',
+    comment: '项目运行入口(复杂模式)',
     type: 'varchar',
     nullable: true,
   })
-  runCommand?: string;
+  indexFile?: string;
 
   @Column({ comment: '代码(简单模式)', type: 'longtext', nullable: true })
   code?: string;

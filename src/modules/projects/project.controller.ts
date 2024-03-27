@@ -19,15 +19,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import * as dayjs from 'dayjs';
-import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { IGetListRes } from '.';
 import type { IResData } from '../index';
 import {
-  changeProjectCodeReqDto,
   createProjectReqDto,
   disableProjectReqDto,
-  reNameProjectReqDto,
   runProjectCodeReqDto,
+  setProjectReqDto,
 } from './dtos/project.req.dto';
 import { getListResDto, getProjectCodeResDto } from './dtos/project.res.dto';
 import { ProjectService } from './project.service';
@@ -97,29 +95,6 @@ export class ProjectController {
     };
   }
 
-  @ApiOperation({ summary: '修改项目代码' })
-  @ApiParam({
-    name: 'projectId',
-    description: '项目id',
-    required: true,
-    example: '0',
-  })
-  @ApiBody({
-    type: changeProjectCodeReqDto,
-  })
-  @Patch('code/:projectId')
-  async changeCode(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Body('code') code: string,
-    @Body('code') codeLanguage?: string,
-  ): Promise<IResData<UpdateResult>> {
-    console.log('🚀 ~ ProjectController ~ codeLanguage:', codeLanguage);
-    return {
-      msg: '修改代码成功',
-      data: await this.projectService.changeProjectCode(projectId, code),
-    };
-  }
-
   @ApiOperation({ summary: '运行项目代码' })
   @Post('code')
   async runCode(
@@ -152,25 +127,64 @@ export class ProjectController {
       data: result,
     };
   }
-  @ApiOperation({ summary: '重命名项目' })
+
+  @ApiOperation({ summary: '设置项目' })
   @ApiParam({
     name: 'projectId',
     description: '项目id',
     required: true,
     example: '0',
   })
-  @ApiBody({
-    type: reNameProjectReqDto,
-  })
-  @Patch('rename/:projectId')
-  async auth(
-    @Body('newName') newName: string,
+  @Patch('set/:projectId')
+  async set(
+    @Body() config: setProjectReqDto,
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResData<null>> {
-    await this.projectService.reName(projectId, newName);
+    await this.projectService.setProject(projectId, config);
 
-    return { msg: '项目重命名成功' };
+    return { msg: '项目设置成功' };
   }
+  // @ApiOperation({ summary: '修改项目代码' })
+  // @ApiParam({
+  //   name: 'projectId',
+  //   description: '项目id',
+  //   required: true,
+  //   example: '0',
+  // })
+  // @ApiBody({
+  //   type: changeProjectCodeReqDto,
+  // })
+  // @Patch('code/:projectId')
+  // async changeCode(
+  //   @Param('projectId', ParseIntPipe) projectId: number,
+  //   @Body('code') code: string,
+  //   @Body('code') codeLanguage?: string,
+  // ): Promise<IResData<UpdateResult>> {
+  //   console.log('🚀 ~ ProjectController ~ codeLanguage:', codeLanguage);
+  //   return {
+  //     msg: '修改代码成功',
+  //     data: await this.projectService.changeProjectCode(projectId, code),
+  //   };
+  // }
+  // @ApiOperation({ summary: '重命名项目' })
+  // @ApiParam({
+  //   name: 'projectId',
+  //   description: '项目id',
+  //   required: true,
+  //   example: '0',
+  // })
+  // @ApiBody({
+  //   type: reNameProjectReqDto,
+  // })
+  // @Patch('rename/:projectId')
+  // async rename(
+  //   @Body('newName') newName: string,
+  //   @Param('projectId', ParseIntPipe) projectId: number,
+  // ): Promise<IResData<null>> {
+  //   await this.projectService.reName(projectId, newName);
+
+  //   return { msg: '项目重命名成功' };
+  // }
 
   @ApiOperation({ summary: '禁用项目(批量)' })
   @ApiBody({ type: disableProjectReqDto })

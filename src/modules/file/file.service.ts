@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
+import { IMenuResItem } from '.';
 import { IReqUser } from '..';
 import { UserEntity } from '../users/entities/user.entity';
 import { IFileType } from './dtos/workSpace.req.dto';
@@ -146,11 +147,12 @@ export class FileService {
       await this.workSpaceRepository.save(workFiles);
       // }
     }
-    dbRes.forEach((e) => {
-      e.fileName = e.fileName.split('\\').pop() || '';
-      return e;
+    const data = dbRes.map((e) => {
+      const t: IMenuResItem = e as IMenuResItem;
+      t.name = e.fileName.split('\\').pop() || '';
+      return t;
     });
-    return dbRes;
+    return data;
   }
 
   // 上传文件到工作区

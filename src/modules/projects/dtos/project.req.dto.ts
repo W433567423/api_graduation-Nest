@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 // 'create'
 export class createProjectReqDto {
@@ -24,7 +24,7 @@ export class createProjectReqDto {
     description: '项目入口文件',
     example: 'main.py',
   })
-  readonly workIndexFile?: string;
+  readonly indexFile?: string;
 
   @ApiProperty({
     description: '项目语言',
@@ -103,4 +103,44 @@ export class disableProjectReqDto {
   })
   @IsNotEmpty({ message: '项目的禁用状态不能为空' })
   readonly disable: boolean;
+}
+
+export class setProjectReqDto {
+  @ApiProperty({
+    description: '新项目名称',
+    maximum: 20,
+    example: 'new test',
+    required: false,
+  })
+  @IsOptional()
+  @MaxLength(20)
+  readonly projectName?: string;
+
+  @ApiProperty({
+    description: '项目入口文件',
+    example: 'index.py',
+    required: false,
+  })
+  readonly indexFile?: string;
+
+  @ApiProperty({
+    description: '项目语言',
+    example: 'JavaScript',
+    required: false,
+  })
+  readonly codeLanguage?: string;
+
+  @ApiProperty({
+    description: '项目源码',
+    example: 'console.log(1)',
+    required: false,
+  })
+  readonly code?: string;
+
+  @ApiProperty({
+    description: '项目是否禁用',
+    example: false,
+    required: false,
+  })
+  readonly disable?: boolean;
 }

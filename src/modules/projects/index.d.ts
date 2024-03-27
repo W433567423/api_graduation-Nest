@@ -6,7 +6,7 @@ export interface IGetListRes {
 export interface IPostCreateProject {
   projectName: string;
   projectType: string;
-  runCommand?: string;
+  indexFile?: string;
   projectLanguage?: string;
   projectCode?: string;
 }
