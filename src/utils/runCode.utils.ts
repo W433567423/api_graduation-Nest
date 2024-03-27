@@ -35,7 +35,7 @@ const runJavaScript = async (code: string) => {
   return data;
 };
 
-// 运行代码
+// TODO 运行代码 更多类型待支持
 const runCode = async (code: string, type: string) => {
   switch (type) {
     case 'JavaScript':
@@ -44,31 +44,20 @@ const runCode = async (code: string, type: string) => {
       return await runJavaScript(code);
   }
 };
-
-const runInnerProject = async (
-  cb: (data: string) => string,
-  indexFile: string,
-) => {
+// TODO 运行项目 限制每十分钟最多跑一次
+const runInnerProject = async (cb: any, indexFile: string) => {
   const index = joinWorkPath(indexFile);
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
-  console.log('🚀 ~ runInnerProject ~ cwd:', cwd);
-
-  return new Promise((resolve, rejects) => {
-    const result = '';
-    const py = spawn('python', [index], { cwd });
-    py.stdout.on('data', (res) => {
-      console.log('🚀 ~ py.stdout.on ~ res.toString():', res.toString());
-      cb(res.toString);
-      // socketsGateway.handleSendMessage(res.toString(), 'runCode' as any);
-    });
-    py.stderr.on('data', (res) => {
-      console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
-      rejects(res.toString());
-    });
-    py.on('close', (code) => {
-      resolve(result);
-      console.log(`子进程退出：退出代码code ${code}`);
-    });
+  const py = spawn('python', [index], { cwd });
+  py.stdout.on('data', (res) => {
+    cb(res.toString());
+  });
+  py.stderr.on('data', (res) => {
+    console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
+  });
+  py.on('close', (code) => {
+    console.log(`子进程退出：退出代码code ${code}`);
+    cb('tutu~end');
   });
 };
 export { runCode, runInnerProject, type returnRunCodeData };

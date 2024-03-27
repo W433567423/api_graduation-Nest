@@ -88,19 +88,7 @@ export class ProjectService {
     };
   }
 
-  // // 修改项目代码
-  // async changeProjectCode(projectId: number, code: string) {
-  //   const dbProject = await this.projectRepository.findOneBy({
-  //     id: projectId,
-  //     userId: this.getUserId(),
-  //   });
-  //   if (dbProject) {
-  //     return await this.projectRepository.update(dbProject.id, { code });
-  //   } else {
-  //     throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
-  //   }
-  // }
-  // TODO 运行项目代码
+  // DONE 运行项目代码
   async runProjectCode(
     projectId: number,
     code: string,
@@ -136,27 +124,13 @@ export class ProjectService {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
       // const indexFile = 'script.py';
-      const res = await runInnerProject(
-        this.socketsGateway.handleSendMessage,
-        dbProject.indexFile!,
+      const cb = this.socketsGateway.sendMessageToClient.bind(
+        this.socketsGateway,
       );
+      const res = await runInnerProject(cb, dbProject.indexFile!);
       return res;
     }
   }
-
-  // // 重命名项目
-  // async reName(projectId: number, newName: string) {
-  //   const dbProject = await this.projectRepository.findOneBy({
-  //     id: projectId,
-  //     userId: this.getUserId(),
-  //   });
-  //   if (dbProject) {
-  //     await this.isExistProject(newName, this.getUserId());
-  //     this.projectRepository.update(dbProject.id, { projectName: newName });
-  //   } else {
-  //     throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
-  //   }
-  // }
 
   // 删除项目
   async deleteByIds(ids: number[]) {

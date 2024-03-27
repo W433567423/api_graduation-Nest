@@ -4,24 +4,30 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway(8014, { cors: { origin: '*' } })
 export class SocketsGateway {
   // 直接访问原生的、特定于平台的服务器实例
-  @WebSocketServer() server: Server;
+  @WebSocketServer()
+  server: Server;
 
   @SubscribeMessage('runCode')
-  handleGetListenMessage(@MessageBody() data: string) {
-    return data;
+  handleGetMessage(@MessageBody() body: string) {
+    console.log('🚀 ~ 服务器订阅到消息 ~', body);
+    this.server.local.emit('runCode', `{ msg: 'server send' }`);
+    return 'ok';
   }
-  // @ConnectedSocket() client: Socket,
 
-  @SubscribeMessage('runCode')
-  handleSendMessage(@MessageBody() data: string) {
-    console.log('🚀 ~ SocketsGateway 发送:', data);
-    this.server.emit('runCode', data);
-    // client.emit('runCode', data);
-    return data;
+  sendMessageToClient(msg: any) {
+    console.log('🚀 ~ 主动发消息 ~', msg);
+    this.server.local.emit('runCode', msg);
+  }
+  handleConnection(client: Socket) {
+    console.log('🚀 ~ 有人上线了 ~', client.id);
+  }
+
+  handleDisconnect(client: Socket) {
+    console.log('🚀 ~ 有人下线了 ~' + client.id);
   }
 }
