@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
-import { join } from 'path';
 
+import { join } from 'path';
 import { NodeVM, VMScript } from 'vm2';
 import { joinWorkPath } from './joinWorkPath';
 interface returnRunCodeData {
@@ -47,18 +47,19 @@ const runCode = async (code: string, type: string) => {
 };
 
 const runInnerProject = async (indexFile: string) => {
+  const index = joinWorkPath(indexFile);
+  const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
+  console.log('🚀 ~ runInnerProject ~ cwd:', cwd);
+
   return new Promise((resolve, rejects) => {
     let result = '';
-    const cwd = joinWorkPath('Diabetic-Rredict/');
-    const py = spawn('python', [join(cwd, indexFile)], { cwd: cwd });
-    console.log(
-      '🚀 ~ returnnewPromise ~ join(cwd, indexFile):',
-      join(cwd, indexFile),
-    );
+    const py = spawn('python', [index], { cwd });
     py.stdout.on('data', (res) => {
+      console.log('🚀 ~ py.stdout.on ~ res.toString():', res.toString());
       result = res.toString();
     });
     py.stderr.on('data', (res) => {
+      console.log('🚀 ~ py.stderr.on ~ res.toString():', res.toString());
       rejects(res.toString());
     });
     py.on('close', (code) => {

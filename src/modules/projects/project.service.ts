@@ -131,7 +131,7 @@ export class ProjectService {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
       // const indexFile = 'script.py';
-      const res = await runInnerProject('index.python');
+      const res = await runInnerProject(dbProject.indexFile!);
       return res;
     }
   }

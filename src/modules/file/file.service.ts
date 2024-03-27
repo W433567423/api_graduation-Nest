@@ -117,14 +117,14 @@ export class FileService {
       ],
       where: { parentFolder: parentId, userId: this.getUserId() },
     });
-    const filename = parentFolderDb?.fileName;
+    const parentFold = parentFolderDb?.fileName;
 
-    const curMenu = joinWorkPath(filename);
+    const curMenu = joinWorkPath(parentFold);
     // DONE 扫描文件上传
     const dbFileNames = dbRes?.map((e) => e.fileName.split('\\').pop());
 
     const items = fs.readdirSync(curMenu);
-    console.log('🚀 ~ 开始扫描文件上传:', items, dbFileNames);
+    // console.log('🚀 ~ 开始扫描文件上传:', items, dbFileNames);
 
     if (dbFileNames.length !== items.length) {
       const workFiles: WorkFileEntity[] = [];
@@ -145,7 +145,6 @@ export class FileService {
         }
       });
       await this.workSpaceRepository.save(workFiles);
-      // }
     }
     const data = dbRes.map((e) => {
       const t: IMenuResItem = e as IMenuResItem;
