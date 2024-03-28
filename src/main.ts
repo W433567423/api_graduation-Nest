@@ -6,7 +6,7 @@ import { swaggerOptions, swaggerPrefix } from '@/config/swagger.config';
 import { corsConfig } from './config/cors.config';
 import { SERVER_PORT, sessionConfig } from './config/root.config';
 
-import { init } from '@/beforeNest';
+import { init } from '@/scripts/beforeNest';
 import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
