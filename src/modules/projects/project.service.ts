@@ -124,11 +124,14 @@ export class ProjectService {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
       // const indexFile = 'script.py';
+      if (!dbProject.indexFile) {
+        return { msg: '请先设置项目入口', data: false };
+      }
       const cb = this.socketsGateway.sendMessageToClient.bind(
         this.socketsGateway,
       );
-      const res = await runInnerProject(cb, dbProject.indexFile!);
-      return res;
+      await runInnerProject(cb, dbProject.indexFile!);
+      return { msg: '代码运行成功', data: true };
     }
   }
 

@@ -1,3 +1,4 @@
+import type { IResData } from '@/modules';
 import {
   CallHandler,
   ExecutionContext,
@@ -6,10 +7,9 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { map, Observable } from 'rxjs';
-import { Logger } from 'winston';
+import { Observable, map } from 'rxjs';
 import { getInfoReq } from 'src/global/helper/getInfoReq';
-import type { IResData } from '@/modules';
+import { Logger } from 'winston';
 
 @Injectable()
 export default class TransformInterceptor implements NestInterceptor {
@@ -25,7 +25,7 @@ export default class TransformInterceptor implements NestInterceptor {
         });
         return {
           code: data.code || 200,
-          message: data.msg || '请求成功',
+          msg: data.msg || '请求成功',
           data: data.data,
         };
       }),

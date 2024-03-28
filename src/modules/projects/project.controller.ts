@@ -123,10 +123,7 @@ export class ProjectController {
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResData<any>> {
     const result = await this.projectService.runComplexProject(projectId);
-    return {
-      msg: '代码运行成功',
-      data: result,
-    };
+    return result;
   }
 
   @ApiOperation({ summary: '设置项目' })
