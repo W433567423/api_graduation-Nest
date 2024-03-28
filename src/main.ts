@@ -11,7 +11,7 @@ import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
   init();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: false });
 
   // cors
   app.enableCors(corsConfig);
