@@ -26,6 +26,9 @@ async function bootstrap() {
   // session
   app.use(sessionConfig);
 
+  // websocket
+  // app.useWebSocketAdapter(new WsAdapter(app));
+
   await app.listen(SERVER_PORT);
 }
 

@@ -48,6 +48,8 @@
     "nodemailer": "^6.9.9",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "svg-captcha": "^1.4.0",
     "swagger-ui-express": "^5.0.0",
     "tencentcloud-sdk-nodejs": "^4.0.791",

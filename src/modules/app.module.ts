@@ -16,6 +16,7 @@ import { UserModule } from '@/modules/users/user.module';
 import { FileModule } from './file/file.module';
 import { PeaceModule } from './peace/peace.module';
 import { ProjectModule } from './projects/project.module';
+import { SocketsModule } from './sockets/sockets.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ProjectModule } from './projects/project.module';
     ProjectModule,
     FileModule,
     PeaceModule,
+    SocketsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -9,13 +9,16 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
+import { io } from 'socket.io-client';
 import { Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { v4 } from 'uuid';
 import { IPostCreateProject } from '.';
 import { IReqUser } from '..';
 import { FileService } from '../file/file.service';
+import { SocketsGateway } from '../sockets/sockets.gateway';
 import { ProjectEntity } from './entities/project.entity';
+
 @Injectable({ scope: Scope.REQUEST })
 export class ProjectService {
   constructor(
@@ -23,8 +26,10 @@ export class ProjectService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly fileService: FileService,
+    private readonly socketsGateway: SocketsGateway,
   ) {}
   qbProjects = this.projectRepository.createQueryBuilder('projects');
+  socket = io('ws://localhost:8013');
   // 创建项目
   async createProject(createParam: IPostCreateProject) {
     await this.isExistProject(createParam.projectName, this.getUserId());
@@ -83,19 +88,7 @@ export class ProjectService {
     };
   }
 
-  // 修改项目代码
-  async changeProjectCode(projectId: number, code: string) {
-    const dbProject = await this.projectRepository.findOneBy({
-      id: projectId,
-      userId: this.getUserId(),
-    });
-    if (dbProject) {
-      return await this.projectRepository.update(dbProject.id, { code });
-    } else {
-      throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
-    }
-  }
-  // 运行项目代码
+  // DONE 运行项目代码
   async runProjectCode(
     projectId: number,
     code: string,
@@ -131,21 +124,11 @@ export class ProjectService {
       throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
     } else {
       // const indexFile = 'script.py';
-      return runInnerProject(dbProject.indexFile!);
-    }
-  }
-
-  // 重命名项目
-  async reName(projectId: number, newName: string) {
-    const dbProject = await this.projectRepository.findOneBy({
-      id: projectId,
-      userId: this.getUserId(),
-    });
-    if (dbProject) {
-      await this.isExistProject(newName, this.getUserId());
-      this.projectRepository.update(dbProject.id, { projectName: newName });
-    } else {
-      throw new HttpException('未找到该项目', HttpStatus.NOT_FOUND);
+      const cb = this.socketsGateway.sendMessageToClient.bind(
+        this.socketsGateway,
+      );
+      const res = await runInnerProject(cb, dbProject.indexFile!);
+      return res;
     }
   }
 
