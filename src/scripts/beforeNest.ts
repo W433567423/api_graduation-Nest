@@ -5,6 +5,7 @@ export const workSpaceFolderJs = join(__dirname, '../.work_space/js');
 export const workSpaceFolderPy = join(__dirname, '../.work_space/py');
 export const initFolder = async (path: string) => {
   try {
+    console.log(`工作区目录已存在---${path}`);
     await fs.promises.stat(path);
   } catch (e) {
     // 不存在文件夹，直接创建 {recursive: true} 这个配置项是配置自动创建多个文件夹

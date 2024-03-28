@@ -1,4 +1,4 @@
-import { workSpaceFolder } from '@/beforeNest';
+import { workSpaceFolder } from '@/scripts/beforeNest';
 import { join } from 'path';
 
 export const joinWorkPath = (rootFolderName: string) => {
