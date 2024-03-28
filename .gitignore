@@ -39,3 +39,6 @@ lerna-debug.log*
 test/*.*
 test/test.blade.php
 src/config/secret.config.ts
+
+.work_space/*
+.out_code/*
