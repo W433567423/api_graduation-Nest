@@ -10,7 +10,6 @@ export class DrwbncfController {
   @ApiOperation({ summary: '运行DRWBNC项目' })
   @Get('run')
   async run(): Promise<IResData<any>> {
-    const result = await this.drwbncfService.run();
-    return result;
+    return await this.drwbncfService.run();
   }
 }

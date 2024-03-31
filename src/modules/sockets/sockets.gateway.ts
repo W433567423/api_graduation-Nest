@@ -19,8 +19,8 @@ export class SocketsGateway {
     return 'ok';
   }
 
-  sendMessageToClient(msg: any) {
-    console.log('🚀 ~ 主动发消息 ~', msg);
+  sendMessageToClient(msg: any, noConsole = false) {
+    if (!noConsole) console.log('🚀 ~ 主动发消息 ~', msg);
     this.server.local.emit('runCode', msg);
   }
   handleConnection(client: Socket) {
