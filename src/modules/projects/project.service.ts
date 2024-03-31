@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { io } from 'socket.io-client';
 import { Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { v4 } from 'uuid';
@@ -29,7 +28,7 @@ export class ProjectService {
     private readonly socketsGateway: SocketsGateway,
   ) {}
   qbProjects = this.projectRepository.createQueryBuilder('projects');
-  socket = io('ws://localhost:8013');
+  // socket = io('ws://localhost:8013');
   // 创建项目
   async createProject(createParam: IPostCreateProject) {
     await this.isExistProject(createParam.projectName, this.getUserId());

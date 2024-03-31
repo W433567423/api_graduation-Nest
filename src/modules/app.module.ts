@@ -17,6 +17,7 @@ import { FileModule } from './file/file.module';
 import { PeaceModule } from './peace/peace.module';
 import { ProjectModule } from './projects/project.module';
 import { SocketsModule } from './sockets/sockets.module';
+import { DrwbncfModule } from './drwbncf/drwbncf.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { SocketsModule } from './sockets/sockets.module';
     FileModule,
     PeaceModule,
     SocketsModule,
+    DrwbncfModule,
   ],
   controllers: [AppController],
   providers: [
