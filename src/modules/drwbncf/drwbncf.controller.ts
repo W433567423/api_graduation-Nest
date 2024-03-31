@@ -16,6 +16,6 @@ export class DrwbncfController {
   @ApiOperation({ summary: '获取DRWBNC项目的excel' })
   @Get('excel')
   async excel() {
-    return await this.drwbncfService.parseExcel();
+    return { data: await this.drwbncfService.parseExcel() };
   }
 }

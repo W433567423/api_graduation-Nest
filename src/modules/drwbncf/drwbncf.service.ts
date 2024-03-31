@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { spawn } from 'child_process';
-import { existsSync, promises } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { emptyDirSync } from 'fs-extra';
 import { decode } from 'iconv-lite';
 import xlsx from 'node-xlsx';
@@ -10,7 +10,7 @@ import { SocketsGateway } from '../sockets/sockets.gateway';
 @Injectable()
 export class DrwbncfService {
   constructor(private readonly socketsGateway: SocketsGateway) {}
-  rootPath = join(__dirname, '../../outCode/DRWBNCF');
+  rootPath = join(__dirname, '../../../outCode/DRWBNCF');
   runPath = join(this.rootPath, 'runs/global-10-fold/Fdataset/WBNCF');
 
   // 运行Drwbncf项目
@@ -18,6 +18,8 @@ export class DrwbncfService {
     const cb = this.socketsGateway.sendMessageToClient.bind(
       this.socketsGateway,
     );
+    if (existsSync(this.runPath)) emptyDirSync(this.runPath);
+
     try {
       if (existsSync(this.runPath)) emptyDirSync(this.runPath);
     } catch {
@@ -41,16 +43,15 @@ export class DrwbncfService {
   }
   // 解析excel表格
   async parseExcel() {
-    const logPath = join(
-      this.runPath,
-      (await promises.readdir(this.runPath)).pop()!,
-    );
-    const res = (await promises.readdir(logPath)).find((e) =>
-      e.includes('fold.xlsx'),
-    )!;
-    const filePath = join(logPath, res);
-    console.log('🚀 ~ res:', filePath);
-    const workSheet = xlsx.parse(filePath);
-    return workSheet.shift()!.data;
+    try {
+      const logPath = join(this.runPath, readdirSync(this.runPath).pop()!);
+      const res = readdirSync(logPath).find((e) => e.includes('fold.xlsx'))!;
+      const filePath = join(logPath, res);
+      console.log('🚀 ~ res:', filePath);
+      const workSheet = xlsx.parse(filePath);
+      return workSheet.shift()!.data;
+    } catch {
+      return null;
+    }
   }
 }
