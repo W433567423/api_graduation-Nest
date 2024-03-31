@@ -15,9 +15,9 @@ import { CaptchaModule } from '@/modules/captchas/captcha.module';
 import { UserModule } from '@/modules/users/user.module';
 import { FileModule } from './file/file.module';
 import { PeaceModule } from './peace/peace.module';
+import { DrwbncfModule } from './projects/entities/drwbncf.module';
 import { ProjectModule } from './projects/project.module';
 import { SocketsModule } from './sockets/sockets.module';
-import { DrwbncfModule } from './drwbncf/drwbncf.module';
 
 @Module({
   imports: [
