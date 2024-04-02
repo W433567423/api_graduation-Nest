@@ -1,5 +1,4 @@
 import os
-import json
 import time
 import argparse
 import torch
@@ -81,15 +80,6 @@ def test_fn(model, val_loader, save_file_format=None):
                       "score": scores,
                       "label": labels,
                       })
-        print('\n\n')
-        f=open('test.json','w')
-        f.write(json.dumps({"row": edges[0].tolist(),
-                                 "col": edges[1].tolist(),
-                                 "score": scores.tolist(),
-                                 "label": labels.tolist(),
-                                 }))
-        f.close
-        input()
         logger.info(f"save time cost: {time.time()-eval_end_time_stamp}")
     return scores, labels, edges, metric
 

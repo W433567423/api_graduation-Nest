@@ -3,6 +3,8 @@
     "DRWBNC",
     "drwbncf",
     "Fdataset",
+    "scio",
+    "tqdm",
     "WBNCF"
   ]
 }
