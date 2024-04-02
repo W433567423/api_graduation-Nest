@@ -6,7 +6,16 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ cors: { origin: '*' }, transports: ['websocket'] })
+@WebSocketGateway({
+  cors: {
+    origin: [
+      'http://localhost:8003',
+      'https://g.wtututu.top',
+      'http://g.wtututu.top',
+    ],
+  },
+  transports: ['websocket'],
+})
 export class SocketsGateway {
   // 直接访问原生的、特定于平台的服务器实例
   @WebSocketServer()
