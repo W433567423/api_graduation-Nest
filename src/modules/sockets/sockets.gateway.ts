@@ -6,7 +6,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ cors: { origin: '*' }, transports: ['websocket'] })
 export class SocketsGateway {
   // 直接访问原生的、特定于平台的服务器实例
   @WebSocketServer()
