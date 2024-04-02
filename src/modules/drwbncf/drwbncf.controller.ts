@@ -18,4 +18,10 @@ export class DrwbncfController {
   async excel() {
     return { data: await this.drwbncfService.parseExcel() };
   }
+
+  @ApiOperation({ summary: 'test' })
+  @Get('test')
+  async test() {
+    return { data: await this.drwbncfService.parseExcel() };
+  }
 }
