@@ -1,4 +1,3 @@
-import { IS_DEV } from '@/scripts/beforeNest';
 import { Injectable } from '@nestjs/common';
 import { spawn } from 'child_process';
 import { existsSync, readdirSync } from 'fs';
@@ -30,12 +29,10 @@ export class DrwbncfService {
       cwd: this.rootPath,
     });
     py.stdout.on('data', (res) => {
-      if (IS_DEV) cb(decode(res, 'cp936').toString(), true);
-      else cb(res.toString(), true);
+      cb(decode(res, 'cp936').toString(), true);
     });
     py.stderr.on('data', (res) => {
-      if (IS_DEV) cb(decode(res, 'cp936').toString(), true);
-      else cb(res.toString(), true);
+      cb(decode(res, 'cp936').toString(), true);
     });
     py.on('close', (code) => {
       console.log(`子进程退出：退出代码code ${code}`);
