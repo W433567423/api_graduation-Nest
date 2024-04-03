@@ -25,7 +25,7 @@ export class DrwbncfService {
     } catch {
       return { msg: 'DRWBNCF项目不存在', data: false };
     }
-    const py = spawn('python', [join(this.rootPath, 'main.py')], {
+    const py = spawn('python3.8', [join(this.rootPath, 'main.py')], {
       cwd: this.rootPath,
     });
     py.stdout.on('data', (res) => {

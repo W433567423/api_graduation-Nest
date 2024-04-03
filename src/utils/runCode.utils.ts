@@ -48,7 +48,7 @@ const runCode = async (code: string, type: string) => {
 const runInnerProject = async (cb: any, indexFile: string) => {
   const index = joinWorkPath(indexFile);
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
-  const py = spawn('python', [index], { cwd });
+  const py = spawn('python3.8', [index], { cwd });
   py.stdout.on('data', (res) => {
     cb(res.toString());
   });
