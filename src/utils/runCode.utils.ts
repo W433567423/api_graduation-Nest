@@ -1,3 +1,4 @@
+import { IS_DEV } from '@/scripts/beforeNest';
 import { spawn } from 'child_process';
 import { decode } from 'iconv-lite';
 import { join } from 'path';
@@ -51,10 +52,10 @@ const runInnerProject = async (cb: any, indexFile: string) => {
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
   const py = spawn('python3.8', [index], { cwd });
   py.stdout.on('data', (res) => {
-    cb(decode(res, 'cp936').toString(), true);
+    cb(decode(res, IS_DEV ? 'cp936' : 'utf-8').toString(), true);
   });
   py.stderr.on('data', (res) => {
-    cb(decode(res, 'cp936').toString(), true);
+    cb(decode(res, IS_DEV ? 'cp936' : 'utf-8').toString(), true);
   });
   py.on('close', (code) => {
     console.log(`子进程退出：退出代码code ${code}`);
