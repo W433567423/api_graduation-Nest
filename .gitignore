@@ -44,4 +44,4 @@ src/config/secret.config.ts
 
 .work_space/*
 outCode/**/runs/*
-outCode/**/__pycache__/*
+outCode/**/src/__pycache__/*
