@@ -24,3 +24,6 @@ export const init = () => {
   initFolder(logger, workSpaceFolderJs);
   initFolder(logger, workSpaceFolderPy);
 };
+
+// 判断环境
+export const IS_DEV = process.env.NODE_ENV !== 'production';
