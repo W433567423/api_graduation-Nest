@@ -14,6 +14,7 @@ import LoggerMiddleware from '@/global/middleware/logger.middleware';
 import { CaptchaModule } from '@/modules/captchas/captcha.module';
 import { UserModule } from '@/modules/users/user.module';
 import { FileModule } from './file/file.module';
+import { HfsModule } from './hfs/hfs.module';
 import { PeaceModule } from './peace/peace.module';
 import { DrwbncfModule } from './projects/entities/drwbncf.module';
 import { ProjectModule } from './projects/project.module';
@@ -30,6 +31,7 @@ import { SocketsModule } from './sockets/sockets.module';
     PeaceModule,
     SocketsModule,
     DrwbncfModule,
+    HfsModule,
   ],
   controllers: [AppController],
   providers: [
