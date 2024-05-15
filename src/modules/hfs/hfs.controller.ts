@@ -27,4 +27,11 @@ export class HfsController {
     console.log(file, fileName);
     return { msg: '上传成功' };
   }
+
+  @Post('detect')
+  @ApiOperation({ summary: '进行分类算法' })
+  async detect() {
+    // await this.hfsService.uploadDataSet(file, fileName);
+    return { msg: '诊断成功' };
+  }
 }
