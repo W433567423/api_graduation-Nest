@@ -49,6 +49,7 @@ const runCode = async (code: string, type: string) => {
 // TODO 运行项目 限制每十分钟最多跑一次
 const runInnerProject = async (cb: any, indexFile: string) => {
   const index = joinWorkPath(indexFile);
+  console.log('🚀 ~ runInnerProject ~ index:', index);
   const cwd = joinWorkPath(join(...indexFile.split('\\').slice(0, -1)));
   const py = spawn('python3.8', [index], { cwd });
   py.stdout.on('data', (res) => {
